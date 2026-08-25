@@ -46,7 +46,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
               AFB<span className="text-gold-400">.</span>Taxis
             </span>
             <span className="text-[9px] font-semibold uppercase tracking-[.18em] text-neutral-500">
-              Fontainebleau
+              {t('nav.subtitle')}
             </span>
           </div>
         </a>

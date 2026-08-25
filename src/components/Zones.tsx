@@ -1,19 +1,22 @@
 import { MapPin } from 'lucide-react';
 import { ZONES } from '@/lib/constants';
+import { useI18n } from '@/lib/i18n';
 
 export function Zones() {
+  const { t } = useI18n();
+
   return (
     <section id="zones" className="relative overflow-hidden bg-ink py-24 lg:py-32">
       <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mb-14 text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[.2em] text-gold-400">Couverture</p>
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[.2em] text-gold-400">{t('zones.label')}</p>
           <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Zones <span className="gold-text">desservies</span>
+            {t('zones.title1')}<span className="gold-text">{t('zones.title2')}</span>
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-neutral-400">
-            Départ ou arrivée Fontainebleau, nous vous transportons partout en Île-de-France.
+            {t('zones.subtitle')}
           </p>
         </div>
 

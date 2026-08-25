@@ -23,10 +23,10 @@ export function Hero({ onOpenBooking }: Props) {
   }, []);
 
   const STATS = [
-    { value: '20+', label: 'ans d\'expérience' },
-    { value: '5', label: 'véhicules premium' },
-    { value: '24/7', label: 'disponibilité' },
-    { value: '4.9', label: 'étoiles Google' },
+    { value: '20+', label: t('hero.stat.years') },
+    { value: '5', label: t('hero.stat.vehicles') },
+    { value: '24/7', label: t('hero.stat.availability') },
+    { value: '4.9', label: t('hero.stat.rating') },
   ];
 
   return (
@@ -55,18 +55,18 @@ export function Hero({ onOpenBooking }: Props) {
           {/* Badge */}
           <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-gold-400/30 bg-gold-400/10 px-5 py-2 backdrop-blur-sm">
             <div className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
-            <span className="text-sm font-semibold text-gold-300">Service de taxi premium Fontainebleau</span>
+            <span className="text-sm font-semibold text-gold-300">{t('hero.badge')}</span>
           </div>
 
           {/* Heading */}
           <h1 className="text-5xl font-black leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
-            Votre chauffeur
+            {t('hero.title1')}
             <br />
-            <span className="gold-text">d'exception</span>
+            <span className="gold-text">{t('hero.title2')}</span>
           </h1>
 
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-neutral-300">
-            Service de taxi haut de gamme au départ de Fontainebleau. Ponctualité, confort et discrétion pour tous vos trajets en Île-de-France.
+            {t('hero.subtitle')}
           </p>
 
           {/* CTA */}
@@ -76,7 +76,7 @@ export function Hero({ onOpenBooking }: Props) {
               className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gold-400 px-8 py-4 font-bold text-ink transition-all hover:bg-gold-300 hover:shadow-[0_20px_50px_rgba(255,208,59,0.3)]"
             >
               <span className="relative z-10 flex items-center gap-3">
-                Réserver maintenant
+                {t('hero.cta')}
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </span>
             </button>
@@ -92,14 +92,14 @@ export function Hero({ onOpenBooking }: Props) {
           {/* Location */}
           <div className="mt-8 flex items-center gap-2 text-sm text-neutral-400">
             <MapPin size={15} className="text-gold-400" />
-            <span>Fontainebleau · Avon · Seine-et-Marne · Paris · Île-de-France</span>
+            <span>{t('hero.locations')}</span>
           </div>
         </div>
 
         {/* Stats row */}
         <div className="mt-16 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
           {STATS.map((stat) => (
-            <div key={stat.label} className="glass rounded-2xl px-5 py-4 text-center">
+            <div key={stat.value} className="glass rounded-2xl px-5 py-4 text-center">
               <p className="text-2xl font-black text-gold-400">{stat.value}</p>
               <p className="mt-1 text-xs font-medium text-neutral-400">{stat.label}</p>
             </div>
@@ -123,7 +123,7 @@ export function Hero({ onOpenBooking }: Props) {
         {/* Scroll hint */}
         <div className="absolute bottom-10 right-6 lg:right-8">
           <div className="flex flex-col items-center gap-2 text-neutral-500">
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
+            <span className="text-[10px] font-semibold uppercase tracking-widest">{t('hero.scroll')}</span>
             <ChevronDown size={16} className="animate-scroll-hint" />
           </div>
         </div>

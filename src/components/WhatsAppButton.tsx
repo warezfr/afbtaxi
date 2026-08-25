@@ -1,19 +1,18 @@
 import { MessageCircle } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
-
-const whatsappMessage = encodeURIComponent(
-  `Bonjour ${COMPANY.name}, je souhaite r\u00e9server un taxi.`
-);
-const whatsappUrl = `https://wa.me/${COMPANY.whatsapp}?text=${whatsappMessage}`;
+import { useI18n } from '@/lib/i18n';
 
 export function WhatsAppButton() {
+  const { t } = useI18n();
+  const whatsappUrl = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(t('whatsapp.message'))}`;
+
   return (
     <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition-all hover:-translate-y-1 hover:shadow-xl"
-      aria-label="Contacter via WhatsApp"
+      aria-label={t('whatsapp.aria')}
     >
       <MessageCircle size={24} />
     </a>

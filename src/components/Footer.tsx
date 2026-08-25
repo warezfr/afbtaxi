@@ -1,7 +1,10 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
+import { useI18n } from '@/lib/i18n';
 
 export function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="border-t border-white/5 bg-ink">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -31,10 +34,9 @@ export function Footer() {
               <span className="text-lg font-black text-white">AFB<span className="text-gold-400">.</span>Taxis</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-neutral-500">
-              Service de taxi premium à Fontainebleau depuis 2004. Transferts aéroports, gares et courses locales.
+              {t('footer.desc')}
             </p>
 
-            {/* NAP visible */}
             <div className="mt-5 space-y-2">
               <a href={`tel:${COMPANY.phoneRaw}`} className="flex items-center gap-2 text-sm text-neutral-400 transition hover:text-gold-400">
                 <Phone size={14} className="text-gold-400" />
@@ -53,39 +55,39 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">Navigation</p>
+            <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">{t('footer.nav')}</p>
             <nav className="flex flex-col gap-2.5">
-              <a href="#services" className="text-sm text-neutral-500 transition-colors hover:text-white">Services</a>
-              <a href="#flotte" className="text-sm text-neutral-500 transition-colors hover:text-white">Flotte</a>
-              <a href="#tarifs" className="text-sm text-neutral-500 transition-colors hover:text-white">Tarifs</a>
-              <a href="#zones" className="text-sm text-neutral-500 transition-colors hover:text-white">Zones desservies</a>
-              <a href="#contact" className="text-sm text-neutral-500 transition-colors hover:text-white">Contact</a>
+              <a href="#services" className="text-sm text-neutral-500 transition-colors hover:text-white">{t('footer.nav.services')}</a>
+              <a href="#flotte" className="text-sm text-neutral-500 transition-colors hover:text-white">{t('footer.nav.fleet')}</a>
+              <a href="#tarifs" className="text-sm text-neutral-500 transition-colors hover:text-white">{t('footer.nav.tarifs')}</a>
+              <a href="#zones" className="text-sm text-neutral-500 transition-colors hover:text-white">{t('footer.nav.zones')}</a>
+              <a href="#contact" className="text-sm text-neutral-500 transition-colors hover:text-white">{t('footer.nav.contact')}</a>
             </nav>
           </div>
 
           {/* Legal + Local info */}
           <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">Informations légales</p>
+            <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">{t('footer.legal')}</p>
             <div className="space-y-2 text-sm text-neutral-500">
-              <p>SIRET : {COMPANY.siret}</p>
-              <p>Forme juridique : {COMPANY.legalForm}</p>
-              <p>Stationnement : {COMPANY.stationnement}</p>
-              <p>Conventionné CPAM 77</p>
+              <p>{t('footer.legal.siret')} : {COMPANY.siret}</p>
+              <p>{t('footer.legal.form')} : {COMPANY.legalForm}</p>
+              <p>{t('footer.legal.parking')} : {COMPANY.stationnement}</p>
+              <p>{t('footer.legal.cpam')}</p>
             </div>
 
-            <p className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-gold-400">Zones principales</p>
+            <p className="mb-3 mt-6 text-xs font-bold uppercase tracking-wider text-gold-400">{t('footer.zones')}</p>
             <p className="text-sm leading-relaxed text-neutral-500">
-              Fontainebleau · Avon · Dammarie-les-Lys · Melun · Nemours · Paris · Île-de-France
+              {t('footer.zonesList')}
             </p>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
           <p className="text-xs text-neutral-600">
-            © {new Date().getFullYear()} {COMPANY.name}. Tous droits réservés.
+            &copy; {new Date().getFullYear()} {COMPANY.name}. {t('footer.rights')}
           </p>
           <p className="text-xs text-neutral-600">
-            Taxi conventionné CPAM 77 — Fontainebleau & Seine-et-Marne
+            {t('footer.tagline')}
           </p>
         </div>
       </div>

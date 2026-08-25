@@ -46,43 +46,49 @@ interface Props {
   context?: string;
 }
 
-function buildWhatsAppMessage(form: ReservationInput, context?: string): string {
-  let msg = `Bonjour ${COMPANY.name},\n\nJe souhaite réserver un taxi.\n\n`;
-  if (context) msg += `Service / Véhicule : ${context}\n`;
-  msg += `Nom : ${form.first_name} ${form.last_name}\n`;
-  msg += `Téléphone : ${form.phone}\n`;
-  if (form.email) msg += `Email : ${form.email}\n`;
-  msg += `\nDate : ${form.pickup_date}\n`;
-  msg += `Heure : ${form.pickup_time}\n`;
-  msg += `Départ : ${form.pickup_location}\n`;
-  msg += `Arrivée : ${form.dropoff_location}\n`;
-  msg += `Passagers : ${form.passengers}\n`;
-  msg += `Type : ${form.trip_type === 'aller_retour' ? 'Aller-retour' : 'Aller simple'}\n`;
-  if (form.special_needs) msg += `Besoins spécifiques : ${form.special_needs}\n`;
-  if (form.message) msg += `Message : ${form.message}\n`;
-  msg += `\nMerci !`;
-  return msg;
+function useBuildWhatsAppMessage(t: (k: any) => string) {
+  return (form: ReservationInput, context?: string): string => {
+    let msg = `${t('wizard.wa.greeting')} ${COMPANY.name},\n\n${t('wizard.wa.intro')}\n\n`;
+    if (context) msg += `${t('wizard.wa.service')} : ${context}\n`;
+    msg += `${t('wizard.wa.name')} : ${form.first_name} ${form.last_name}\n`;
+    msg += `${t('wizard.wa.phone')} : ${form.phone}\n`;
+    if (form.email) msg += `${t('wizard.wa.email')} : ${form.email}\n`;
+    msg += `\n${t('wizard.wa.date')} : ${form.pickup_date}\n`;
+    msg += `${t('wizard.wa.time')} : ${form.pickup_time}\n`;
+    msg += `${t('wizard.wa.pickup')} : ${form.pickup_location}\n`;
+    msg += `${t('wizard.wa.dropoff')} : ${form.dropoff_location}\n`;
+    msg += `${t('wizard.wa.passengers')} : ${form.passengers}\n`;
+    msg += `${t('wizard.wa.type')} : ${form.trip_type === 'aller_retour' ? t('wizard.roundTrip') : t('wizard.oneWay')}\n`;
+    if (form.special_needs) msg += `${t('wizard.wa.needs')} : ${form.special_needs}\n`;
+    if (form.message) msg += `${t('wizard.wa.message')} : ${form.message}\n`;
+    msg += `\n${t('wizard.wa.thanks')}`;
+    return msg;
+  };
 }
 
-function buildEmailBody(form: ReservationInput, context?: string): string {
-  let body = '';
-  if (context) body += `Service / Véhicule : ${context}\n`;
-  body += `Nom : ${form.first_name} ${form.last_name}\n`;
-  body += `Téléphone : ${form.phone}\n`;
-  if (form.email) body += `Email : ${form.email}\n`;
-  body += `Date : ${form.pickup_date}\n`;
-  body += `Heure : ${form.pickup_time}\n`;
-  body += `Départ : ${form.pickup_location}\n`;
-  body += `Arrivée : ${form.dropoff_location}\n`;
-  body += `Passagers : ${form.passengers}\n`;
-  body += `Type : ${form.trip_type === 'aller_retour' ? 'Aller-retour' : 'Aller simple'}\n`;
-  if (form.special_needs) body += `Besoins spécifiques : ${form.special_needs}\n`;
-  if (form.message) body += `Message : ${form.message}\n`;
-  return body;
+function useBuildEmailBody(t: (k: any) => string) {
+  return (form: ReservationInput, context?: string): string => {
+    let body = '';
+    if (context) body += `${t('wizard.wa.service')} : ${context}\n`;
+    body += `${t('wizard.wa.name')} : ${form.first_name} ${form.last_name}\n`;
+    body += `${t('wizard.wa.phone')} : ${form.phone}\n`;
+    if (form.email) body += `${t('wizard.wa.email')} : ${form.email}\n`;
+    body += `${t('wizard.wa.date')} : ${form.pickup_date}\n`;
+    body += `${t('wizard.wa.time')} : ${form.pickup_time}\n`;
+    body += `${t('wizard.wa.pickup')} : ${form.pickup_location}\n`;
+    body += `${t('wizard.wa.dropoff')} : ${form.dropoff_location}\n`;
+    body += `${t('wizard.wa.passengers')} : ${form.passengers}\n`;
+    body += `${t('wizard.wa.type')} : ${form.trip_type === 'aller_retour' ? t('wizard.roundTrip') : t('wizard.oneWay')}\n`;
+    if (form.special_needs) body += `${t('wizard.wa.needs')} : ${form.special_needs}\n`;
+    if (form.message) body += `${t('wizard.wa.message')} : ${form.message}\n`;
+    return body;
+  };
 }
 
 export function ReservationWizard({ open, onClose, context }: Props) {
   const { t, dir } = useI18n();
+  const buildWhatsAppMessage = useBuildWhatsAppMessage(t);
+  const buildEmailBody = useBuildEmailBody(t);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<ReservationInput>(EMPTY_FORM);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -99,9 +105,9 @@ export function ReservationWizard({ open, onClose, context }: Props) {
 
   useEffect(() => {
     if (open && context) {
-      setForm((prev) => ({ ...prev, message: prev.message || `Véhicule / Service : ${context}` }));
+      setForm((prev) => ({ ...prev, message: prev.message || `${t('wizard.contextLabel')}${context}` }));
     }
-  }, [open, context]);
+  }, [open, context, t]);
 
   const update = (field: keyof ReservationInput, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -148,7 +154,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   };
 
   const handleEmail = () => {
-    const subject = encodeURIComponent(`Réservation taxi - ${form.first_name} ${form.last_name}`);
+    const subject = encodeURIComponent(`${t('wizard.email.subject')} - ${form.first_name} ${form.last_name}`);
     const body = encodeURIComponent(buildEmailBody(form, context));
     window.open(`mailto:${COMPANY.email}?subject=${subject}&body=${body}`, '_self');
   };
@@ -271,7 +277,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     <AddressAutocomplete
                       value={form.pickup_location}
                       onChange={(v) => update('pickup_location', v)}
-                      placeholder="Ex : Gare de Fontainebleau"
+                      placeholder={t('wizard.pickupLocationPlaceholder')}
                       required
                       className={inputCls}
                     />
@@ -281,7 +287,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     <AddressAutocomplete
                       value={form.dropoff_location}
                       onChange={(v) => update('dropoff_location', v)}
-                      placeholder="Ex : Aéroport Orly"
+                      placeholder={t('wizard.dropoffLocationPlaceholder')}
                       required
                       className={inputCls}
                     />
@@ -337,23 +343,20 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                 </button>
               ) : (
                 <div className="flex items-center gap-2">
-                  {/* WhatsApp */}
                   <button
                     onClick={handleWhatsApp}
-                    title="Envoyer via WhatsApp"
+                    title={t('wizard.sendWhatsApp')}
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366] transition hover:bg-[#25D366]/20"
                   >
                     <MessageCircle size={18} />
                   </button>
-                  {/* Email */}
                   <button
                     onClick={handleEmail}
-                    title="Envoyer par email"
+                    title={t('wizard.sendEmail')}
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-neutral-300 transition hover:bg-white/10"
                   >
                     <Mail size={18} />
                   </button>
-                  {/* Submit to DB */}
                   <button
                     onClick={handleSubmit}
                     disabled={status === 'loading'}
