@@ -22,7 +22,7 @@ export function Tarifs() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)]">
+        <div className="hidden overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] sm:block">
           <div className="taxi-checker h-2.5" />
           <div className="overflow-x-auto" data-testid="tarifs-table">
             <table className="w-full min-w-[680px]">
@@ -56,7 +56,42 @@ export function Tarifs() {
             </table>
           </div>
         </div>
-        <p className="mt-3 text-center text-xs text-gray-400 sm:hidden">← {t('tarifs.destination')} →</p>
+
+        {/* Mobile : stacked cards */}
+        <div className="space-y-4 sm:hidden" data-testid="tarifs-cards-mobile">
+          {TARIFS.map((tarif) => (
+            <div key={tarif.route} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_12px_30px_-20px_rgba(17,24,39,0.3)]">
+              <div className="taxi-checker h-2" />
+              <div className="p-5">
+                <p className="font-display text-base font-black text-gray-900">{tarif.route.replace('Fontainebleau ↔ ', '')}</p>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-gray-50 p-3.5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gold-600">{t('tarifs.car')}</p>
+                    <div className="mt-2 flex items-center justify-between text-sm">
+                      <span className="text-gray-400">{t('tarifs.day')}</span>
+                      <span className="font-bold text-gray-900">{tarif.carDay}</span>
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-sm">
+                      <span className="text-gray-400">{t('tarifs.night')}</span>
+                      <span className="font-bold text-gray-900">{tarif.carNight}</span>
+                    </div>
+                  </div>
+                  <div className="rounded-xl bg-gray-900 p-3.5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-gold-400">{t('tarifs.van')}</p>
+                    <div className="mt-2 flex items-center justify-between text-sm">
+                      <span className="text-gray-500">{t('tarifs.day')}</span>
+                      <span className="font-bold text-white">{tarif.vanDay}</span>
+                    </div>
+                    <div className="mt-1 flex items-center justify-between text-sm">
+                      <span className="text-gray-500">{t('tarifs.night')}</span>
+                      <span className="font-bold text-white">{tarif.vanNight}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <div className="card-lift rounded-2xl border border-gray-200 bg-white p-6 sm:p-7">

@@ -22,12 +22,13 @@
 - Sections light: Services (6 cards: 1 yellow, 1 dark, medical highlighted), Fleet (5 white cards), Zones chips, Tarifs (dark-header table + checker strip, horiz scroll on mobile), Advantages (YELLOW section, white circle icons like reference), Contact (big phone banner + dark card), Footer light with checker bottom.
 - Wizard modal restyled light, min date = today, try/catch on submit, graceful error (Supabase placeholder). AddressAutocomplete (Nominatim) light dropdown.
 - data-testids across interactive elements. Fixes post-test: scroll-padding-top 5.5rem, hero H1 space, dot touch targets, footer bottom padding (WhatsApp float).
+- Iteration 2 (June 2026): PriceEstimator.tsx in hero (destination select from official TARIFS grid + Voiture/Van + Jour/Nuit toggles → instant price → opens wizard with prefilled context); Tarifs mobile = stacked cards (table hidden <sm); Reviews.tsx carousel (#avis, 6 static Google-style reviews FR/EN — MOCKED content, not live Google API; auto-advance 6s, arrows, dots, responsive 1/2/3 per view) placed between Advantages and Contact. New i18n keys estimator.* and reviews.* in all 4 locales.
 
 ## Testing
 - iteration_2.json: 100% frontend flows pass (localhost:3000). Supabase insert MOCKED/placeholder → intentional graceful error.
 
 ## Backlog / P1-P2
 - P1: Real Supabase credentials in preview if user wants working reservations/admin
-- P2: Stacked card layout for Tarifs on mobile (currently horizontal scroll)
+- P2: Live Google Reviews via Places API (current reviews are static/curated)
 - P2: Locale-aware date/time picker in wizard; phone/email format validation
 - P2: OG image (og-image.jpg referenced but not present), favicon (still vite.svg)

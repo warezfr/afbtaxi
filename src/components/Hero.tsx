@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PhoneCall, ArrowRight, MapPin, Star, ShieldCheck, Clock } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+import { PriceEstimator } from './PriceEstimator';
 
 const CITIES = [
   'Fontainebleau', 'Avon', 'Paris', 'Melun', 'Nemours', 'Orly', 'Roissy CDG',
@@ -17,7 +18,7 @@ const SLIDES = [
 ];
 
 interface Props {
-  onOpenBooking: () => void;
+  onOpenBooking: (context?: string) => void;
 }
 
 export function Hero({ onOpenBooking }: Props) {
@@ -67,7 +68,7 @@ export function Hero({ onOpenBooking }: Props) {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <button
                   data-testid="hero-book-button"
-                  onClick={onOpenBooking}
+                  onClick={() => onOpenBooking()}
                   className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 py-4 font-bold text-gray-900 shadow-[0_12px_35px_-8px_rgba(250,204,21,0.5)] transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-gold-300"
                 >
                   {t('hero.cta')}
@@ -157,9 +158,13 @@ export function Hero({ onOpenBooking }: Props) {
         </div>
       </div>
 
-      {/* ===== Light zone : stats + location ===== */}
+      {/* ===== Light zone : estimator + stats + location ===== */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="-mt-2 grid grid-cols-2 rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] sm:grid-cols-4 sm:divide-x sm:divide-gray-200">
+        <div className="-mt-2">
+          <PriceEstimator onOpenBooking={onOpenBooking} />
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] sm:grid-cols-4 sm:divide-x sm:divide-gray-200">
           {STATS.map((stat, i) => (
             <div key={stat.value + i} className={`px-6 py-6 text-center sm:py-7 ${i > 1 ? 'border-t border-gray-200 sm:border-t-0' : ''} ${i % 2 === 1 ? 'border-l border-gray-200 sm:border-l-0' : ''}`}>
               <p className="font-display text-3xl font-black text-gray-900">{stat.value}</p>

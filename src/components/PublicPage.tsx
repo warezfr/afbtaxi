@@ -6,6 +6,7 @@ import { Fleet } from './Fleet';
 import { Zones } from './Zones';
 import { Tarifs } from './Tarifs';
 import { Advantages } from './Advantages';
+import { Reviews } from './Reviews';
 import { ContactSection } from './ContactSection';
 import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
@@ -40,12 +41,13 @@ export function PublicPage() {
     <>
       <Navbar onOpenBooking={() => openBooking()} />
       <main>
-        <Hero onOpenBooking={() => openBooking()} />
+        <Hero onOpenBooking={openBooking} />
         <Services onOpenBooking={openBooking} />
         <Fleet onOpenBooking={openBooking} />
         <Zones />
         <Tarifs />
         <Advantages />
+        <Reviews />
         <ContactSection onOpenBooking={() => openBooking()} />
       </main>
       <Footer />
