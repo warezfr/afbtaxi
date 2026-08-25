@@ -178,7 +178,7 @@ export function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           </div>
           <div className="flex items-center gap-3">
             <a
-              href="#/"
+              href="/"
               className="text-sm font-medium text-neutral-500 transition-colors hover:text-neutral-900"
             >
               Voir le site

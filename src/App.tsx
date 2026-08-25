@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { I18nProvider } from '@/lib/i18n';
-import { PublicPage } from '@/components/PublicPage';
+import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+
+import { PublicLayout } from '@/components/layouts/PublicLayout';
+import { Home } from '@/pages/Home';
+import { SeoLandingPage } from '@/pages/SeoLandingPage';
+import { BlogList } from '@/pages/BlogList';
+import { BlogPost } from '@/pages/BlogPost';
+
 import { AdminLogin } from '@/components/admin/AdminLogin';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 
-type Route = 'public' | 'admin';
-
-function getRouteFromHash(): Route {
-  return window.location.hash.startsWith('#/admin') ? 'admin' : 'public';
-}
-
 function App() {
-  const [route, setRoute] = useState<Route>(getRouteFromHash());
   const [session, setSession] = useState<boolean>(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
@@ -26,16 +27,13 @@ function App() {
       setSession(!!s);
     });
 
-    const onHashChange = () => setRoute(getRouteFromHash());
-    window.addEventListener('hashchange', onHashChange);
-
     return () => {
       listener.subscription.unsubscribe();
-      window.removeEventListener('hashchange', onHashChange);
     };
   }, []);
 
-  if (route === 'admin') {
+  // For Admin section, we keep a separate isolated tree without the public layout
+  const AdminRoute = () => {
     if (checkingAuth) {
       return (
         <div className="flex min-h-screen items-center justify-center bg-neutral-900">
@@ -45,12 +43,25 @@ function App() {
     }
     if (!session) return <AdminLogin onLogin={() => setSession(true)} />;
     return <AdminDashboard onLogout={() => setSession(false)} />;
-  }
+  };
 
   return (
-    <I18nProvider>
-      <PublicPage />
-    </I18nProvider>
+    <HelmetProvider>
+      <I18nProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/admin/*" element={<AdminRoute />} />
+            
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/:slug" element={<SeoLandingPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </I18nProvider>
+    </HelmetProvider>
   );
 }
 

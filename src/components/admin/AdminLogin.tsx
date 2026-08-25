@@ -32,7 +32,7 @@ export function AdminLogin({ onLogin }: { onLogin: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-neutral-900 px-4">
       <div className="w-full max-w-md">
         <a
-          href="#/"
+          href="/"
           className="mb-6 flex items-center gap-2 text-sm text-neutral-400 transition-colors hover:text-white"
         >
           <ArrowLeft size={16} />

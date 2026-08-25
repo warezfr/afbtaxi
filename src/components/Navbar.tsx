@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Menu, X, Globe, PhoneCall } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { COMPANY } from '@/lib/constants';
 import { useI18n, LOCALE_LABELS, type Locale } from '@/lib/i18n';
 
@@ -14,10 +15,10 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
   const [langOpen, setLangOpen] = useState(false);
 
   const NAV_LINKS = [
-    { href: '#services', label: t('nav.services') },
-    { href: '#flotte', label: t('nav.fleet') },
-    { href: '#zones', label: t('nav.zones') },
-    { href: '#tarifs', label: t('nav.tarifs') },
+    { href: '/#services', label: t('nav.services') },
+    { href: '/#flotte', label: t('nav.fleet') },
+    { href: '/#tarifs', label: t('nav.tarifs') },
+    { href: '/blog', label: 'Blog' },
   ];
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
         {/* Logo */}
-        <a href="#home" className="flex items-center gap-3" data-testid="nav-logo">
+        <Link to="/" className="flex items-center gap-3" data-testid="nav-logo">
           <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gold-400">
             <span className="font-display text-lg font-black text-gray-900">A</span>
             <div className="taxi-checker absolute bottom-0 left-0 right-0 h-1.5" />
@@ -50,18 +51,18 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
               {t('nav.subtitle')}
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
-              href={link.href}
+              to={link.href}
               className={`text-sm font-semibold transition-colors ${light ? 'text-gray-500 hover:text-gray-900' : 'text-gray-300 hover:text-white'}`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
 
           {/* Language */}
@@ -137,14 +138,14 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
         <div className="border-t border-gray-100 bg-white/95 backdrop-blur-xl lg:hidden">
           <div className="flex flex-col gap-1 px-4 py-5 sm:px-6">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-4 py-3.5 text-base font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <button
               data-testid="nav-mobile-book-button"
