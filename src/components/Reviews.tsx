@@ -37,7 +37,7 @@ export function Reviews() {
   }, [maxIndex]);
 
   return (
-    <section id="avis" className="relative overflow-hidden bg-white py-16 lg:py-28">
+    <section id="avis" className="relative overflow-hidden bg-white dark:bg-gray-950 py-16 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-10 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end lg:mb-14">
           <div>
@@ -45,14 +45,14 @@ export function Reviews() {
               <span className="h-px w-8 bg-gold-400" />
               {t('reviews.label')}
             </p>
-            <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+            <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
               {t('reviews.title1')}<span className="yellow-marker px-1">{t('reviews.title2')}</span>
             </h2>
-            <p className="mt-4 flex items-center gap-3 text-base text-gray-500 sm:text-lg">
+            <p className="mt-4 flex items-center gap-3 text-base text-gray-500 dark:text-gray-400 sm:text-lg">
               <span className="flex text-gold-500">
                 {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
               </span>
-              <span className="font-bold text-gray-900">4.9/5</span>
+              <span className="font-bold text-gray-900 dark:text-white">4.9/5</span>
               {t('reviews.subtitle')}
             </p>
           </div>
@@ -62,7 +62,7 @@ export function Reviews() {
               data-testid="reviews-prev-button"
               onClick={prev}
               aria-label="Avis précédent"
-              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-gray-900 text-gray-900 transition-colors hover:bg-gray-900 hover:text-gold-400"
+              className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-gray-900 dark:border-gray-700 text-gray-900 dark:text-white transition-colors hover:bg-gray-900 dark:hover:bg-gray-800 hover:text-gold-400 dark:hover:text-gold-400"
             >
               <ChevronLeft size={20} />
             </button>
@@ -84,28 +84,28 @@ export function Reviews() {
           >
             {REVIEWS.map((review, i) => (
               <div key={i} className="w-full shrink-0 px-2 sm:w-1/2 lg:w-1/3" style={{ minWidth: `${100 / perView}%` }}>
-                <article className="flex h-full flex-col rounded-3xl border border-gray-100 bg-gray-50 p-7">
+                <article className="flex h-full flex-col rounded-3xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-7">
                   <div className="flex items-center justify-between">
                     <div className="flex text-gold-500">
                       {[...Array(5)].map((_, s) => (
-                        <Star key={s} size={16} fill={s < review.rating ? 'currentColor' : 'none'} className={s < review.rating ? '' : 'text-gray-300'} />
+                        <Star key={s} size={16} fill={s < review.rating ? 'currentColor' : 'none'} className={s < review.rating ? '' : 'text-gray-300 dark:text-gray-700'} />
                       ))}
                     </div>
-                    <span className="flex items-center gap-1 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-500 shadow-sm">
+                    <span className="flex items-center gap-1 rounded-full bg-white dark:bg-gray-800 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 shadow-sm">
                       <span className="font-black"><span className="text-[#4285F4]">G</span><span className="text-[#EA4335]">o</span><span className="text-[#FBBC05]">o</span><span className="text-[#4285F4]">g</span><span className="text-[#34A853]">l</span><span className="text-[#EA4335]">e</span></span>
                     </span>
                   </div>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-gray-600">"{review.text}"</p>
-                  <div className="mt-5 flex items-center gap-3 border-t border-gray-200 pt-4">
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">"{review.text}"</p>
+                  <div className="mt-5 flex items-center gap-3 border-t border-gray-200 dark:border-gray-800 pt-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-400 font-display text-sm font-black text-gray-900">
                       {review.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="flex items-center gap-1.5 text-sm font-bold text-gray-900">
+                      <p className="flex items-center gap-1.5 text-sm font-bold text-gray-900 dark:text-white">
                         {review.name}
                         <BadgeCheck size={14} className="text-gold-600" />
                       </p>
-                      <p className="text-xs text-gray-400">{review.date}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">{review.date}</p>
                     </div>
                   </div>
                 </article>
@@ -118,7 +118,7 @@ export function Reviews() {
         <div className="mt-8 flex justify-center gap-2">
           {[...Array(maxIndex + 1)].map((_, i) => (
             <button key={i} aria-label={`Page ${i + 1}`} onClick={() => setIndex(i)} className="flex h-8 items-center px-0.5">
-              <span className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${i === index ? 'w-8 bg-gold-500' : 'w-3 bg-gray-200'}`} />
+              <span className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${i === index ? 'w-8 bg-gold-500' : 'w-3 bg-gray-200 dark:bg-gray-800'}`} />
             </button>
           ))}
         </div>

@@ -173,23 +173,23 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   if (!open) return null;
 
   const inputCls =
-    'w-full min-h-[48px] rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40';
-  const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700';
+    'w-full min-h-[48px] rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40';
+  const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700 dark:text-gray-300';
 
   return createPortal(
     <dialog open className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4" dir={dir}>
-      <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={close} />
-      <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={close} />
+      <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-900 shadow-2xl border border-transparent dark:border-gray-800">
         <div className="taxi-checker h-2.5 shrink-0" />
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 dark:border-gray-800 px-6 py-4">
           <div>
-            <h2 className="font-display text-lg font-bold text-gray-900">{t('wizard.title')}</h2>
+            <h2 className="font-display text-lg font-bold text-gray-900 dark:text-white">{t('wizard.title')}</h2>
             {context && (
               <p className="mt-0.5 text-xs font-bold text-gold-600">{context}</p>
             )}
           </div>
-          <button data-testid="wizard-close-button" onClick={close} className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900">
+          <button data-testid="wizard-close-button" onClick={close} className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -200,10 +200,10 @@ export function ReservationWizard({ open, onClose, context }: Props) {
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gold-100">
               <CheckCircle2 size={36} className="text-gold-600" />
             </div>
-            <h3 className="mb-2 font-display text-xl font-bold text-gray-900">{t('wizard.success.title')}</h3>
-            <p className="mb-6 text-gray-500">{t('wizard.success.text')}</p>
+            <h3 className="mb-2 font-display text-xl font-bold text-gray-900 dark:text-white">{t('wizard.success.title')}</h3>
+            <p className="mb-6 text-gray-500 dark:text-gray-400">{t('wizard.success.text')}</p>
             <div className="flex justify-center gap-3">
-              <button onClick={() => { reset(); }} className="min-h-[44px] rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold text-gray-600 transition-colors hover:border-gray-400">
+              <button onClick={() => { reset(); }} className="min-h-[44px] rounded-full border border-gray-200 dark:border-gray-700 px-5 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 transition-colors hover:border-gray-400 dark:hover:border-gray-500">
                 {t('wizard.success.newBooking')}
               </button>
               <button data-testid="wizard-success-ok" onClick={close} className="min-h-[44px] rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300">
@@ -221,14 +221,14 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                 const isDone = i < step;
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-gold-400 text-gray-900' : isDone ? 'bg-gold-100 text-gold-700' : 'bg-gray-100 text-gray-400'}`}>
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-gold-400 text-gray-900' : isDone ? 'bg-gold-100 text-gold-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'}`}>
                       <Icon size={16} />
                     </div>
-                    <span className={`hidden text-xs font-bold sm:block ${isActive ? 'text-gray-900' : 'text-gray-400'}`}>
+                    <span className={`hidden text-xs font-bold sm:block ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
                       {t(s.key)}
                     </span>
                     {i < STEPS.length - 1 && (
-                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-gray-200'}`} />
+                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-gray-200 dark:bg-gray-700'}`} />
                     )}
                   </div>
                 );
@@ -319,16 +319,16 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     <textarea rows={3} value={form.message} onChange={(e) => update('message', e.target.value)} className={inputCls} placeholder={t('wizard.messagePlaceholder')} />
                   </div>
                   {status === 'error' && (
-                    <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{errorMsg}</p>
+                    <p className="rounded-xl border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-400">{errorMsg}</p>
                   )}
                 </div>
               )}
             </div>
 
             {/* Footer buttons */}
-            <div className="flex shrink-0 items-center justify-between border-t border-gray-100 bg-gray-50/60 px-6 py-4">
+            <div className="flex shrink-0 items-center justify-between border-t border-gray-100 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-950/60 px-6 py-4">
               {step > 0 ? (
-                <button data-testid="wizard-prev-button" onClick={() => setStep(step - 1)} className="flex min-h-[44px] items-center gap-1 text-sm font-bold text-gray-500 transition-colors hover:text-gray-900">
+                <button data-testid="wizard-prev-button" onClick={() => setStep(step - 1)} className="flex min-h-[44px] items-center gap-1 text-sm font-bold text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">
                   <ChevronLeft size={16} /> {t('wizard.prev')}
                 </button>
               ) : <span />}
@@ -356,7 +356,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     data-testid="wizard-email-button"
                     onClick={handleEmail}
                     title={t('wizard.sendEmail')}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
                   >
                     <Mail size={18} />
                   </button>

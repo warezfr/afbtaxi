@@ -22,30 +22,42 @@ export function BlogPost() {
         <meta name="description" content={post.description} />
       </Helmet>
 
-      <article className="bg-white pt-32 pb-16">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 mb-8 transition-colors">
+      <article className="bg-white dark:bg-gray-950 pt-20">
+        {/* Full width hero image */}
+        <div className="w-full h-[40vh] md:h-[50vh] lg:h-[60vh] relative overflow-hidden mb-12 lg:mb-16">
+           <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+           <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent" />
+           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 md:px-16 md:pb-16 text-white max-w-5xl mx-auto flex flex-col justify-end h-full">
+             <div>
+               <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-6 inline-block">{post.category}</span>
+               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">{post.title}</h1>
+               <p className="mt-6 text-gray-300 font-medium tracking-wide uppercase text-sm">{new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+             </div>
+           </div>
+        </div>
+
+        {/* Content container */}
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-16 lg:pb-24">
+          <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-10 transition-colors">
             <ArrowLeft size={16} /> Retour aux articles
           </Link>
-          
-          <div className="mb-8">
-             <span className="bg-gold-100 text-gold-700 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">{post.category}</span>
-             <h1 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight leading-tight">{post.title}</h1>
-             <p className="mt-4 text-gray-500">{new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-          </div>
 
-          <div className="aspect-video w-full rounded-3xl overflow-hidden mb-12 shadow-md">
-            <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
-          </div>
-
-          <div className="prose prose-lg prose-gray max-w-none prose-headings:font-display prose-headings:font-black prose-a:text-gold-600 hover:prose-a:text-gold-500">
+          <div className="markdown-content text-lg text-gray-600 dark:text-gray-300 leading-relaxed space-y-6 
+            [&>h2]:font-display [&>h2]:text-3xl [&>h2]:font-black [&>h2]:text-gray-900 [&>h2]:dark:text-white [&>h2]:mt-12 [&>h2]:mb-6
+            [&>h3]:font-display [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-gray-900 [&>h3]:dark:text-white [&>h3]:mt-10 [&>h3]:mb-4
+            [&>p]:mb-6 [&>p>strong]:text-gray-900 [&>p>strong]:dark:text-white
+            [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul>li]:mb-2 [&>ul>li>strong]:text-gray-900 [&>ul>li>strong]:dark:text-white
+            [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-6 [&>ol>li]:mb-2
+            [&>blockquote]:border-l-4 [&>blockquote]:border-gold-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-700 [&>blockquote]:dark:text-gray-400
+            [&_a]:text-gold-600 [&_a]:dark:text-gold-500 [&_a]:underline hover:[&_a]:text-gold-500"
+          >
              <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </div>
       </article>
 
-      <div className="bg-gray-50 py-16 text-center px-4">
-        <h3 className="font-display text-2xl font-bold text-gray-900 mb-4">Besoin d'un transport dans la région ?</h3>
+      <div className="bg-gray-50 dark:bg-gray-900 py-16 text-center px-4">
+        <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-4">Besoin d'un transport dans la région ?</h3>
         <button
           onClick={() => openBooking(`Suite à la lecture : ${post.title}`)}
           className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 py-4 font-bold text-gray-900 transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-gold-300"

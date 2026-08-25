@@ -6,15 +6,15 @@ export function ContactSection({ onOpenBooking }: { onOpenBooking: () => void })
   const { t } = useI18n();
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-white pb-16 pt-16 lg:pb-28 lg:pt-24" style={{ contentVisibility: 'auto' }}>
+    <section id="contact" className="relative overflow-hidden bg-white dark:bg-gray-950 pb-16 pt-16 lg:pb-28 lg:pt-24" style={{ contentVisibility: 'auto' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Big phone banner */}
         <div className="reveal mb-12 text-center lg:mb-16">
-          <p className="text-xs font-bold uppercase tracking-[.22em] text-gray-400 sm:text-sm">{t('contact.phone')} — 24/7</p>
+          <p className="text-xs font-bold uppercase tracking-[.22em] text-gray-400 dark:text-gray-500 sm:text-sm">{t('contact.phone')} — 24/7</p>
           <a
             href={`tel:${COMPANY.phoneRaw}`}
             data-testid="contact-big-phone"
-            className="mt-2 inline-block font-display text-4xl font-black tracking-tight text-gray-900 transition-colors hover:text-gold-500 sm:text-6xl lg:text-7xl"
+            className="mt-2 inline-block font-display text-4xl font-black tracking-tight text-gray-900 dark:text-white transition-colors hover:text-gold-500 sm:text-6xl lg:text-7xl"
           >
             {COMPANY.phone}
           </a>

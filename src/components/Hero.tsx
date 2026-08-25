@@ -38,7 +38,7 @@ export function Hero({ onOpenBooking }: Props) {
   ];
 
   return (
-    <section id="home" className="relative overflow-hidden bg-white">
+    <section id="home" className="relative overflow-hidden bg-white dark:bg-gray-950">
       {/* ===== Dark hero ===== */}
       <div className="relative overflow-hidden bg-[#0a0a0a] pb-24 pt-24 sm:pb-28 lg:pb-36 lg:pt-28">
         {/* Decorative */}
@@ -151,10 +151,10 @@ export function Hero({ onOpenBooking }: Props) {
           </div>
         </div>
 
-        {/* Wave transition to white */}
+        {/* Wave transition to white/dark */}
         <div className="absolute -bottom-px left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 110" preserveAspectRatio="none" className="block h-[50px] w-full sm:h-[70px] lg:h-[95px]">
-            <path d="M0,70 C240,115 480,110 720,72 C960,34 1200,26 1440,74 L1440,110 L0,110 Z" fill="#ffffff" />
+          <svg viewBox="0 0 1440 110" preserveAspectRatio="none" className="block h-[50px] w-full fill-white dark:fill-gray-950 sm:h-[70px] lg:h-[95px]">
+            <path d="M0,70 C240,115 480,110 720,72 C960,34 1200,26 1440,74 L1440,110 L0,110 Z" />
           </svg>
         </div>
       </div>
@@ -165,11 +165,11 @@ export function Hero({ onOpenBooking }: Props) {
           <PriceEstimator onOpenBooking={onOpenBooking} />
         </div>
 
-        <div className="mt-8 grid grid-cols-2 rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] sm:grid-cols-4 sm:divide-x sm:divide-gray-200">
+        <div className="mt-8 grid grid-cols-2 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] dark:shadow-none sm:grid-cols-4 sm:divide-x sm:divide-gray-200 dark:sm:divide-gray-800">
           {STATS.map((stat, i) => (
-            <div key={stat.value + i} className={`px-6 py-6 text-center sm:py-7 ${i > 1 ? 'border-t border-gray-200 sm:border-t-0' : ''} ${i % 2 === 1 ? 'border-l border-gray-200 sm:border-l-0' : ''}`}>
-              <p className="font-display text-3xl font-black text-gray-900">{stat.value}</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-400">{stat.label}</p>
+            <div key={stat.value + i} className={`px-6 py-6 text-center sm:py-7 ${i > 1 ? 'border-t border-gray-200 dark:border-gray-800 sm:border-t-0' : ''} ${i % 2 === 1 ? 'border-l border-gray-200 dark:border-gray-800 sm:border-l-0' : ''}`}>
+              <p className="font-display text-3xl font-black text-gray-900 dark:text-white">{stat.value}</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -181,7 +181,7 @@ export function Hero({ onOpenBooking }: Props) {
       </div>
 
       {/* Cities marquee */}
-      <div className="relative border-y border-gray-100 bg-gray-50">
+      <div className="relative border-y border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
         <div className="overflow-hidden py-4">
           <div className="animate-marquee flex w-max items-center gap-8">
             {[...CITIES, ...CITIES].map((city, i) => (

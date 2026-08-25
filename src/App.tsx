@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { ThemeProvider } from '@/lib/ThemeContext';
 import { I18nProvider } from '@/lib/i18n';
 import { BrowserRouter, Routes, Route, HashRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -46,22 +47,24 @@ function App() {
   };
 
   return (
-    <HelmetProvider>
-      <I18nProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/admin/*" element={<AdminRoute />} />
-            
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/blog" element={<BlogList />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/:slug" element={<SeoLandingPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </I18nProvider>
-    </HelmetProvider>
+    <ThemeProvider>
+      <HelmetProvider>
+        <I18nProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/admin/*" element={<AdminRoute />} />
+              
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/blog" element={<BlogList />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/:slug" element={<SeoLandingPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </I18nProvider>
+      </HelmetProvider>
+    </ThemeProvider>
   );
 }
 

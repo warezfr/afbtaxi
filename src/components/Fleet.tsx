@@ -53,11 +53,11 @@ function VehicleCard({ vehicle, t, onOpenBooking }: { vehicle: typeof VEHICLES[n
   return (
     <article
       data-testid={`fleet-card-${vehicle.name.replace(/\s+/g, '-').toLowerCase()}`}
-      className="card-lift group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-[0_10px_30px_-18px_rgba(17,24,39,0.15)]"
+      className="card-lift group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-[0_10px_30px_-18px_rgba(17,24,39,0.15)] dark:shadow-none"
     >
       <div className="relative h-52 overflow-hidden sm:h-56">
         <img src={vehicle.image} alt={vehicle.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-        <span className="glass-light absolute right-4 top-4 rounded-full px-3 py-1.5 text-[11px] font-bold text-gray-900">
+        <span className="glass-light dark:bg-gray-900/80 dark:border-gray-700 dark:text-white absolute right-4 top-4 rounded-full px-3 py-1.5 text-[11px] font-bold text-gray-900">
           {vehicle.seatCount} {t('fleet.seats')}
         </span>
       </div>
@@ -68,16 +68,16 @@ function VehicleCard({ vehicle, t, onOpenBooking }: { vehicle: typeof VEHICLES[n
             <Icon size={18} />
           </div>
           <div>
-            <h3 className="font-display text-lg font-bold text-gray-900">{vehicle.name}</h3>
+            <h3 className="font-display text-lg font-bold text-gray-900 dark:text-white">{vehicle.name}</h3>
             <p className="text-[11px] font-bold uppercase tracking-wider text-gold-600">{t(vehicle.tagKey)}</p>
           </div>
         </div>
 
         <ul className="mt-5 flex-1 space-y-2.5">
           {vehicle.featureKeys.map((key) => (
-            <li key={key} className="flex items-center gap-2.5 text-sm text-gray-500">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-100">
-                <Check size={12} className="text-gold-700" />
+            <li key={key} className="flex items-center gap-2.5 text-sm text-gray-500 dark:text-gray-400">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gold-100 dark:bg-gold-400/10">
+                <Check size={12} className="text-gold-700 dark:text-gold-400" />
               </span>
               {t(key)}
             </li>
@@ -86,7 +86,7 @@ function VehicleCard({ vehicle, t, onOpenBooking }: { vehicle: typeof VEHICLES[n
 
         <button
           onClick={() => onOpenBooking(vehicle.name)}
-          className="mt-6 min-h-[48px] w-full rounded-full border-2 border-gray-900 bg-white px-5 py-3 text-sm font-bold text-gray-900 transition-[background-color,color] duration-300 hover:bg-gray-900 hover:text-gold-400"
+          className="mt-6 min-h-[48px] w-full rounded-full border-2 border-gray-900 dark:border-gray-700 bg-white dark:bg-gray-800 px-5 py-3 text-sm font-bold text-gray-900 dark:text-white transition-[background-color,color] duration-300 hover:bg-gray-900 dark:hover:bg-gray-700 hover:text-gold-400 dark:hover:text-gold-400"
         >
           {t('fleet.book')}
         </button>
@@ -99,8 +99,8 @@ export function Fleet({ onOpenBooking }: FleetProps) {
   const { t } = useI18n();
 
   return (
-    <section id="flotte" className="relative overflow-hidden bg-gray-50 py-16 lg:py-28" style={{ contentVisibility: 'auto' }}>
-      <div className="dot-grid absolute inset-0 opacity-40" />
+    <section id="flotte" className="relative overflow-hidden bg-gray-50 dark:bg-gray-950 py-16 lg:py-28" style={{ contentVisibility: 'auto' }}>
+      <div className="dot-grid absolute inset-0 opacity-40 dark:opacity-10" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-12 text-center lg:mb-16">
           <p className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.22em] text-gold-600 sm:text-sm">
@@ -108,10 +108,10 @@ export function Fleet({ onOpenBooking }: FleetProps) {
             {t('fleet.label')}
             <span className="h-px w-8 bg-gold-400" />
           </p>
-          <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+          <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
             {t('fleet.title1')}<span className="yellow-marker px-1">{t('fleet.title2')}</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base text-gray-500 sm:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-base text-gray-500 dark:text-gray-400 sm:text-lg">
             {t('fleet.subtitle')}
           </p>
         </div>
