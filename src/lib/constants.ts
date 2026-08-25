@@ -77,34 +77,12 @@ export const ZONES = [
 ];
 
 export const TARIFS = [
-  {
-    route: 'Avon ↔ Melun',
-    distance: '18,2 km',
-    duration: '29-33 min',
-    priceMin: '38,90 €',
-    priceMax: '51,70 €',
-  },
-  {
-    route: 'Avon ↔ Nemours',
-    distance: '22,5 km',
-    duration: '28-33 min',
-    priceMin: '47,40 €',
-    priceMax: '63,10 €',
-  },
-  {
-    route: 'Avon ↔ Montereau',
-    distance: '22,5 km',
-    duration: '27-32 min',
-    priceMin: '47,40 €',
-    priceMax: '63,10 €',
-  },
-  {
-    route: 'Avon ↔ Aéroport Orly',
-    distance: '61,6 km',
-    duration: '55-63 min',
-    priceMin: '124 €',
-    priceMax: '167,10 €',
-  },
+  { route: 'Fontainebleau ↔ Orly', carDay: '115 €', carNight: '145 €', vanDay: '150 €', vanNight: '200 €' },
+  { route: 'Fontainebleau ↔ Paris rive droite', carDay: '153 €', carNight: '173 €', vanDay: '205 €', vanNight: '245 €' },
+  { route: 'Fontainebleau ↔ Paris rive gauche', carDay: '132 €', carNight: '153 €', vanDay: '200 €', vanNight: '240 €' },
+  { route: 'Fontainebleau ↔ CDG', carDay: '168 €', carNight: '192 €', vanDay: '210 €', vanNight: '245 €' },
+  { route: 'Fontainebleau ↔ Gare de Chessy / Marne-la-Vallée', carDay: '135 €', carNight: '155 €', vanDay: '200 €', vanNight: '240 €' },
+  { route: 'Fontainebleau ↔ Gare d’Avon', carDay: '18 €', carNight: '25 €', vanDay: '28 €', vanNight: '35 €' },
 ];
 
 export const ADVANTAGES = [

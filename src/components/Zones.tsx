@@ -13,7 +13,7 @@ export function Zones() {
             Zones Desservies
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-base text-neutral-400">
-            Nous vous accompagnons partout en Île-de-France
+            Nous vous accompagnons partout en Île-de-France depuis Fontainebleau
           </p>
         </div>
 
