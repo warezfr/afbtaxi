@@ -6,7 +6,7 @@ export function ContactSection({ onOpenBooking }: { onOpenBooking: () => void })
   const { t } = useI18n();
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-white pb-16 pt-16 lg:pb-28 lg:pt-24">
+    <section id="contact" className="relative overflow-hidden bg-white pb-16 pt-16 lg:pb-28 lg:pt-24" style={{ contentVisibility: 'auto' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Big phone banner */}
         <div className="reveal mb-12 text-center lg:mb-16">

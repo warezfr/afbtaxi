@@ -177,7 +177,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700';
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" dir={dir}>
+    <dialog open className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4" dir={dir}>
       <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={close} />
       <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
         <div className="taxi-checker h-2.5 shrink-0" />
@@ -378,7 +378,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
           </>
         )}
       </div>
-    </div>,
+    </dialog>,
     document.body
   );
 }

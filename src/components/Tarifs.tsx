@@ -6,7 +6,7 @@ export function Tarifs() {
   const { t } = useI18n();
 
   return (
-    <section id="tarifs" className="relative overflow-hidden bg-gray-50 py-16 lg:py-28">
+    <section id="tarifs" className="relative overflow-hidden bg-gray-50 py-16 lg:py-28" style={{ contentVisibility: 'auto' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-12 text-center lg:mb-16">
           <p className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.22em] text-gold-600 sm:text-sm">

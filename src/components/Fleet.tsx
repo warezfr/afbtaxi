@@ -99,7 +99,7 @@ export function Fleet({ onOpenBooking }: FleetProps) {
   const { t } = useI18n();
 
   return (
-    <section id="flotte" className="relative overflow-hidden bg-gray-50 py-16 lg:py-28">
+    <section id="flotte" className="relative overflow-hidden bg-gray-50 py-16 lg:py-28" style={{ contentVisibility: 'auto' }}>
       <div className="dot-grid absolute inset-0 opacity-40" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-12 text-center lg:mb-16">

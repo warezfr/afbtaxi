@@ -116,6 +116,7 @@ export function Hero({ onOpenBooking }: Props) {
                       alt={slide.name}
                       className="h-full w-full object-cover"
                       loading={i === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={i === 0 ? 'high' : 'auto'}
                     />
                     {/* Blend edges into black */}
                     <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-[#0a0a0a]/60" />
