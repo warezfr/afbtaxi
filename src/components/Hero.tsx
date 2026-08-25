@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Phone, PhoneCall, ArrowRight, MapPin, ChevronDown } from 'lucide-react';
+import { PhoneCall, ArrowRight, MapPin, ChevronDown } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+
+const CITIES = [
+  'Fontainebleau', 'Avon', 'Paris', 'Melun', 'Nemours', 'Orly', 'Roissy CDG',
+  'Dammarie-les-Lys', 'Barbizon', 'Moret-sur-Loing', 'Samois-sur-Seine',
+  'Thomery', 'Vulaines-sur-Seine', 'Bois-le-Roi', 'Chailly-en-Bière',
+  'Milly-la-Forêt', 'La Rochette', 'Vaux-le-Pénil', 'Le Mée-sur-Seine',
+  'Chessy', 'Disneyland Paris', 'Gare de Lyon', 'La Défense',
+  'Versailles', 'Évry', 'Corbeil-Essonnes', 'Sénart',
+];
 
 const SLIDES = [
   { name: 'Mercedes Classe S', image: 'https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg?auto=compress&cs=tinysrgb&w=1920' },
@@ -107,7 +116,7 @@ export function Hero({ onOpenBooking }: Props) {
         </div>
 
         {/* Slide indicators */}
-        <div className="absolute bottom-10 left-6 flex items-center gap-4 lg:left-8">
+        <div className="absolute bottom-28 left-6 flex items-center gap-4 lg:bottom-28 lg:left-8">
           <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{SLIDES[current].name}</span>
           <div className="flex gap-2">
             {SLIDES.map((_, i) => (
@@ -121,10 +130,25 @@ export function Hero({ onOpenBooking }: Props) {
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-10 right-6 lg:right-8">
+        <div className="absolute bottom-28 right-6 lg:bottom-28 lg:right-8">
           <div className="flex flex-col items-center gap-2 text-neutral-500">
             <span className="text-[10px] font-semibold uppercase tracking-widest">{t('hero.scroll')}</span>
             <ChevronDown size={16} className="animate-scroll-hint" />
+          </div>
+        </div>
+      </div>
+
+      {/* Cities marquee banner */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-ink/80 backdrop-blur-md">
+        <div className="overflow-hidden py-4">
+          <div className="animate-marquee flex w-max items-center gap-6">
+            {[...CITIES, ...CITIES].map((city, i) => (
+              <span key={i} className="flex shrink-0 items-center gap-2">
+                <MapPin size={12} className="text-gold-400/70" />
+                <span className="whitespace-nowrap text-sm font-medium text-neutral-400">{city}</span>
+                <span className="ml-4 h-1 w-1 rounded-full bg-gold-400/30" />
+              </span>
+            ))}
           </div>
         </div>
       </div>
