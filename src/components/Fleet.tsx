@@ -1,0 +1,117 @@
+import { Check, Crown, Users } from 'lucide-react';
+
+interface FleetProps {
+  onOpenBooking: () => void;
+}
+
+const VEHICLES = [
+  {
+    name: 'Mercedes Classe S',
+    tag: 'VIP · Confort premium',
+    image:
+      'https://images.pexels.com/photos/18369291/pexels-photo-18369291.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    icon: Crown,
+    features: [
+      'Berline de luxe silencieuse',
+      'Cuir, climatisation bi-zone',
+      'Idéale pour vos trajets VIP et affaires',
+      'Transferts aéroport & gare haut de gamme',
+    ],
+    seats: '4 places',
+  },
+  {
+    name: 'Mercedes Classe V',
+    tag: 'Van · Transport de groupe',
+    image:
+      'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    icon: Users,
+    features: [
+      'Van spacieux et confortable',
+      'Idéal pour familles et groupes',
+      'Grande capacité de bagages',
+      'Transferts aéroport, gares & longue distance',
+    ],
+    seats: '8 places',
+  },
+];
+
+export function Fleet({ onOpenBooking }: FleetProps) {
+  return (
+    <section id="flotte" className="bg-ink py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="mb-14 text-center">
+          <p className="mb-3 text-xs font-black uppercase tracking-[.25em] text-yellow-400">
+            Notre flotte
+          </p>
+          <h2 className="text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">
+            Voyagez en Mercedes
+          </h2>
+          <p className="mx-auto mt-3 max-w-lg text-base text-neutral-400">
+            Des véhicules premium pour un confort d'exception, quel que soit
+            votre trajet.
+          </p>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          {VEHICLES.map((vehicle) => {
+            const Icon = vehicle.icon;
+            return (
+              <article
+                key={vehicle.name}
+                className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-neutral-900 transition-all hover:border-yellow-400/40"
+              >
+                <div className="relative h-64 overflow-hidden sm:h-72">
+                  <img
+                    src={vehicle.image}
+                    alt={vehicle.name}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/30 to-transparent" />
+                  <div className="absolute bottom-4 left-5 flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-400 text-neutral-950">
+                      <Icon size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white">
+                        {vehicle.name}
+                      </h3>
+                      <p className="text-xs font-medium text-yellow-400">
+                        {vehicle.tag}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="absolute right-4 top-4 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                    {vehicle.seats}
+                  </span>
+                </div>
+
+                <div className="p-6">
+                  <ul className="space-y-3">
+                    {vehicle.features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-start gap-3 text-sm text-neutral-300"
+                      >
+                        <Check
+                          size={18}
+                          className="mt-0.5 shrink-0 text-yellow-400"
+                        />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={onOpenBooking}
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-yellow-400 px-6 py-3 text-sm font-bold text-neutral-950 transition-all hover:bg-yellow-300"
+                  >
+                    Réserver ce véhicule
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
