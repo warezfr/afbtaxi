@@ -1,54 +1,107 @@
-import {
-  ArrowUpRight,
-  Car,
-  HeartPulse,
-  Plane,
-  TrainFront,
-} from 'lucide-react';
-import { SERVICES } from '@/lib/constants';
-
-const SERVICE_SPOTLIGHTS = [
-  { title: 'Dans la ville', subtitle: 'Courses locales', icon: Car, accent: 'yellow' },
-  { title: 'Gares & aéroports', subtitle: 'Transferts ponctuels', icon: Plane, accent: 'light' },
-  { title: 'Transport sanitaire', subtitle: 'Conventionné CPAM 77', icon: HeartPulse, accent: 'light' },
-];
+import { ArrowUpRight, Plane, HeartPulse, Car, TrainFront, Clock, Users } from 'lucide-react';
 
 interface ServicesProps {
   onOpenBooking: () => void;
 }
 
+const SERVICE_CARDS = [
+  {
+    title: 'Transferts A\u00e9roports',
+    subtitle: 'Orly \u00b7 CDG',
+    description: 'Ponctualit\u00e9 garantie pour vos vols. Suivi en temps r\u00e9el de votre vol.',
+    icon: Plane,
+    accent: true,
+  },
+  {
+    title: 'Transferts Gares',
+    subtitle: 'TGV \u00b7 RER',
+    description: 'Gare de Lyon, gare d\u2019Avon, Chessy\u2026 Nous vous emmenons partout.',
+    icon: TrainFront,
+    accent: false,
+  },
+  {
+    title: 'Transport Sanitaire',
+    subtitle: 'Conventionn\u00e9 CPAM 77',
+    description: 'Transport m\u00e9dical s\u00e9curis\u00e9, toutes distances, avec le plus grand soin.',
+    icon: HeartPulse,
+    accent: false,
+  },
+  {
+    title: 'Mise \u00e0 Disposition',
+    subtitle: 'Journ\u00e9e \u00b7 Soir\u00e9e',
+    description: 'Chauffeur d\u00e9di\u00e9 pour vos d\u00e9placements professionnels ou \u00e9v\u00e9nements.',
+    icon: Clock,
+    accent: false,
+  },
+  {
+    title: 'Transport de Groupe',
+    subtitle: 'Jusqu\u2019\u00e0 7 passagers',
+    description: 'Mercedes Classe V spacieuse pour familles et groupes.',
+    icon: Users,
+    accent: false,
+  },
+  {
+    title: 'Courses Locales',
+    subtitle: 'Fontainebleau & alentours',
+    description: 'D\u00e9placements quotidiens dans Fontainebleau et ses environs.',
+    icon: Car,
+    accent: true,
+  },
+];
+
 export function Services({ onOpenBooking }: ServicesProps) {
   return (
-    <section id="services" className="bg-cream pb-20 pt-8 lg:pb-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="mx-auto mb-10 max-w-xl text-center">
-          <p className="mb-3 text-xs font-black uppercase tracking-[.25em] text-yellow-600">Nos solutions</p>
-          <h2 className="text-3xl font-black uppercase tracking-tight text-neutral-950 sm:text-4xl">Un taxi pour chaque moment</h2>
-          <p className="mt-3 text-base text-neutral-600">Simple à réserver, agréable à vivre, partout où vous devez aller.</p>
+    <section id="services" className="relative overflow-hidden bg-ink py-24 lg:py-32">
+      {/* Background decoration */}
+      <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-400/20 to-transparent" />
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[.2em] text-gold-400">Nos services</p>
+          <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+            Un taxi pour chaque <span className="gold-text">besoin</span>
+          </h2>
+          <p className="mt-4 text-base leading-7 text-neutral-400">
+            Que ce soit pour un transfert a\u00e9roport, un trajet m\u00e9dical ou une mise \u00e0 disposition, nous avons la solution adapt\u00e9e.
+          </p>
         </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {SERVICE_SPOTLIGHTS.map(({ title, subtitle, icon: Icon, accent }) => (
-            <article key={title} className={`group relative min-h-[250px] overflow-hidden rounded-[28px] p-7 shadow-sm transition-all hover:-translate-y-2 hover:shadow-xl ${accent === 'yellow' ? 'bg-yellow-400' : 'bg-white'}`}>
-              <div className="relative z-10 flex h-full flex-col justify-between">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${accent === 'yellow' ? 'bg-neutral-950 text-yellow-400' : 'bg-neutral-100 text-neutral-950'}`}><Icon size={23} /></div>
-                <div>
-                  <p className={`mb-2 text-xs font-black uppercase tracking-[.18em] ${accent === 'yellow' ? 'text-neutral-800' : 'text-yellow-600'}`}>{subtitle}</p>
-                  <h3 className="text-2xl font-black uppercase tracking-tight text-neutral-950">{title}</h3>
-                  <button onClick={onOpenBooking} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-neutral-950">Réserver <ArrowUpRight size={16} /></button>
-                </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICE_CARDS.map(({ title, subtitle, description, icon: Icon, accent }) => (
+            <article
+              key={title}
+              className={`group relative overflow-hidden rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 ${
+                accent
+                  ? 'bg-gold-400 text-ink'
+                  : 'glass hover:border-gold-400/20'
+              }`}
+            >
+              <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                style={{ background: accent ? 'rgba(10,10,10,0.9)' : 'rgba(255,208,59,0.1)' }}
+              >
+                <Icon size={22} className={accent ? 'text-gold-400' : 'text-gold-400'} />
               </div>
-              <div className={`absolute -bottom-16 -right-10 h-44 w-44 rounded-full ${accent === 'yellow' ? 'bg-yellow-300' : 'bg-yellow-50'} transition-transform group-hover:scale-125`} />
-              <div className="absolute -bottom-1 right-7 text-neutral-950/10"><Car size={105} strokeWidth={1} /></div>
+
+              <p className={`mb-2 text-xs font-bold uppercase tracking-wider ${accent ? 'text-ink/60' : 'text-gold-400/70'}`}>
+                {subtitle}
+              </p>
+              <h3 className={`text-xl font-bold ${accent ? 'text-ink' : 'text-white'}`}>{title}</h3>
+              <p className={`mt-2 text-sm leading-relaxed ${accent ? 'text-ink/70' : 'text-neutral-400'}`}>{description}</p>
+
+              <button
+                onClick={onOpenBooking}
+                className={`mt-5 inline-flex items-center gap-2 text-sm font-bold transition-colors ${
+                  accent ? 'text-ink hover:text-ink/70' : 'text-gold-400 hover:text-gold-300'
+                }`}
+              >
+                R\u00e9server <ArrowUpRight size={15} />
+              </button>
+
+              {/* Corner decoration */}
+              <div className={`absolute -bottom-12 -right-12 h-32 w-32 rounded-full transition-transform duration-500 group-hover:scale-150 ${
+                accent ? 'bg-gold-300/50' : 'bg-gold-400/5'
+              }`} />
             </article>
-          ))}
-        </div>
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.slice(3).map((service) => (
-            <div key={service.title} className="rounded-2xl border border-neutral-200 bg-white p-5 transition-colors hover:border-yellow-400">
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-950 text-yellow-400"><TrainFront size={19} /></div>
-              <h3 className="font-bold text-neutral-950">{service.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-neutral-600">{service.description}</p>
-            </div>
           ))}
         </div>
       </div>

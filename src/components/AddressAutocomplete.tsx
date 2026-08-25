@@ -88,15 +88,15 @@ export function AddressAutocomplete({ value, onChange, placeholder, required, cl
       </div>
 
       {showDropdown && suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 top-full z-50 mt-1 max-h-48 overflow-y-auto rounded-xl border border-neutral-700 bg-neutral-800 shadow-xl">
+        <ul className="absolute left-0 right-0 top-full z-50 mt-1 max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-ink/95 shadow-xl backdrop-blur-xl">
           {suggestions.map((s) => (
             <li key={s.place_id}>
               <button
                 type="button"
                 onClick={() => handleSelect(s)}
-                className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm text-neutral-200 transition hover:bg-neutral-700"
+                className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm text-neutral-200 transition hover:bg-white/5"
               >
-                <MapPin size={14} className="mt-0.5 shrink-0 text-yellow-400" />
+                <MapPin size={14} className="mt-0.5 shrink-0 text-gold-400" />
                 <span className="line-clamp-2">{s.display_name}</span>
               </button>
             </li>

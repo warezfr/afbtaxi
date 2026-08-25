@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n, LOCALE_LABELS, type Locale } from '@/lib/i18n';
-import { PhoneButton } from './WhatsAppButton';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -32,38 +31,34 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled ? 'bg-ink/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+        scrolled ? 'bg-ink/90 shadow-lg shadow-black/20 backdrop-blur-xl' : 'bg-transparent'
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         {/* Logo */}
-        <a href="#home" className="group flex items-center gap-3">
-          <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl bg-yellow-400 shadow-[0_4px_20px_rgba(255,196,0,.3)] transition-transform group-hover:scale-105">
-            <img
-              src={COMPANY.logoUrl}
-              alt={`Logo ${COMPANY.name}`}
-              className="h-10 w-10 rounded-lg object-contain"
-            />
+        <a href="#home" className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-400">
+            <span className="text-lg font-black text-ink">A</span>
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-xl font-black tracking-tight text-white">
-              AFB<span className="text-yellow-400">.</span>Taxis
+            <span className="text-lg font-black tracking-tight text-white">
+              AFB<span className="text-gold-400">.</span>Taxis
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[.15em] text-neutral-400">
+            <span className="text-[9px] font-semibold uppercase tracking-[.18em] text-neutral-500">
               Fontainebleau
             </span>
           </div>
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-8 lg:flex">
           {NAV_LINKS.map((link) =>
             link.isBooking ? (
               <button
                 key={link.href}
                 onClick={onOpenBooking}
-                className="text-sm font-medium text-neutral-300 transition-colors hover:text-yellow-400"
+                className="rounded-full bg-gold-400 px-5 py-2 text-sm font-bold text-ink transition-all hover:bg-gold-300 hover:shadow-[0_8px_30px_rgba(255,208,59,0.25)]"
               >
                 {link.label}
               </button>
@@ -71,30 +66,30 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-neutral-300 transition-colors hover:text-yellow-400"
+                className="text-sm font-medium text-neutral-400 transition-colors hover:text-white"
               >
                 {link.label}
               </a>
             )
           )}
 
-          {/* Language selector */}
+          {/* Language */}
           <div className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 rounded-full border border-neutral-700 px-3 py-1.5 text-xs font-bold text-neutral-300 transition hover:border-yellow-400 hover:text-yellow-400"
+              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold text-neutral-400 transition hover:border-gold-400/50 hover:text-white"
             >
-              <Globe size={14} />
+              <Globe size={13} />
               {LOCALE_LABELS[locale]}
             </button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-2 overflow-hidden rounded-xl border border-neutral-700 bg-neutral-900 shadow-xl">
+              <div className="absolute right-0 top-full mt-2 overflow-hidden rounded-xl border border-white/10 bg-ink/95 shadow-xl backdrop-blur-xl">
                 {locales.map((l) => (
                   <button
                     key={l}
                     onClick={() => { setLocale(l); setLangOpen(false); }}
-                    className={`block w-full px-5 py-2 text-left text-sm font-medium transition ${
-                      l === locale ? 'bg-yellow-400/10 text-yellow-400' : 'text-neutral-300 hover:bg-neutral-800'
+                    className={`block w-full px-5 py-2.5 text-left text-sm font-medium transition ${
+                      l === locale ? 'bg-gold-400/10 text-gold-400' : 'text-neutral-300 hover:bg-white/5'
                     }`}
                   >
                     {LOCALE_LABELS[l]}
@@ -103,21 +98,10 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
               </div>
             )}
           </div>
-
-          <PhoneButton />
         </div>
 
-        {/* Mobile */}
+        {/* Mobile toggle */}
         <div className="flex items-center gap-3 lg:hidden">
-          {/* Mobile lang */}
-          <button
-            onClick={() => setLangOpen(!langOpen)}
-            className="flex items-center gap-1 rounded-full border border-neutral-700 px-2.5 py-1.5 text-xs font-bold text-neutral-300"
-          >
-            <Globe size={13} />
-            {LOCALE_LABELS[locale]}
-          </button>
-          <PhoneButton />
           <button onClick={() => setOpen(!open)} className="text-white" aria-label="Menu">
             {open ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -126,14 +110,14 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
 
       {/* Mobile dropdown */}
       {open && (
-        <div className="bg-ink/98 backdrop-blur-md lg:hidden">
-          <div className="flex flex-col gap-4 px-4 py-6">
+        <div className="bg-ink/98 backdrop-blur-xl lg:hidden">
+          <div className="flex flex-col gap-1 px-6 py-6">
             {NAV_LINKS.map((link) =>
               link.isBooking ? (
                 <button
                   key={link.href}
                   onClick={() => { onOpenBooking(); setOpen(false); }}
-                  className="text-left text-base font-medium text-neutral-300 transition-colors hover:text-yellow-400"
+                  className="mt-4 rounded-full bg-gold-400 px-6 py-3 text-center text-sm font-bold text-ink"
                 >
                   {link.label}
                 </button>
@@ -142,20 +126,19 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="text-base font-medium text-neutral-300 transition-colors hover:text-yellow-400"
+                  className="rounded-xl px-4 py-3 text-base font-medium text-neutral-300 transition-colors hover:bg-white/5 hover:text-white"
                 >
                   {link.label}
                 </a>
               )
             )}
-            {/* Mobile language list */}
-            <div className="mt-3 flex gap-2 border-t border-neutral-800 pt-4">
+            <div className="mt-4 flex gap-2 border-t border-white/10 pt-4">
               {locales.map((l) => (
                 <button
                   key={l}
                   onClick={() => { setLocale(l); setOpen(false); }}
                   className={`rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                    l === locale ? 'bg-yellow-400 text-neutral-900' : 'bg-neutral-800 text-neutral-400 hover:text-white'
+                    l === locale ? 'bg-gold-400 text-ink' : 'bg-white/5 text-neutral-400 hover:text-white'
                   }`}
                 >
                   {LOCALE_LABELS[l]}
@@ -166,10 +149,8 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
         </div>
       )}
 
-      {/* Click outside lang dropdown */}
-      {langOpen && (
-        <div className="fixed inset-0 z-[-1]" onClick={() => setLangOpen(false)} />
-      )}
+      {/* Close lang dropdown on outside click */}
+      {langOpen && <div className="fixed inset-0 z-[-1]" onClick={() => setLangOpen(false)} />}
     </header>
   );
 }

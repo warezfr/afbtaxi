@@ -111,15 +111,15 @@ export function ReservationWizard({ open, onClose }: Props) {
   if (!open) return null;
 
   const inputCls =
-    'w-full rounded-xl border border-neutral-700 bg-neutral-800/80 px-4 py-3 text-white placeholder-neutral-500 transition-colors focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400';
+    'w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white placeholder-neutral-500 transition-colors focus:border-gold-400 focus:outline-none focus:ring-1 focus:ring-gold-400';
   const labelCls = 'mb-1.5 block text-sm font-semibold text-neutral-300';
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" dir={dir}>
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={close} />
-      <div className="relative w-full max-w-lg animate-slideUp rounded-3xl border border-neutral-700/60 bg-neutral-900 shadow-2xl">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={close} />
+      <div className="relative w-full max-w-lg animate-slideUp rounded-3xl border border-white/10 bg-ink/95 shadow-2xl backdrop-blur-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-neutral-800 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
           <h2 className="text-lg font-bold text-white">{t('wizard.title')}</h2>
           <button onClick={close} className="rounded-full p-1.5 text-neutral-400 transition hover:bg-neutral-800 hover:text-white">
             <X size={20} />
@@ -129,16 +129,16 @@ export function ReservationWizard({ open, onClose }: Props) {
         {/* Success state */}
         {status === 'success' ? (
           <div className="px-6 py-12 text-center">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-400/15">
-              <CheckCircle2 size={36} className="text-yellow-400" />
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gold-400/15">
+              <CheckCircle2 size={36} className="text-gold-400" />
             </div>
             <h3 className="mb-2 text-xl font-bold text-white">{t('wizard.success.title')}</h3>
             <p className="mb-6 text-neutral-400">{t('wizard.success.text')}</p>
             <div className="flex justify-center gap-3">
-              <button onClick={() => { reset(); }} className="rounded-full border border-neutral-600 px-5 py-2.5 text-sm font-semibold text-neutral-300 hover:border-neutral-400">
+              <button onClick={() => { reset(); }} className="rounded-full border border-white/10 px-5 py-2.5 text-sm font-semibold text-neutral-300 hover:border-white/30">
                 {t('wizard.success.newBooking')}
               </button>
-              <button onClick={close} className="rounded-full bg-yellow-400 px-5 py-2.5 text-sm font-bold text-neutral-900 hover:bg-yellow-300">
+              <button onClick={close} className="rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink hover:bg-gold-300">
                 OK
               </button>
             </div>
@@ -153,14 +153,14 @@ export function ReservationWizard({ open, onClose }: Props) {
                 const isDone = i < step;
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-all ${isActive ? 'bg-yellow-400 text-neutral-900' : isDone ? 'bg-yellow-400/20 text-yellow-400' : 'bg-neutral-800 text-neutral-500'}`}>
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-all ${isActive ? 'bg-gold-400 text-ink' : isDone ? 'bg-gold-400/20 text-gold-400' : 'bg-white/5 text-neutral-500'}`}>
                       <Icon size={16} />
                     </div>
                     <span className={`hidden text-xs font-semibold sm:block ${isActive ? 'text-white' : 'text-neutral-500'}`}>
                       {t(s.key)}
                     </span>
                     {i < STEPS.length - 1 && (
-                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-yellow-400' : 'bg-neutral-700'}`} />
+                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-white/10'}`} />
                     )}
                   </div>
                 );
@@ -258,7 +258,7 @@ export function ReservationWizard({ open, onClose }: Props) {
             </div>
 
             {/* Footer buttons */}
-            <div className="flex items-center justify-between border-t border-neutral-800 px-6 py-4">
+            <div className="flex items-center justify-between border-t border-white/5 px-6 py-4">
               {step > 0 ? (
                 <button onClick={() => setStep(step - 1)} className="flex items-center gap-1 text-sm font-semibold text-neutral-400 transition hover:text-white">
                   <ChevronLeft size={16} /> {t('wizard.prev')}
@@ -269,7 +269,7 @@ export function ReservationWizard({ open, onClose }: Props) {
                 <button
                   onClick={() => setStep(step + 1)}
                   disabled={!canProceed()}
-                  className="flex items-center gap-1 rounded-full bg-yellow-400 px-5 py-2.5 text-sm font-bold text-neutral-900 transition hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {t('wizard.next')} <ChevronRight size={16} />
                 </button>
@@ -277,7 +277,7 @@ export function ReservationWizard({ open, onClose }: Props) {
                 <button
                   onClick={handleSubmit}
                   disabled={status === 'loading'}
-                  className="flex items-center gap-2 rounded-full bg-yellow-400 px-5 py-2.5 text-sm font-bold text-neutral-900 transition hover:bg-yellow-300 disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-50"
                 >
                   {status === 'loading' ? (
                     <><Loader2 size={16} className="animate-spin" /> {t('wizard.sending')}</>

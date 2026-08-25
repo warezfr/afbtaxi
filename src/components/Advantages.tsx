@@ -1,59 +1,37 @@
-import {
-  Award,
-  CalendarDays,
-  Clock,
-  Handshake,
-  MapPin,
-  Snowflake,
-  type LucideIcon,
-} from 'lucide-react';
-import { ADVANTAGES } from '@/lib/constants';
+import { Clock, MapPin, Handshake, Snowflake, CalendarDays, Award } from 'lucide-react';
 
-const ICONS: Record<string, LucideIcon> = {
-  Clock,
-  MapPin,
-  Handshake,
-  Snowflake,
-  CalendarDays,
-  Award,
-};
+const ADVANTAGES_DATA = [
+  { icon: Clock, title: 'Ponctualit\u00e9', desc: 'Nous arrivons \u00e0 l\u2019heure, \u00e0 chaque trajet. Notre r\u00e9putation en d\u00e9pend.' },
+  { icon: MapPin, title: 'Chauffeurs exp\u00e9riment\u00e9s', desc: 'Connaissance parfaite de la r\u00e9gion pour des trajets rapides.' },
+  { icon: Handshake, title: 'Confiance', desc: 'Respect de chaque engagement. Vos horaires sont notre priorit\u00e9.' },
+  { icon: Snowflake, title: 'V\u00e9hicules confortables', desc: 'Flotte premium, climatis\u00e9e et entretenue avec soin.' },
+  { icon: CalendarDays, title: 'Service 7j/7', desc: 'Disponibles tous les jours, t\u00f4t le matin ou tard le soir.' },
+  { icon: Award, title: '20 ans d\u2019exp\u00e9rience', desc: 'Au service de Fontainebleau et sa r\u00e9gion depuis 2004.' },
+];
 
 export function Advantages() {
   return (
-    <section className="bg-ink py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="mb-14 text-center">
-          <p className="mb-3 text-xs font-black uppercase tracking-[.25em] text-yellow-400">Pourquoi nous faire confiance</p>
-          <h2 className="text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">
-            La différence AFB Taxis
+    <section className="relative overflow-hidden bg-ink py-24 lg:py-32">
+      <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-400/20 to-transparent" />
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mb-16 text-center">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[.2em] text-gold-400">Pourquoi nous choisir</p>
+          <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+            L'excellence au <span className="gold-text">quotidien</span>
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-base text-neutral-400">
-            Plus de 20 ans d'expérience au service de votre mobilité
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/5 sm:grid-cols-2 lg:grid-cols-3">
-          {ADVANTAGES.map((adv) => {
-            const Icon = ICONS[adv.icon] ?? Clock;
-            return (
-              <div
-                key={adv.title}
-                className="group flex flex-col items-start gap-4 bg-ink p-7 transition-colors hover:bg-neutral-900"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-400 text-neutral-950 transition-transform group-hover:scale-110">
-                  <Icon size={22} />
-                </div>
-                <div>
-                  <h3 className="mb-2 text-lg font-bold text-white">
-                    {adv.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-neutral-400">
-                    {adv.description}
-                  </p>
-                </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {ADVANTAGES_DATA.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="group glass rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-400/20">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-400/10 transition-colors duration-300 group-hover:bg-gold-400/20">
+                <Icon size={22} className="text-gold-400" />
               </div>
-            );
-          })}
+              <h3 className="text-lg font-bold text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-400">{desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
