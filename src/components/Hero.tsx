@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
-import { PhoneCall, ArrowRight, MapPin, ChevronDown } from 'lucide-react';
+import { PhoneCall, ArrowRight, MapPin, Star, ShieldCheck, Clock } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 
 const CITIES = [
   'Fontainebleau', 'Avon', 'Paris', 'Melun', 'Nemours', 'Orly', 'Roissy CDG',
   'Dammarie-les-Lys', 'Barbizon', 'Moret-sur-Loing', 'Samois-sur-Seine',
-  'Thomery', 'Vulaines-sur-Seine', 'Bois-le-Roi', 'Chailly-en-Bière',
-  'Milly-la-Forêt', 'La Rochette', 'Vaux-le-Pénil', 'Le Mée-sur-Seine',
-  'Chessy', 'Disneyland Paris', 'Gare de Lyon', 'La Défense',
-  'Versailles', 'Évry', 'Corbeil-Essonnes', 'Sénart',
+  'Thomery', 'Bois-le-Roi', 'Milly-la-Forêt', 'Chessy', 'Disneyland Paris',
+  'Gare de Lyon', 'La Défense', 'Versailles', 'Évry', 'Sénart',
 ];
 
 const SLIDES = [
-  { name: 'Mercedes Classe S', image: 'https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg?auto=compress&cs=tinysrgb&w=1920' },
-  { name: 'Service VIP', image: 'https://images.pexels.com/photos/15774577/pexels-photo-15774577.jpeg?auto=compress&cs=tinysrgb&w=1920' },
-  { name: 'Mercedes Classe V', image: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1920' },
+  { name: 'Mercedes Classe S', image: 'https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg?auto=compress&cs=tinysrgb&w=1600' },
+  { name: 'Mercedes S W222', image: 'https://images.pexels.com/photos/18369291/pexels-photo-18369291.jpeg?auto=compress&cs=tinysrgb&w=1600' },
+  { name: 'Mercedes Classe V', image: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1600' },
 ];
 
 interface Props {
@@ -27,7 +25,7 @@ export function Hero({ onOpenBooking }: Props) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % SLIDES.length), 6000);
+    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % SLIDES.length), 5500);
     return () => clearInterval(timer);
   }, []);
 
@@ -39,114 +37,151 @@ export function Hero({ onOpenBooking }: Props) {
   ];
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-ink">
-      {/* Background slides */}
-      <div className="absolute inset-0">
-        {SLIDES.map((slide, i) => (
-          <div
-            key={slide.name}
-            className={`absolute inset-0 transition-opacity duration-[2000ms] ease-in-out ${i === current ? 'opacity-100' : 'opacity-0'}`}
-          >
-            <img src={slide.image} alt={slide.name} className="h-full w-full object-cover" />
-          </div>
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-black/50" />
-      </div>
+    <section id="home" className="relative overflow-hidden bg-white">
+      {/* ===== Dark hero ===== */}
+      <div className="relative overflow-hidden bg-[#0a0a0a] pb-24 pt-24 sm:pb-28 lg:pb-36 lg:pt-28">
+        {/* Decorative */}
+        <div className="absolute -right-32 top-0 h-[480px] w-[480px] rounded-full bg-gold-400/10 blur-[130px]" />
+        <div className="absolute -left-32 bottom-20 h-[320px] w-[320px] rounded-full bg-gold-400/5 blur-[100px]" />
 
-      {/* Decorative */}
-      <div className="absolute -right-40 top-1/4 h-[600px] w-[600px] rounded-full bg-gold-400/5 blur-[120px]" />
-      <div className="absolute -left-20 bottom-1/4 h-[400px] w-[400px] rounded-full bg-gold-400/3 blur-[80px]" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-10 pt-6 lg:grid-cols-[1fr_1.1fr] lg:gap-8 lg:pt-10">
+            {/* Left : copy */}
+            <div className="animate-fade-in-up">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-gold-400/40 bg-gold-400/10 px-4 py-2">
+                <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
+                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">{t('hero.badge')}</span>
+              </div>
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pb-32 pt-32 lg:px-8">
-        <div className="max-w-3xl">
-          {/* Badge */}
-          <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-gold-400/30 bg-gold-400/10 px-5 py-2 backdrop-blur-sm">
-            <div className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
-            <span className="text-sm font-semibold text-gold-300">{t('hero.badge')}</span>
-          </div>
+              <h1 className="mt-6 font-display text-[2.9rem] font-black leading-[1.0] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] xl:text-[4.8rem]">
+                {t('hero.title1')}{' '}
+                <br />
+                <span className="text-gold-400">{t('hero.title2')}</span>
+              </h1>
 
-          {/* Heading */}
-          <h1 className="text-5xl font-black leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-8xl">
-            {t('hero.title1')}
-            <br />
-            <span className="gold-text">{t('hero.title2')}</span>
-          </h1>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg">
+                {t('hero.subtitle')}
+              </p>
 
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-neutral-300">
-            {t('hero.subtitle')}
-          </p>
+              {/* CTAs */}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+                <button
+                  data-testid="hero-book-button"
+                  onClick={onOpenBooking}
+                  className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 py-4 font-bold text-gray-900 shadow-[0_12px_35px_-8px_rgba(250,204,21,0.5)] transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-gold-300"
+                >
+                  {t('hero.cta')}
+                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                </button>
+                <a
+                  data-testid="hero-call-button"
+                  href={`tel:${COMPANY.phoneRaw}`}
+                  className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full border border-white/15 bg-white/10 px-8 py-4 font-bold text-white backdrop-blur-sm transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-white/20"
+                >
+                  <PhoneCall size={18} className="text-gold-400" />
+                  {COMPANY.phone}
+                </a>
+              </div>
 
-          {/* CTA */}
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <button
-              onClick={onOpenBooking}
-              className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gold-400 px-8 py-4 font-bold text-ink transition-all hover:bg-gold-300 hover:shadow-[0_20px_50px_rgba(255,208,59,0.3)]"
-            >
-              <span className="relative z-10 flex items-center gap-3">
-                {t('hero.cta')}
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-              </span>
-            </button>
-            <a
-              href={`tel:${COMPANY.phoneRaw}`}
-              className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:border-gold-400/50 hover:bg-white/5"
-            >
-              <PhoneCall size={18} className="text-gold-400" />
-              {COMPANY.phone}
-            </a>
-          </div>
+              {/* Trust row */}
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-400">
+                <span className="flex items-center gap-2">
+                  <span className="flex text-gold-400">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                  </span>
+                  <span className="font-bold text-white">4.9</span> Google
+                </span>
+                <span className="hidden h-4 w-px bg-white/15 sm:block" />
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck size={15} className="text-gold-400" /> CPAM 77
+                </span>
+                <span className="hidden h-4 w-px bg-white/15 sm:block" />
+                <span className="flex items-center gap-1.5">
+                  <Clock size={15} className="text-gold-400" /> 24/7
+                </span>
+              </div>
+            </div>
 
-          {/* Location */}
-          <div className="mt-8 flex items-center gap-2 text-sm text-neutral-400">
-            <MapPin size={15} className="text-gold-400" />
-            <span>{t('hero.locations')}</span>
+            {/* Right : fleet slideshow blended into dark bg */}
+            <div className="relative animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+              <div className="relative h-64 sm:h-80 lg:h-[460px]">
+                {SLIDES.map((slide, i) => (
+                  <div
+                    key={slide.name}
+                    className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${i === current ? 'opacity-100' : 'opacity-0'}`}
+                  >
+                    <img
+                      src={slide.image}
+                      alt={slide.name}
+                      className="h-full w-full object-cover"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                    {/* Blend edges into black */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-[#0a0a0a]/60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
+                  </div>
+                ))}
+
+                {/* Floating pill : availability */}
+                <div className="absolute left-0 top-4 flex items-center gap-2.5 rounded-full border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-md">
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse-gold" />
+                  <span className="text-xs font-bold text-white sm:text-sm">24/7 · {t('hero.stat.availability')}</span>
+                </div>
+
+                {/* Vehicle name + dots */}
+                <div className="absolute bottom-2 left-0 flex items-center gap-4">
+                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">{SLIDES[current].name}</span>
+                  <div className="flex gap-2">
+                    {SLIDES.map((_, i) => (
+                      <button
+                        key={i}
+                        aria-label={`Slide ${i + 1}`}
+                        onClick={() => setCurrent(i)}
+                        className="flex h-8 items-center"
+                      >
+                        <span className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${i === current ? 'w-9 bg-gold-400' : 'w-4 bg-white/25'}`} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Stats row */}
-        <div className="mt-16 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
-          {STATS.map((stat) => (
-            <div key={stat.value} className="glass rounded-2xl px-5 py-4 text-center">
-              <p className="text-2xl font-black text-gold-400">{stat.value}</p>
-              <p className="mt-1 text-xs font-medium text-neutral-400">{stat.label}</p>
+        {/* Wave transition to white */}
+        <div className="absolute -bottom-px left-0 right-0 z-10">
+          <svg viewBox="0 0 1440 110" preserveAspectRatio="none" className="block h-[50px] w-full sm:h-[70px] lg:h-[95px]">
+            <path d="M0,70 C240,115 480,110 720,72 C960,34 1200,26 1440,74 L1440,110 L0,110 Z" fill="#ffffff" />
+          </svg>
+        </div>
+      </div>
+
+      {/* ===== Light zone : stats + location ===== */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="-mt-2 grid grid-cols-2 rounded-3xl border border-gray-200 bg-white shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] sm:grid-cols-4 sm:divide-x sm:divide-gray-200">
+          {STATS.map((stat, i) => (
+            <div key={stat.value + i} className={`px-6 py-6 text-center sm:py-7 ${i > 1 ? 'border-t border-gray-200 sm:border-t-0' : ''} ${i % 2 === 1 ? 'border-l border-gray-200 sm:border-l-0' : ''}`}>
+              <p className="font-display text-3xl font-black text-gray-900">{stat.value}</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-400">{stat.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Slide indicators */}
-        <div className="absolute bottom-28 left-6 flex items-center gap-4 lg:bottom-28 lg:left-8">
-          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{SLIDES[current].name}</span>
-          <div className="flex gap-2">
-            {SLIDES.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`h-1 rounded-full transition-all duration-700 ${i === current ? 'w-10 bg-gold-400' : 'w-4 bg-white/20 hover:bg-white/40'}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Scroll hint */}
-        <div className="absolute bottom-28 right-6 lg:bottom-28 lg:right-8">
-          <div className="flex flex-col items-center gap-2 text-neutral-500">
-            <span className="text-[10px] font-semibold uppercase tracking-widest">{t('hero.scroll')}</span>
-            <ChevronDown size={16} className="animate-scroll-hint" />
-          </div>
+        <div className="mt-6 flex items-center justify-center gap-2 pb-10 text-xs font-medium text-gray-400 sm:text-sm">
+          <MapPin size={14} className="shrink-0 text-gold-600" />
+          <span className="text-center">{t('hero.locations')}</span>
         </div>
       </div>
 
-      {/* Cities marquee banner */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-ink/80 backdrop-blur-md">
+      {/* Cities marquee */}
+      <div className="relative border-y border-gray-100 bg-gray-50">
         <div className="overflow-hidden py-4">
-          <div className="animate-marquee flex w-max items-center gap-6">
+          <div className="animate-marquee flex w-max items-center gap-8">
             {[...CITIES, ...CITIES].map((city, i) => (
-              <span key={i} className="flex shrink-0 items-center gap-2">
-                <MapPin size={12} className="text-gold-400/70" />
-                <span className="whitespace-nowrap text-sm font-medium text-neutral-400">{city}</span>
-                <span className="ml-4 h-1 w-1 rounded-full bg-gold-400/30" />
+              <span key={i} className="flex shrink-0 items-center gap-3">
+                <span className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.2em] text-gray-400">{city}</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gold-400" />
               </span>
             ))}
           </div>

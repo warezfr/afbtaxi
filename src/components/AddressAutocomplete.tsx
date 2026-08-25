@@ -83,20 +83,20 @@ export function AddressAutocomplete({ value, onChange, placeholder, required, cl
           className={className}
         />
         {loading && (
-          <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-neutral-500" />
+          <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-gray-400" />
         )}
       </div>
 
       {showDropdown && suggestions.length > 0 && (
-        <ul className="absolute left-0 right-0 top-full z-50 mt-1 max-h-48 overflow-y-auto rounded-xl border border-white/10 bg-ink/95 shadow-xl backdrop-blur-xl">
+        <ul className="absolute left-0 right-0 top-full z-50 mt-1 max-h-48 overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-xl">
           {suggestions.map((s) => (
             <li key={s.place_id}>
               <button
                 type="button"
                 onClick={() => handleSelect(s)}
-                className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm text-neutral-200 transition hover:bg-white/5"
+                className="flex w-full items-start gap-2 px-3 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gold-50"
               >
-                <MapPin size={14} className="mt-0.5 shrink-0 text-gold-400" />
+                <MapPin size={14} className="mt-0.5 shrink-0 text-gold-600" />
                 <span className="line-clamp-2">{s.display_name}</span>
               </button>
             </li>

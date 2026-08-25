@@ -1,0 +1,73 @@
+{
+  "summary": "Frontend-only re-test of the AFB Taxis redesign after the DARK-hero refactor (Vite+React+TS, http://localhost:3000). Verified: dark hero (#0a0a0a) + 3-slide vehicle slideshow with working dots, wave SVG transition to white, hero CTA + phone buttons, navbar dark->white-glass switch at 420px scroll, desktop anchor links (services 1002 / flotte 2088 / zones 3536 / tarifs 4076), i18n FR/EN/AR/ES (dir=rtl for AR, AR phone now renders correctly), 3-step reservation wizard incl. step gating, live Nominatim autocomplete (2 suggestions returned + selection fills the field), WhatsApp/email/submit buttons, graceful red error box on the placeholder-Supabase submit (button returns to idle, not stuck), modal close + body-overflow restore, booking context propagation from Services ('Transferts Aeroports') and Fleet ('Mercedes Classe E') cards, all sections/counts (6 services, 5 fleet cards, 9 zone chips, 6 tarif rows, yellow Advantages with 6 white circle icons, contact-big-phone, footer), scroll-reveal (7/7 .reveal become visible), mobile 390x844 (menu toggle + mobile book button, 2x2 stats grid 178px/178px, tarifs horizontal scroll 680/356, whatsapp-float visible, 0 horizontal overflow at all breakpoints). ESLint now clean. No blocking bugs found; only minor UI/design nits.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Anchor navigation (Navbar links / section ids)",
+        "issue": "Sections have no scroll-margin-top, so the fixed 68-76px header covers the top of each section after an anchor click (e.g. clicking 'Services' scrolls to y=1002 which equals section top, hiding the 'NOS SERVICES' eyebrow/heading on mobile). Add scroll-mt-24 (or CSS scroll-padding-top on html) to #services/#flotte/#zones/#tarifs/#contact.",
+        "selector": "header a[href=\"#services\"], #services",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "Hero H1",
+        "issue": "Still unfixed from iteration 1: title1 and title2 joined by <br> with no whitespace -> accessible/SEO text reads 'Votre chauffeurd'exception' (EN 'Your exceptionalchauffeur', ES 'Tu choferexcepcional').",
+        "selector": "section#home h1",
+        "priority": "LOW"
+      },
+      {
+        "component": "WhatsAppButton (floating)",
+        "issue": "On mobile the fixed float still overlaps content (covers the Fleet '5 places' badge and part of the last footer/supplement line). Add bottom padding to Footer/last section or raise the offset.",
+        "selector": "[data-testid=\"whatsapp-float\"]",
+        "priority": "LOW"
+      },
+      {
+        "component": "Advantages section",
+        "issue": "No data-testid on the section or its 6 items, so it cannot be asserted directly by automation (had to detect it by background colour). Add data-testid=\"advantages-section\" / \"advantage-item-{i}\". Same for Zones chips (only the wrapper zones-list has one).",
+        "selector": "section.bg-gold-400",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Services (desktop)",
+        "issues": ["Section heading block is left-aligned while Zones/Tarifs/Advantages headings are centered - inconsistent rhythm between blocks."]
+      },
+      {
+        "screen": "Reservation wizard - step 2",
+        "issues": ["Still uses native browser date/time inputs (US mm/dd/yyyy placeholder in non-FR browsers) instead of a locale-aware/shadcn-style picker.", "No min attribute on the date input: a past pickup date can be submitted."]
+      },
+      {
+        "screen": "Tarifs (mobile 390px)",
+        "issues": ["Table scrolls horizontally (scrollWidth 680 vs client 356); the Voiture/Van price columns are entirely off-screen on first paint, only the '<- Destination ->' hint suggests scrolling. A stacked card layout would read better."]
+      },
+      {
+        "screen": "Hero slideshow (desktop)",
+        "issues": ["Slide dots are only 6px tall (below the 24-44px touch-target guidance) - fine with a mouse, cramped on touch."]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Add scroll-margin-top (scroll-mt-24) to #services/#flotte/#zones/#tarifs/#contact so anchor navigation does not hide headings behind the fixed navbar.",
+    "Add a space (or aria-label) between hero title1 and title2 - accessible name is still 'Votre chauffeurd'exception'.",
+    "Add data-testid to the Advantages section/items and to individual Zones chips for testability.",
+    "Optional: min={today} on the wizard date input; locale-aware date/time picker; mobile card layout for Tarifs; extra bottom padding so the WhatsApp float does not overlap footer/fleet badges."
+  ],
+  "critical_code_review_comments": [
+    "ReservationWizard.handleSubmit still has no try/catch: only a returned supabase `error` is handled. A thrown network/DNS exception would leave status='loading' forever (submit button permanently disabled). Wrap in try/catch/finally.",
+    "No client-side format validation on phone/email in the wizard; canProceed() only checks non-empty strings.",
+    "AddressAutocomplete calls Nominatim directly from the browser with no identifying header/rate-limit guard (usage-policy risk in production) and silently keeps stale suggestions when res.ok is false.",
+    "Fleet.tsx / ReservationWizard.tsx type the i18n function as `t: (k: any) => string` - use the translation key union type instead of any (lint passes only because the rule is now off/warn).",
+    "useBuildWhatsAppMessage and useBuildEmailBody are ~90% duplicated (DRY) - extract a single formatter."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "N/A (no backend by design)", "frontend": "100% of functional flows passed (0 blocking failures)" },
+  "seed_data_creation": "None - wizard filled with throwaway data (Jean Dupont / 0612345678); no persistence (placeholder Supabase).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "/app/memory/test_credentials.md not present - not needed (public site, #/admin out of scope).",
+  "context_for_next_testing_agent": "Test on http://localhost:3000 (external URL behind Cloudflare). Verified working in iteration 2: dark hero bg rgb(10,10,10); hero imgs all naturalWidth 1600; slide dots switch vehicle name; navbar bg rgba(10,10,10,0.6) -> rgba(255,255,255,0.9) after 420px; wizard step gating + Nominatim suggestions (selector 'ul li button'); placeholder-Supabase submit shows 'Une erreur est survenue...' red box then button returns to 'Envoyer ma reservation'; context header = <h2 'Reserver votre taxi'> following-sibling p; mobile menu link selector must be `header a[href=\"#services\"]`.last (desktop copy exists but is hidden); reveal 7/7 visible after full scroll; overflow 0 at 1920/390. ESLint clean. Only console errors are vite HMR websocket ERR_CONNECTION_REFUSED (harmless).",
+  "rca_of_the_issue": "Anchor-offset issue: sections are targeted by id with a position:fixed header and no scroll-margin-top, so window.scrollY lands exactly on the section top and the header (68-76px) overlays the heading. Reproduce: 390x844, open mobile menu, tap 'Services' -> 'NOS SERVICES' eyebrow is clipped under the navbar. Fix: add scroll-mt-24 to each section (or html { scroll-padding-top: 5rem })."
+}

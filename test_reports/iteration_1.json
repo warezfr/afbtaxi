@@ -1,0 +1,84 @@
+{
+  "summary": "Frontend-only E2E/visual testing of the AFB Taxis light-theme redesign (Vite+React+TS on http://localhost:3000). Covered: hero, navbar (desktop + mobile), anchor navigation, i18n (FR/EN/AR/ES), 3-step reservation wizard (validation, WhatsApp/email/submit), Services (6 cards), Fleet (5 cards), Tarifs table, Zones, Advantages, Contact block, Footer, WhatsApp float, scroll-reveal, and responsive behaviour at 1920/768/390/320px. Result: all functional flows pass, no layout overflow at any breakpoint, no broken images, no blocking console errors. Only minor i18n/design/lint nits found.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Navbar / Hero / ContactSection / Footer (phone number)",
+        "issue": "In Arabic (RTL) locale the phone number is rendered reversed: '16 46 42 07 06' instead of '06 07 42 46 16'. Unicode bidi reorders the LTR digit groups. Fix by wrapping the phone text in dir=\"ltr\" (or adding class with unicode-bidi: isolate / \\u2066 LRI).",
+        "selector": "[data-testid=\"nav-phone-link\"], [data-testid=\"hero-call-button\"], [data-testid=\"contact-phone-card\"]",
+        "priority": "MEDIUM"
+      },
+      {
+        "component": "Hero H1",
+        "issue": "Cosmetic/a11y only: title1 and title2 are joined by <br> with no whitespace, so accessible text reads 'Votre chauffeurd'exception' (also 'Your exceptionalchauffeur' in EN). Add a space or aria-label for screen readers/SEO.",
+        "selector": "section#home h1",
+        "priority": "LOW"
+      },
+      {
+        "component": "WhatsAppButton (floating)",
+        "issue": "On mobile the fixed float overlaps content: it covers the Fleet card '4 places' badge and the last footer line 'Taxi conventionné CPAM 77 — ...'. Consider extra bottom padding on the footer / higher offset.",
+        "selector": "[data-testid=\"whatsapp-float\"]",
+        "priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Reservation wizard - step 2",
+        "issues": [
+          "Uses native browser date/time pickers (input type=date/time). Rendered as US 'mm/dd/yyyy' placeholder in the test browser, which is inconsistent with the French UI - consider a locale-aware custom date picker as per design guidance.",
+          "Autocomplete dropdown (Nominatim) works but visually overlaps the 'Passagers'/'Type de trajet' fields below; acceptable but slightly cramped on 768px."
+        ]
+      },
+      {
+        "screen": "Tarifs (mobile 390/320px)",
+        "issues": [
+          "Table is horizontally scrollable (scrollWidth 680 vs client 356) and the price columns are entirely off-screen on first paint; only the '← Destination →' hint reveals it. A card/stacked layout on mobile would read better. No layout break though."
+        ]
+      },
+      {
+        "screen": "Hero (desktop)",
+        "issues": [
+          "The floating 4.9 rating card sits on top of the yellow/black checker strip at the bottom of the image, partially hiding it. Minor overlap, intentional-looking but slightly noisy."
+        ]
+      },
+      {
+        "screen": "Cities marquee (AR locale)",
+        "issues": [
+          "Marquee animation direction is not mirrored in RTL, leaving a visible empty gap on one side. Cosmetic."
+        ]
+      },
+      {
+        "screen": "Contact dark block",
+        "issues": [
+          "Small uppercase labels 'TÉLÉPHONE / EMAIL / ADRESSE' use text-gray-400 on gray-900/800 - contrast is borderline for 11px text; bump to gray-300."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Wrap all phone-number renderings in dir=\"ltr\" so the number is not reversed in the Arabic locale.",
+    "Add whitespace/aria-label between hero title1 and title2 (accessible name currently 'Votre chauffeurd'exception').",
+    "Fix 3 ESLint errors (@typescript-eslint/no-explicit-any) in src/components/Fleet.tsx:51 and src/components/ReservationWizard.tsx:49,69 - `t: (k: any) => string` should use the i18n key union type. `yarn lint` currently fails (tsc --noEmit passes).",
+    "Optional: increase bottom padding of Footer / offset the floating WhatsApp button so it does not cover the last footer line and Fleet badges on mobile.",
+    "Optional: replace native date/time inputs with a locale-aware picker; consider mobile card layout for the Tarifs grid."
+  ],
+  "critical_code_review_comments": [
+    "ReservationWizard.handleSubmit has no try/catch around the supabase call - a thrown network exception (not just a returned `error`) would leave status stuck on 'loading' forever. Wrap in try/catch/finally.",
+    "ReservationWizard: no client-side validation of phone/email format and no min date on the date input, so a past pickup_date can be submitted.",
+    "AddressAutocomplete calls Nominatim directly from the browser without a User-Agent/rate-limit guard; Nominatim's usage policy may block production traffic. Also `res.ok === false` silently leaves stale suggestions.",
+    "i18n.tsx is ~880 lines - split the translation dictionaries into per-locale files (>700 line guideline) and move LOCALE_LABELS/useI18n out of the component file (react-refresh warnings).",
+    "Duplicate logic: useBuildWhatsAppMessage and useBuildEmailBody are ~90% identical (DRY) - extract one formatter with a header option.",
+    "Supabase env is a placeholder, so the app has no working persistence path; the wizard should surface the WhatsApp/email fallback more prominently (currently icon-only 44px buttons with title attrs only)."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "N/A (no backend - skipped as requested)", "frontend": "100% of functional flows passed (0 blocking failures)" },
+  "seed_data_creation": "None. Wizard filled with throwaway data (Jean Dupont / 0612345678); no persistence possible (placeholder Supabase).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "/app/memory/test_credentials.md does not exist. Not needed - admin dashboard (#/admin) was out of scope and requires real Supabase.",
+  "context_for_next_testing_agent": "Verified passing: page load + light theme; hero headline 'Votre chauffeur d'exception'; hero Mercedes image (naturalWidth 1400); floating 24/7 pill + 4.9 card; stats strip 20+/5/24/7/4.9; cities marquee; navbar anchors (services 968, flotte 2054, zones 3503, tarifs 4042); nav-book-button, hero-book-button, nav-mobile-book-button, contact-book-button all open the wizard; lang switcher FR/EN/AR/ES changes copy and sets dir=rtl for AR; mobile hamburger open/close + links close the menu; wizard step1 next disabled until first/last/phone filled then enabled; step2 date/time/pickup/dropoff gating + Nominatim autocomplete returns suggestions; wizard-whatsapp-button opens correct api.whatsapp.com/send?phone=33607424616 URL with the full pre-filled message; wizard-email-button and wizard-submit-button present; submit to placeholder Supabase shows the expected red light-styled alert 'Une erreur est survenue...' (graceful, NOT a bug); 6 service cards / 5 fleet cards / 6 tarif rows / 10 zone chips / advantages 01-06 all render; wizard context header shows 'Transport Sanitaire' and 'Tesla Y'; whatsapp-float href correct; contact tel:/mailto: hrefs correct; all 6 .reveal elements gain 'visible'; horizontal overflow = 0px at 1920, 768, 390 and 320px; no broken images; only console errors are vite HMR websocket ERR_CONNECTION_REFUSED (harmless in preview). NOTE: run tests against http://localhost:3000 - the external preview URL is behind a Cloudflare challenge. Playwright tip: avoid backslashes inside f-strings (script compile error).",
+  "rca_of_the_issue": "AR phone reversal: the phone string '06 07 42 46 16' is neutral/LTR digit runs placed inside a dir=rtl container, so the Unicode bidi algorithm reorders the space-separated digit groups right-to-left. Reproduce: load http://localhost:3000 at 390x844, open the mobile menu, click AR, observe the hero call button showing '16 46 42 07 06'. Mitigation: add dir=\"ltr\" (or CSS unicode-bidi: isolate) on the element containing COMPANY.phone."
+}

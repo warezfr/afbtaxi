@@ -1,0 +1,138 @@
+{
+  "theme": "light",
+  "archetype": "Swiss & High-Contrast (Luminous Variant)",
+  "colors": {
+    "primary": "#FACC15",
+    "primary_hover": "#EAB308",
+    "primary_foreground": "#000000",
+    "background": "#FFFFFF",
+    "surface": "#F9FAFB",
+    "surface_alt": "#F3F4F6",
+    "border": "#E5E7EB",
+    "text_main": "#111827",
+    "text_muted": "#6B7280"
+  },
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Plus Jakarta Sans",
+    "h1": "text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-gray-900 leading-tight",
+    "h2": "text-3xl md:text-4xl font-bold tracking-tight text-gray-900",
+    "h3": "text-xl md:text-2xl font-semibold tracking-tight text-gray-900",
+    "body": "text-base md:text-lg text-gray-600 leading-relaxed"
+  },
+  "visual_enhancers": {
+    "surfaces": [
+      "Crystal Glass for Sticky Navbar: backdrop-blur-xl bg-white/80 border-b border-gray-200/50",
+      "Solid Flat for Cards: bg-gray-50 border border-gray-100 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300",
+      "Grid Borders for Tarifs Table to give technical precision."
+    ],
+    "shadows": "Ambient shadows for floating elements, sharp 1px borders to separate white-on-white layers.",
+    "buttons": "Pill-shaped (rounded-full) or smooth rounded-xl. Primary button: bg-yellow-400 text-black font-semibold hover:bg-yellow-500 hover:scale-105 transition-transform."
+  },
+  "layout_and_grids": {
+    "spacing": "Generous. Use py-24 for desktop sections, py-16 for mobile. Gap-6 or gap-8 in grids.",
+    "bento_grid": "For Advantages and Services. Mix of col-span-1 and col-span-2 on desktop. 1-col on mobile.",
+    "mobile_first": "All buttons must be min-h-[48px] for touch targets. Grids fall back to grid-cols-1. Padding container px-4 sm:px-6."
+  },
+  "components_to_use": [
+    { "name": "Button", "type": "shadcn", "notes": "rounded-full, bold text" },
+    { "name": "Dialog", "type": "shadcn", "notes": "For the 3-step reservation wizard" },
+    { "name": "Table", "type": "shadcn", "notes": "For the Tarifs section, high contrast headers" },
+    { "name": "Card", "type": "shadcn", "notes": "Use flat gray-50 style, not bordered generic white" },
+    { "name": "Input, Select, Label", "type": "shadcn", "notes": "For the wizard form" },
+    { "name": "Badge", "type": "shadcn", "notes": "For 'Zones Served' chips" },
+    { "name": "Marquee", "type": "react-fast-marquee", "notes": "For the cities served, editorial ribbon style" },
+    { "name": "Lucide React", "type": "icons", "notes": "For service icons, phone, whatsapp, etc" },
+    { "name": "Sonner", "type": "shadcn", "notes": "For success/error toast after booking" }
+  ],
+  "motion_and_interactions": {
+    "scroll": "Use Lenis for smooth scrolling.",
+    "reveal": "Use framer-motion to stagger-fade-up cards as they scroll into view.",
+    "micro": "Hover states on buttons must scale up (1.05) and increase shadow. Cards must lift (-translate-y-1)."
+  },
+  "sections_instructions": [
+    {
+      "name": "Sticky Navbar",
+      "guidelines": "Fixed top-0, z-50, backdrop-blur-xl bg-white/80. Must contain Logo, lang switcher, 'Réserver' button. Hidden links behind mobile menu."
+    },
+    {
+      "name": "Hero Section",
+      "guidelines": "Desktop: Split layout. Left: H1 'Votre Chauffeur Privé à Fontainebleau', subtext, 2 large CTAs (Book in yellow, Call in gray outline). Right: Image of White Mercedes S-Class. Overlay stats (20+ years, 4.9 rating) as floating glass pills. Mobile: Image on top or background with gradient, text below, CTAs prominently fixed or sticky."
+    },
+    {
+      "name": "Marquee Cities",
+      "guidelines": "Slow, elegant scrolling text of cities served. bg-gray-50 text-gray-400 uppercase tracking-[0.2em] text-sm py-4 border-y border-gray-100."
+    },
+    {
+      "name": "Services Grid",
+      "guidelines": "6 cards. High-density grid. Use Lucide icons. Highlight 'Transport Médical (CPAM)' slightly differently (maybe a yellow badge or border) to show importance."
+    },
+    {
+      "name": "Fleet Gallery",
+      "guidelines": "Showcase vehicles. Mercedes Classe E, S, V, Tesla Y. Use high-quality imagery. Large images with specs below. Make it feel luxurious but accessible."
+    },
+    {
+      "name": "Zones Served",
+      "guidelines": "Use flex-wrap with Shadcn Badges (rounded-full bg-gray-100 text-gray-800 px-4 py-2 text-sm) for a chip-list aesthetic."
+    },
+    {
+      "name": "Tarifs (Pricing)",
+      "guidelines": "Clean Shadcn Table inside a prominent container. White background, gray borders. Highlight the differences between Day/Night using light gray alternating rows."
+    },
+    {
+      "name": "Advantages",
+      "guidelines": "Bento style grid. 6 small cards with icons focusing on reliability, 24/7, comfort, etc."
+    },
+    {
+      "name": "Contact & Footer",
+      "guidelines": "Darker footer (bg-gray-900 text-white) to create contrast shift at the end, or keep it ultra-clean light (bg-gray-50). Big CTA 'Réservez votre trajet'. Contact info clearly visible."
+    },
+    {
+      "name": "Booking Wizard (Modal)",
+      "guidelines": "3 steps: 1. Trajet (Pickup, Dropoff, Date, Time) 2. Véhicule & Options 3. Identité (Name, Phone). Use a yellow progress bar. Form submission sends user data."
+    },
+    {
+      "name": "Floating WhatsApp",
+      "guidelines": "Fixed bottom-right, z-50. Green WhatsApp icon. Pulse animation. Essential for mobile users."
+    }
+  ],
+  "image_urls": {
+    "hero": {
+      "url": "https://images.pexels.com/photos/10358231/pexels-photo-10358231.jpeg",
+      "description": "Sleek white Mercedes-Benz S-Class, perfect for the luxurious yet luminous hero section."
+    },
+    "fleet_black_mercedes": {
+      "url": "https://images.pexels.com/photos/18369291/pexels-photo-18369291.jpeg",
+      "description": "Black Mercedes S Class for the fleet section."
+    },
+    "service_airport": {
+      "url": "https://images.pexels.com/photos/15774577/pexels-photo-15774577.jpeg",
+      "description": "Chauffeur opening door, great for airport transfer or premium service card."
+    }
+  },
+  "accessibility": {
+    "contrast": "Text on yellow button MUST be black (#000000) for WCAG AA. Text on white must be gray-900 or gray-700.",
+    "touch_targets": "All interactive elements on mobile must be minimum 48x48px (h-12 w-12).",
+    "aria": "Add aria-labels to all icon buttons (WhatsApp, Menu)."
+  },
+  "testing": {
+    "data_testid": "Add data-testid attributes to all major interactive elements: hero-book-button, hero-call-button, nav-book-button, whatsapp-float, wizard-step-1-next, form-submit, etc."
+  },
+  "3d_libraries": {
+    "usage": "Not recommended for this specific local utility site to maintain fast load times, but consider framer-motion for smooth 2D entry animations."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur) for sticky headers.",
+    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific interactive elements.",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡🔮🎯 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap. Use padding inside bordered containers.",
+    "Use sonner for toasts notifications.",
+    "DO NOT use raw HTML forms, use Shadcn Form, Input, Select for the Booking Modal.",
+    "Ensure perfect mobile responsiveness. Stacking grids, side-scrolling for horizontal elements if needed, full width buttons."
+  ]
+}

@@ -123,28 +123,27 @@ export function ReservationWizard({ open, onClose, context }: Props) {
     setStatus('loading');
     setErrorMsg('');
 
-    const { error } = await supabase.from('reservations').insert({
-      first_name: form.first_name,
-      last_name: form.last_name,
-      phone: form.phone,
-      email: form.email || null,
-      pickup_date: form.pickup_date,
-      pickup_time: form.pickup_time,
-      pickup_location: form.pickup_location,
-      dropoff_location: form.dropoff_location,
-      passengers: form.passengers,
-      trip_type: form.trip_type,
-      special_needs: form.special_needs || null,
-      message: form.message || null,
-    });
-
-    if (error) {
+    try {
+      const { error } = await supabase.from('reservations').insert({
+        first_name: form.first_name,
+        last_name: form.last_name,
+        phone: form.phone,
+        email: form.email || null,
+        pickup_date: form.pickup_date,
+        pickup_time: form.pickup_time,
+        pickup_location: form.pickup_location,
+        dropoff_location: form.dropoff_location,
+        passengers: form.passengers,
+        trip_type: form.trip_type,
+        special_needs: form.special_needs || null,
+        message: form.message || null,
+      });
+      if (error) throw error;
+      setStatus('success');
+    } catch {
       setStatus('error');
       setErrorMsg(t('wizard.error'));
-      return;
     }
-
-    setStatus('success');
   };
 
   const handleWhatsApp = () => {
@@ -174,39 +173,40 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   if (!open) return null;
 
   const inputCls =
-    'w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white placeholder-neutral-500 transition-colors focus:border-gold-400 focus:outline-none focus:ring-1 focus:ring-gold-400';
-  const labelCls = 'mb-1.5 block text-sm font-semibold text-neutral-300';
+    'w-full min-h-[48px] rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40';
+  const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700';
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" dir={dir}>
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={close} />
-      <div className="relative w-full max-w-lg animate-slideUp overflow-hidden rounded-3xl border border-white/10 bg-ink/95 shadow-2xl backdrop-blur-xl">
+      <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={close} />
+      <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+        <div className="taxi-checker h-2.5 shrink-0" />
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
-            <h2 className="text-lg font-bold text-white">{t('wizard.title')}</h2>
+            <h2 className="font-display text-lg font-bold text-gray-900">{t('wizard.title')}</h2>
             {context && (
-              <p className="mt-0.5 text-xs font-medium text-gold-400">{context}</p>
+              <p className="mt-0.5 text-xs font-bold text-gold-600">{context}</p>
             )}
           </div>
-          <button onClick={close} className="rounded-full p-1.5 text-neutral-400 transition hover:bg-white/5 hover:text-white">
+          <button data-testid="wizard-close-button" onClick={close} className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900">
             <X size={20} />
           </button>
         </div>
 
         {/* Success state */}
         {status === 'success' ? (
-          <div className="px-6 py-12 text-center">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gold-400/15">
-              <CheckCircle2 size={36} className="text-gold-400" />
+          <div className="overflow-y-auto px-6 py-12 text-center">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gold-100">
+              <CheckCircle2 size={36} className="text-gold-600" />
             </div>
-            <h3 className="mb-2 text-xl font-bold text-white">{t('wizard.success.title')}</h3>
-            <p className="mb-6 text-neutral-400">{t('wizard.success.text')}</p>
+            <h3 className="mb-2 font-display text-xl font-bold text-gray-900">{t('wizard.success.title')}</h3>
+            <p className="mb-6 text-gray-500">{t('wizard.success.text')}</p>
             <div className="flex justify-center gap-3">
-              <button onClick={() => { reset(); }} className="rounded-full border border-white/10 px-5 py-2.5 text-sm font-semibold text-neutral-300 hover:border-white/30">
+              <button onClick={() => { reset(); }} className="min-h-[44px] rounded-full border border-gray-200 px-5 py-2.5 text-sm font-bold text-gray-600 transition-colors hover:border-gray-400">
                 {t('wizard.success.newBooking')}
               </button>
-              <button onClick={close} className="rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink hover:bg-gold-300">
+              <button data-testid="wizard-success-ok" onClick={close} className="min-h-[44px] rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300">
                 OK
               </button>
             </div>
@@ -214,21 +214,21 @@ export function ReservationWizard({ open, onClose, context }: Props) {
         ) : (
           <>
             {/* Step indicator */}
-            <div className="flex items-center justify-center gap-2 px-6 pt-5">
+            <div className="flex shrink-0 items-center justify-center gap-2 px-6 pt-5">
               {STEPS.map((s, i) => {
                 const Icon = s.icon;
                 const isActive = i === step;
                 const isDone = i < step;
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-all ${isActive ? 'bg-gold-400 text-ink' : isDone ? 'bg-gold-400/20 text-gold-400' : 'bg-white/5 text-neutral-500'}`}>
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-gold-400 text-gray-900' : isDone ? 'bg-gold-100 text-gold-700' : 'bg-gray-100 text-gray-400'}`}>
                       <Icon size={16} />
                     </div>
-                    <span className={`hidden text-xs font-semibold sm:block ${isActive ? 'text-white' : 'text-neutral-500'}`}>
+                    <span className={`hidden text-xs font-bold sm:block ${isActive ? 'text-gray-900' : 'text-gray-400'}`}>
                       {t(s.key)}
                     </span>
                     {i < STEPS.length - 1 && (
-                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-white/10'}`} />
+                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-gray-200'}`} />
                     )}
                   </div>
                 );
@@ -236,7 +236,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
             </div>
 
             {/* Form steps */}
-            <div className="px-6 py-6">
+            <div className="overflow-y-auto px-6 py-6">
               {step === 0 && (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
@@ -265,7 +265,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className={labelCls}>{t('wizard.pickupDate')} *</label>
-                      <input type="date" required value={form.pickup_date} onChange={(e) => update('pickup_date', e.target.value)} className={inputCls} />
+                      <input type="date" required min={new Date().toISOString().split('T')[0]} value={form.pickup_date} onChange={(e) => update('pickup_date', e.target.value)} className={inputCls} />
                     </div>
                     <div>
                       <label className={labelCls}>{t('wizard.pickupTime')} *</label>
@@ -319,48 +319,52 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     <textarea rows={3} value={form.message} onChange={(e) => update('message', e.target.value)} className={inputCls} placeholder={t('wizard.messagePlaceholder')} />
                   </div>
                   {status === 'error' && (
-                    <p className="rounded-xl bg-red-900/30 px-4 py-3 text-sm text-red-300">{errorMsg}</p>
+                    <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">{errorMsg}</p>
                   )}
                 </div>
               )}
             </div>
 
             {/* Footer buttons */}
-            <div className="flex items-center justify-between border-t border-white/5 px-6 py-4">
+            <div className="flex shrink-0 items-center justify-between border-t border-gray-100 bg-gray-50/60 px-6 py-4">
               {step > 0 ? (
-                <button onClick={() => setStep(step - 1)} className="flex items-center gap-1 text-sm font-semibold text-neutral-400 transition hover:text-white">
+                <button data-testid="wizard-prev-button" onClick={() => setStep(step - 1)} className="flex min-h-[44px] items-center gap-1 text-sm font-bold text-gray-500 transition-colors hover:text-gray-900">
                   <ChevronLeft size={16} /> {t('wizard.prev')}
                 </button>
               ) : <span />}
 
               {step < 2 ? (
                 <button
+                  data-testid="wizard-next-button"
                   onClick={() => setStep(step + 1)}
                   disabled={!canProceed()}
-                  className="flex items-center gap-1 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex min-h-[48px] items-center gap-1 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {t('wizard.next')} <ChevronRight size={16} />
                 </button>
               ) : (
                 <div className="flex items-center gap-2">
                   <button
+                    data-testid="wizard-whatsapp-button"
                     onClick={handleWhatsApp}
                     title={t('wizard.sendWhatsApp')}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366] transition hover:bg-[#25D366]/20"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366]/15 text-[#1faa52] transition-colors hover:bg-[#25D366]/25"
                   >
                     <MessageCircle size={18} />
                   </button>
                   <button
+                    data-testid="wizard-email-button"
                     onClick={handleEmail}
                     title={t('wizard.sendEmail')}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-neutral-300 transition hover:bg-white/10"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200"
                   >
                     <Mail size={18} />
                   </button>
                   <button
+                    data-testid="wizard-submit-button"
                     onClick={handleSubmit}
                     disabled={status === 'loading'}
-                    className="flex items-center gap-2 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-50"
+                    className="flex min-h-[48px] items-center gap-2 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300 disabled:opacity-50"
                   >
                     {status === 'loading' ? (
                       <><Loader2 size={16} className="animate-spin" /> {t('wizard.sending')}</>

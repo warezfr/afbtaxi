@@ -14,25 +14,34 @@ export function Advantages() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-ink py-24 lg:py-32">
-      <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-400/20 to-transparent" />
+    <section data-testid="advantages-section" className="relative overflow-hidden bg-gold-400 py-16 lg:py-28">
+      {/* Decorative */}
+      <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/15 blur-[70px]" />
+      <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-gray-900/10 blur-[70px]" />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mb-16 text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[.2em] text-gold-400">{t('advantages.label')}</p>
-          <h2 className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-            {t('advantages.title1')}<span className="gold-text">{t('advantages.title2')}</span>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="reveal mb-12 text-center lg:mb-16">
+          <p className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.22em] text-gray-900/70 sm:text-sm">
+            <span className="h-px w-8 bg-gray-900/50" />
+            {t('advantages.label')}
+            <span className="h-px w-8 bg-gray-900/50" />
+          </p>
+          <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+            {t('advantages.title1')}{t('advantages.title2')}
           </h2>
+          <div className="mx-auto mt-4 h-0 w-0 border-x-[9px] border-t-[10px] border-x-transparent border-t-gray-900" />
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {ADVANTAGES_DATA.map(({ icon: Icon, titleKey, descKey }) => (
-            <div key={titleKey} className="group glass rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold-400/20">
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-400/10 transition-colors duration-300 group-hover:bg-gold-400/20">
-                <Icon size={22} className="text-gold-400" />
+        <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {ADVANTAGES_DATA.map(({ icon: Icon, titleKey, descKey }, i) => (
+            <div key={titleKey} data-testid={`advantage-item-${i}`} className="group flex items-start gap-5">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white shadow-[0_10px_25px_-8px_rgba(17,24,39,0.3)] transition-transform duration-300 group-hover:scale-110">
+                <Icon size={26} className="text-gray-900" />
               </div>
-              <h3 className="text-lg font-bold text-white">{t(titleKey)}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-neutral-400">{t(descKey)}</p>
+              <div>
+                <h3 className="font-display text-lg font-black uppercase tracking-wide text-gray-900">{t(titleKey)}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-gray-900/70">{t(descKey)}</p>
+              </div>
             </div>
           ))}
         </div>

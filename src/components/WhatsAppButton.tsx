@@ -8,24 +8,14 @@ export function WhatsAppButton() {
 
   return (
     <a
+      data-testid="whatsapp-float"
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-[#25D366]/30 transition-all hover:-translate-y-1 hover:shadow-xl"
+      className="animate-pulse-wa fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white transition-transform duration-300 hover:-translate-y-1 hover:scale-105 sm:bottom-6 sm:right-6"
       aria-label={t('whatsapp.aria')}
     >
-      <MessageCircle size={24} />
-    </a>
-  );
-}
-
-export function PhoneButton() {
-  return (
-    <a
-      href={`tel:${COMPANY.phoneRaw}`}
-      className="flex items-center gap-2 rounded-full bg-gold-400/10 px-4 py-2 text-sm font-semibold text-gold-400 transition hover:bg-gold-400/20"
-    >
-      {COMPANY.phone}
+      <MessageCircle size={26} />
     </a>
   );
 }
