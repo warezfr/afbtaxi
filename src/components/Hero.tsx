@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, PhoneCall, ArrowRight, MapPin, Clock, Sparkles, Shield, ThumbsUp, Banknote, ChevronDown } from 'lucide-react';
+import { Phone, PhoneCall, ArrowRight, MapPin, ChevronDown } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 
@@ -23,10 +23,10 @@ export function Hero({ onOpenBooking }: Props) {
   }, []);
 
   const STATS = [
-    { value: '20+', label: 'ans d\u2019exp\u00e9rience' },
-    { value: '5', label: 'v\u00e9hicules premium' },
-    { value: '24/7', label: 'disponibilit\u00e9' },
-    { value: '4.9', label: '\u00e9toiles Google' },
+    { value: '20+', label: 'ans d\'expérience' },
+    { value: '5', label: 'véhicules premium' },
+    { value: '24/7', label: 'disponibilité' },
+    { value: '4.9', label: 'étoiles Google' },
   ];
 
   return (
@@ -45,7 +45,7 @@ export function Hero({ onOpenBooking }: Props) {
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-black/50" />
       </div>
 
-      {/* Decorative elements */}
+      {/* Decorative */}
       <div className="absolute -right-40 top-1/4 h-[600px] w-[600px] rounded-full bg-gold-400/5 blur-[120px]" />
       <div className="absolute -left-20 bottom-1/4 h-[400px] w-[400px] rounded-full bg-gold-400/3 blur-[80px]" />
 
@@ -66,7 +66,7 @@ export function Hero({ onOpenBooking }: Props) {
           </h1>
 
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-neutral-300">
-            Service de taxi haut de gamme au d\u00e9part de Fontainebleau. Ponctualit\u00e9, confort et discr\u00e9tion pour tous vos trajets en \u00cele-de-France.
+            Service de taxi haut de gamme au départ de Fontainebleau. Ponctualité, confort et discrétion pour tous vos trajets en Île-de-France.
           </p>
 
           {/* CTA */}
@@ -76,7 +76,7 @@ export function Hero({ onOpenBooking }: Props) {
               className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gold-400 px-8 py-4 font-bold text-ink transition-all hover:bg-gold-300 hover:shadow-[0_20px_50px_rgba(255,208,59,0.3)]"
             >
               <span className="relative z-10 flex items-center gap-3">
-                R\u00e9server maintenant
+                Réserver maintenant
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
               </span>
             </button>
@@ -92,7 +92,7 @@ export function Hero({ onOpenBooking }: Props) {
           {/* Location */}
           <div className="mt-8 flex items-center gap-2 text-sm text-neutral-400">
             <MapPin size={15} className="text-gold-400" />
-            <span>Fontainebleau \u00b7 Avon \u00b7 Seine-et-Marne \u00b7 Paris \u00b7 \u00cele-de-France</span>
+            <span>Fontainebleau · Avon · Seine-et-Marne · Paris · Île-de-France</span>
           </div>
         </div>
 

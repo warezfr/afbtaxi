@@ -13,7 +13,7 @@ export function Zones() {
             Zones <span className="gold-text">desservies</span>
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-neutral-400">
-            D\u00e9part ou arriv\u00e9e Fontainebleau, nous vous transportons partout en \u00cele-de-France.
+            Départ ou arrivée Fontainebleau, nous vous transportons partout en Île-de-France.
           </p>
         </div>
 

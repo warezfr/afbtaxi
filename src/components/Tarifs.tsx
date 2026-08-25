@@ -1,5 +1,4 @@
 import { TARIFS } from '@/lib/constants';
-import { ArrowRight } from 'lucide-react';
 
 export function Tarifs() {
   return (
@@ -14,7 +13,7 @@ export function Tarifs() {
             Grille <span className="gold-text">tarifaire</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-neutral-400">
-            Au d\u00e9part ou \u00e0 l'arriv\u00e9e de Fontainebleau. Tarifs distincts Voiture et Van, Jour et Nuit.
+            Au départ ou à l'arrivée de Fontainebleau. Tarifs distincts Voiture et Van, Jour et Nuit.
           </p>
         </div>
 
@@ -39,7 +38,7 @@ export function Tarifs() {
                   key={tarif.route}
                   className={`border-b border-white/5 transition-colors hover:bg-gold-400/5 ${i % 2 === 1 ? 'bg-white/[0.01]' : ''}`}
                 >
-                  <td className="px-6 py-4 font-semibold text-white">{tarif.route.replace('Fontainebleau \u2194 ', '')}</td>
+                  <td className="px-6 py-4 font-semibold text-white">{tarif.route.replace('Fontainebleau ↔ ', '')}</td>
                   <td className="border-l border-white/5 px-4 py-4 text-right text-sm font-semibold text-neutral-300">{tarif.carDay}</td>
                   <td className="px-4 py-4 text-right text-sm font-semibold text-neutral-300">{tarif.carNight}</td>
                   <td className="border-l border-white/5 px-4 py-4 text-right text-sm font-semibold text-neutral-300">{tarif.vanDay}</td>
@@ -53,15 +52,15 @@ export function Tarifs() {
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <div className="glass rounded-2xl p-6">
             <p className="mb-3 text-sm font-bold text-gold-400">Horaires</p>
-            <p className="text-sm text-neutral-400"><span className="font-semibold text-neutral-300">Jour :</span> 08h30 \u2013 18h15 en semaine</p>
-            <p className="mt-1.5 text-sm text-neutral-400"><span className="font-semibold text-neutral-300">Nuit :</span> 18h15 \u2013 08h30, dimanche & jours f\u00e9ri\u00e9s</p>
+            <p className="text-sm text-neutral-400"><span className="font-semibold text-neutral-300">Jour :</span> 08h30 – 18h15 en semaine</p>
+            <p className="mt-1.5 text-sm text-neutral-400"><span className="font-semibold text-neutral-300">Nuit :</span> 18h15 – 08h30, dimanche & jours fériés</p>
           </div>
           <div className="glass rounded-2xl p-6">
-            <p className="mb-3 text-sm font-bold text-gold-400">Suppl\u00e9ments</p>
+            <p className="mb-3 text-sm font-bold text-gold-400">Suppléments</p>
             <ul className="space-y-1.5 text-sm text-neutral-400">
-              <li>8 \u20ac apr\u00e8s 15 min au-del\u00e0 des 30 min gratuites (a\u00e9roports)</li>
-              <li>20 \u20ac par d\u00e9pose suppl\u00e9mentaire \u00e0 Paris</li>
-              <li>8 \u20ac par stop suppl\u00e9mentaire CDG / Fontainebleau</li>
+              <li>8 € après 15 min au-delà des 30 min gratuites (aéroports)</li>
+              <li>20 € par dépose supplémentaire à Paris</li>
+              <li>8 € par stop supplémentaire CDG / Fontainebleau</li>
             </ul>
           </div>
         </div>

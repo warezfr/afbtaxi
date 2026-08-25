@@ -5,7 +5,6 @@ export function Footer() {
     <footer className="border-t border-white/5 bg-ink">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid gap-10 md:grid-cols-3">
-          {/* Brand */}
           <div>
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-400">
@@ -14,11 +13,10 @@ export function Footer() {
               <span className="text-lg font-black text-white">AFB<span className="text-gold-400">.</span>Taxis</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-neutral-500">
-              Service de taxi premium \u00e0 Fontainebleau depuis 2004. Transferts a\u00e9roports, gares et courses locales.
+              Service de taxi premium à Fontainebleau depuis 2004. Transferts aéroports, gares et courses locales.
             </p>
           </div>
 
-          {/* Links */}
           <div>
             <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">Navigation</p>
             <nav className="flex flex-col gap-2.5">
@@ -29,7 +27,6 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Legal */}
           <div>
             <p className="mb-4 text-xs font-bold uppercase tracking-wider text-gold-400">Informations</p>
             <div className="space-y-2 text-sm text-neutral-500">
@@ -42,10 +39,10 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 md:flex-row">
           <p className="text-xs text-neutral-600">
-            \u00a9 {new Date().getFullYear()} {COMPANY.name}. Tous droits r\u00e9serv\u00e9s.
+            © {new Date().getFullYear()} {COMPANY.name}. Tous droits réservés.
           </p>
           <p className="text-xs text-neutral-600">
-            Taxi conventionn\u00e9 CPAM 77
+            Taxi conventionné CPAM 77
           </p>
         </div>
       </div>

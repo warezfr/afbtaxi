@@ -1,12 +1,12 @@
 import { Clock, MapPin, Handshake, Snowflake, CalendarDays, Award } from 'lucide-react';
 
 const ADVANTAGES_DATA = [
-  { icon: Clock, title: 'Ponctualit\u00e9', desc: 'Nous arrivons \u00e0 l\u2019heure, \u00e0 chaque trajet. Notre r\u00e9putation en d\u00e9pend.' },
-  { icon: MapPin, title: 'Chauffeurs exp\u00e9riment\u00e9s', desc: 'Connaissance parfaite de la r\u00e9gion pour des trajets rapides.' },
-  { icon: Handshake, title: 'Confiance', desc: 'Respect de chaque engagement. Vos horaires sont notre priorit\u00e9.' },
-  { icon: Snowflake, title: 'V\u00e9hicules confortables', desc: 'Flotte premium, climatis\u00e9e et entretenue avec soin.' },
-  { icon: CalendarDays, title: 'Service 7j/7', desc: 'Disponibles tous les jours, t\u00f4t le matin ou tard le soir.' },
-  { icon: Award, title: '20 ans d\u2019exp\u00e9rience', desc: 'Au service de Fontainebleau et sa r\u00e9gion depuis 2004.' },
+  { icon: Clock, title: 'Ponctualité', desc: 'Nous arrivons à l\'heure, à chaque trajet. Notre réputation en dépend.' },
+  { icon: MapPin, title: 'Chauffeurs expérimentés', desc: 'Connaissance parfaite de la région pour des trajets rapides.' },
+  { icon: Handshake, title: 'Confiance', desc: 'Respect de chaque engagement. Vos horaires sont notre priorité.' },
+  { icon: Snowflake, title: 'Véhicules confortables', desc: 'Flotte premium, climatisée et entretenue avec soin.' },
+  { icon: CalendarDays, title: 'Service 7j/7', desc: 'Disponibles tous les jours, tôt le matin ou tard le soir.' },
+  { icon: Award, title: '20 ans d\'expérience', desc: 'Au service de Fontainebleau et sa région depuis 2004.' },
 ];
 
 export function Advantages() {

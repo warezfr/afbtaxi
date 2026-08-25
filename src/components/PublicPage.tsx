@@ -13,23 +13,32 @@ import { ReservationWizard } from './ReservationWizard';
 
 export function PublicPage() {
   const [wizardOpen, setWizardOpen] = useState(false);
-  const openBooking = () => setWizardOpen(true);
+  const [bookingContext, setBookingContext] = useState<string | undefined>();
+
+  const openBooking = (context?: string) => {
+    setBookingContext(context);
+    setWizardOpen(true);
+  };
 
   return (
     <>
-      <Navbar onOpenBooking={openBooking} />
+      <Navbar onOpenBooking={() => openBooking()} />
       <main>
-        <Hero onOpenBooking={openBooking} />
+        <Hero onOpenBooking={() => openBooking()} />
         <Services onOpenBooking={openBooking} />
         <Fleet onOpenBooking={openBooking} />
         <Zones />
         <Tarifs />
         <Advantages />
-        <ContactSection onOpenBooking={openBooking} />
+        <ContactSection onOpenBooking={() => openBooking()} />
       </main>
       <Footer />
       <WhatsAppButton />
-      <ReservationWizard open={wizardOpen} onClose={() => setWizardOpen(false)} />
+      <ReservationWizard
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        context={bookingContext}
+      />
     </>
   );
 }

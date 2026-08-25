@@ -10,8 +10,11 @@ import {
   User,
   MapPin,
   ClipboardList,
+  MessageCircle,
+  Mail,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 import { AddressAutocomplete } from './AddressAutocomplete';
 import type { ReservationInput } from '@/lib/types';
@@ -40,9 +43,45 @@ const STEPS = [
 interface Props {
   open: boolean;
   onClose: () => void;
+  context?: string;
 }
 
-export function ReservationWizard({ open, onClose }: Props) {
+function buildWhatsAppMessage(form: ReservationInput, context?: string): string {
+  let msg = `Bonjour ${COMPANY.name},\n\nJe souhaite réserver un taxi.\n\n`;
+  if (context) msg += `Service / Véhicule : ${context}\n`;
+  msg += `Nom : ${form.first_name} ${form.last_name}\n`;
+  msg += `Téléphone : ${form.phone}\n`;
+  if (form.email) msg += `Email : ${form.email}\n`;
+  msg += `\nDate : ${form.pickup_date}\n`;
+  msg += `Heure : ${form.pickup_time}\n`;
+  msg += `Départ : ${form.pickup_location}\n`;
+  msg += `Arrivée : ${form.dropoff_location}\n`;
+  msg += `Passagers : ${form.passengers}\n`;
+  msg += `Type : ${form.trip_type === 'aller_retour' ? 'Aller-retour' : 'Aller simple'}\n`;
+  if (form.special_needs) msg += `Besoins spécifiques : ${form.special_needs}\n`;
+  if (form.message) msg += `Message : ${form.message}\n`;
+  msg += `\nMerci !`;
+  return msg;
+}
+
+function buildEmailBody(form: ReservationInput, context?: string): string {
+  let body = '';
+  if (context) body += `Service / Véhicule : ${context}\n`;
+  body += `Nom : ${form.first_name} ${form.last_name}\n`;
+  body += `Téléphone : ${form.phone}\n`;
+  if (form.email) body += `Email : ${form.email}\n`;
+  body += `Date : ${form.pickup_date}\n`;
+  body += `Heure : ${form.pickup_time}\n`;
+  body += `Départ : ${form.pickup_location}\n`;
+  body += `Arrivée : ${form.dropoff_location}\n`;
+  body += `Passagers : ${form.passengers}\n`;
+  body += `Type : ${form.trip_type === 'aller_retour' ? 'Aller-retour' : 'Aller simple'}\n`;
+  if (form.special_needs) body += `Besoins spécifiques : ${form.special_needs}\n`;
+  if (form.message) body += `Message : ${form.message}\n`;
+  return body;
+}
+
+export function ReservationWizard({ open, onClose, context }: Props) {
   const { t, dir } = useI18n();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<ReservationInput>(EMPTY_FORM);
@@ -57,6 +96,12 @@ export function ReservationWizard({ open, onClose }: Props) {
     }
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  useEffect(() => {
+    if (open && context) {
+      setForm((prev) => ({ ...prev, message: prev.message || `Véhicule / Service : ${context}` }));
+    }
+  }, [open, context]);
 
   const update = (field: keyof ReservationInput, value: string | number) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -96,6 +141,18 @@ export function ReservationWizard({ open, onClose }: Props) {
     setStatus('success');
   };
 
+  const handleWhatsApp = () => {
+    const msg = buildWhatsAppMessage(form, context);
+    const url = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleEmail = () => {
+    const subject = encodeURIComponent(`Réservation taxi - ${form.first_name} ${form.last_name}`);
+    const body = encodeURIComponent(buildEmailBody(form, context));
+    window.open(`mailto:${COMPANY.email}?subject=${subject}&body=${body}`, '_self');
+  };
+
   const reset = () => {
     setForm(EMPTY_FORM);
     setStep(0);
@@ -117,11 +174,16 @@ export function ReservationWizard({ open, onClose }: Props) {
   return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" dir={dir}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={close} />
-      <div className="relative w-full max-w-lg animate-slideUp rounded-3xl border border-white/10 bg-ink/95 shadow-2xl backdrop-blur-xl">
+      <div className="relative w-full max-w-lg animate-slideUp overflow-hidden rounded-3xl border border-white/10 bg-ink/95 shadow-2xl backdrop-blur-xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-          <h2 className="text-lg font-bold text-white">{t('wizard.title')}</h2>
-          <button onClick={close} className="rounded-full p-1.5 text-neutral-400 transition hover:bg-neutral-800 hover:text-white">
+          <div>
+            <h2 className="text-lg font-bold text-white">{t('wizard.title')}</h2>
+            {context && (
+              <p className="mt-0.5 text-xs font-medium text-gold-400">{context}</p>
+            )}
+          </div>
+          <button onClick={close} className="rounded-full p-1.5 text-neutral-400 transition hover:bg-white/5 hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -269,22 +331,41 @@ export function ReservationWizard({ open, onClose }: Props) {
                 <button
                   onClick={() => setStep(step + 1)}
                   disabled={!canProceed()}
-                  className="flex items-center gap-1 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {t('wizard.next')} <ChevronRight size={16} />
                 </button>
               ) : (
-                <button
-                  onClick={handleSubmit}
-                  disabled={status === 'loading'}
-                  className="flex items-center gap-2 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-50"
-                >
-                  {status === 'loading' ? (
-                    <><Loader2 size={16} className="animate-spin" /> {t('wizard.sending')}</>
-                  ) : (
-                    <><Send size={16} /> {t('wizard.submit')}</>
-                  )}
-                </button>
+                <div className="flex items-center gap-2">
+                  {/* WhatsApp */}
+                  <button
+                    onClick={handleWhatsApp}
+                    title="Envoyer via WhatsApp"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/10 text-[#25D366] transition hover:bg-[#25D366]/20"
+                  >
+                    <MessageCircle size={18} />
+                  </button>
+                  {/* Email */}
+                  <button
+                    onClick={handleEmail}
+                    title="Envoyer par email"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-neutral-300 transition hover:bg-white/10"
+                  >
+                    <Mail size={18} />
+                  </button>
+                  {/* Submit to DB */}
+                  <button
+                    onClick={handleSubmit}
+                    disabled={status === 'loading'}
+                    className="flex items-center gap-2 rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-ink transition hover:bg-gold-300 disabled:opacity-50"
+                  >
+                    {status === 'loading' ? (
+                      <><Loader2 size={16} className="animate-spin" /> {t('wizard.sending')}</>
+                    ) : (
+                      <><Send size={16} /> {t('wizard.submit')}</>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
           </>
