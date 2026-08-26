@@ -76,7 +76,7 @@ export default async function handler(req, res) {
       <div class="content">
         <div style="text-align: center;">
           <div class="badge">${isAdmin ? 'NOUVELLE RÉSERVATION' : 'RÉSERVATION CONFIRMÉE'}</div>
-          ${!isAdmin ? \`<p class="intro-text">Bonjour <strong>\${form.first_name}</strong>,<br>Nous avons bien reçu votre demande de réservation. Voici un récapitulatif de votre trajet.</p>\` : ''}
+          ${!isAdmin ? '<p class="intro-text">Bonjour <strong>' + form.first_name + '</strong>,<br>Nous avons bien reçu votre demande de réservation. Voici un récapitulatif de votre trajet.</p>' : ''}
         </div>
         
         <div class="route">
@@ -125,7 +125,7 @@ export default async function handler(req, res) {
             <label>Téléphone</label>
             <p>${form.phone}</p>
           </div>
-          ${form.email ? \`<div class="field" style="width: 100%;"><label>Email</label><p>\${form.email}</p></div>\` : ''}
+          ${form.email ? '<div class="field" style="width: 100%;"><label>Email</label><p>' + form.email + '</p></div>' : ''}
         </div>
 
         ${form.message || form.special_needs ? `
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
         </div>
         ` : ''}
 
-        ${!isAdmin ? \`<p style="text-align: center; font-size: 14px; color: #6b7280; margin-top: 30px;">Notre chauffeur vous contactera très prochainement pour confirmer les derniers détails de votre prise en charge.</p>\` : ''}
+        ${!isAdmin ? '<p style="text-align: center; font-size: 14px; color: #6b7280; margin-top: 30px;">Notre chauffeur vous contactera très prochainement pour confirmer les derniers détails de votre prise en charge.</p>' : ''}
 
       </div>
       <div class="footer">
