@@ -34,6 +34,19 @@ export function SeoLandingPage() {
       <Helmet>
         <title>{pageData.title}</title>
         <meta name="description" content={pageData.description} />
+        <link rel="canonical" href={`https://www.afbtaxis.com/${pageData.slug}`} />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "${pageData.title}",
+              "description": "${pageData.description}",
+              "url": "https://www.afbtaxis.com/${pageData.slug}"
+            }
+          `}
+        </script>
+
       </Helmet>
       
       {/* Optional: Add a localized H1 here if we want to force the keyword for SEO before the standard Hero */}

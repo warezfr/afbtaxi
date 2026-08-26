@@ -20,6 +20,25 @@ export function BlogPost() {
       <Helmet>
         <title>{post.title} | AFB Taxis</title>
         <meta name="description" content={post.description} />
+        <link rel="canonical" href={`https://www.afbtaxis.com/blog/${post.slug}`} />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "${post.title}",
+              "image": "${post.imageUrl}",
+              "datePublished": "${post.date}",
+              "dateModified": "${post.date}",
+              "author": [{
+                  "@type": "Organization",
+                  "name": "AFB Taxis",
+                  "url": "https://www.afbtaxis.com/"
+              }]
+            }
+          `}
+        </script>
+
       </Helmet>
 
       <article className="bg-white dark:bg-gray-950 pt-20">

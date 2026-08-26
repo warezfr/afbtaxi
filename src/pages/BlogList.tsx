@@ -23,6 +23,19 @@ export function BlogList() {
       <Helmet>
         <title>Blog Fontainebleau : Tourisme, Actualités et Transport | AFB Taxis</title>
         <meta name="description" content="Découvrez nos articles sur Fontainebleau, ses châteaux, sa forêt, l'INSEAD et les astuces pour bien organiser vos transports en Seine-et-Marne." />
+        <link rel="canonical" href="https://www.afbtaxis.com/blog" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Blog",
+              "name": "Le Mag de Fontainebleau par AFB Taxis",
+              "url": "https://www.afbtaxis.com/blog",
+              "description": "Tourisme, patrimoine, bons plans locaux et actualités du VTC en Seine-et-Marne."
+            }
+          `}
+        </script>
+
       </Helmet>
 
       <div className="bg-gray-900 dark:bg-gray-950 pt-32 pb-16 px-4">
