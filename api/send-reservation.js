@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     port: 465,
     secure: true,
     auth: {
-      user: 'reservation@afbtaxis.com',
+      user: 'afb@afbtaxis.com',
       pass: process.env.SMTP_PASSWORD,
     }
   });
