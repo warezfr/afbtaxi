@@ -49,7 +49,7 @@ export function Services({ onOpenBooking }: ServicesProps) {
                     : isDark
                     ? 'bg-gray-900 dark:bg-gray-800'
                     : isMedical
-                    ? 'border-2 border-gold-300 bg-gold-50/60 dark:border-gold-700 dark:bg-gold-950/20'
+                    ? 'border-2 border-gold-300 bg-gold-50/60 dark:border-gold-700 dark:bg-gold-900/20'
                     : 'border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900'
                 }`}
               >
