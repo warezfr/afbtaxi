@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Navigation, ArrowRight, Sun, Moon, Car, Bus } from 'lucide-react';
+import { MapPin, Navigation, ArrowRight, ArrowRightLeft, Sun, Moon, Car, Bus } from 'lucide-react';
 import { TARIFS } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 
@@ -12,6 +12,7 @@ export function PriceEstimator({ onOpenBooking }: Props) {
   const [destIdx, setDestIdx] = useState<number>(-1);
   const [vehicle, setVehicle] = useState<'car' | 'van'>('car');
   const [time, setTime] = useState<'day' | 'night'>('day');
+  const [isReversed, setIsReversed] = useState(false);
 
   const tarif = destIdx >= 0 ? TARIFS[destIdx] : null;
   const price = tarif
@@ -24,7 +25,9 @@ export function PriceEstimator({ onOpenBooking }: Props) {
 
   const handleBook = () => {
     if (!tarif) { onOpenBooking(); return; }
-    const ctx = `${tarif.route} · ${vehicle === 'car' ? t('tarifs.car') : t('tarifs.van')} · ${time === 'day' ? t('tarifs.day') : t('tarifs.night')} · ${price}`;
+    
+    const direction = isReversed ? `${destLabel(tarif.route)} ➝ Fontainebleau` : `Fontainebleau ➝ ${destLabel(tarif.route)}`;
+    const ctx = `${direction} · ${vehicle === 'car' ? t('tarifs.car') : t('tarifs.van')} · ${time === 'day' ? t('tarifs.day') : t('tarifs.night')} · ${price}`;
     onOpenBooking(ctx);
   };
 
@@ -39,30 +42,75 @@ export function PriceEstimator({ onOpenBooking }: Props) {
       <div className="grid gap-5 p-6 sm:p-7 lg:grid-cols-[1fr_1fr_auto] lg:items-end lg:gap-6">
         {/* From / To */}
         <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2">
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{t('estimator.from')}</label>
-            <div className="flex min-h-[48px] items-center gap-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 px-4 py-3">
-              <Navigation size={16} className="shrink-0 text-gold-600" />
-              <span className="text-sm font-bold text-gray-900 dark:text-white">Fontainebleau</span>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="estimator-dest" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{t('estimator.to')}</label>
-            <div className="relative">
-              <MapPin size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gold-600" />
-              <select
-                id="estimator-dest"
-                data-testid="estimator-destination-select"
-                value={destIdx}
-                onChange={(e) => setDestIdx(parseInt(e.target.value))}
-                className="min-h-[48px] w-full appearance-none rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 py-3 pl-11 pr-8 text-sm font-bold text-gray-900 dark:text-white transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40"
+          {/* Dynamic From/To fields based on isReversed */}
+          <div className="relative">
+            <div className="mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                {t('estimator.from')}
+              </label>
+              <button 
+                onClick={() => setIsReversed(!isReversed)}
+                className="flex items-center gap-1.5 text-xs font-bold text-gold-600 hover:text-gold-500 transition-colors sm:hidden"
+                title="Inverser le sens"
               >
-                <option value={-1}>{t('estimator.selectDest')}</option>
-                {TARIFS.map((tf, i) => (
-                  <option key={tf.route} value={i}>{destLabel(tf.route)}</option>
-                ))}
-              </select>
+                <ArrowRightLeft size={14} /> Inverser
+              </button>
             </div>
+            {isReversed ? (
+              <div className="relative">
+                <MapPin size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gold-600" />
+                <select
+                  value={destIdx}
+                  onChange={(e) => setDestIdx(parseInt(e.target.value))}
+                  className="min-h-[48px] w-full appearance-none rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 py-3 pl-11 pr-8 text-sm font-bold text-gray-900 dark:text-white transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40"
+                >
+                  <option value={-1}>{t('estimator.selectDest')}</option>
+                  {TARIFS.map((tf, i) => (
+                    <option key={tf.route} value={i}>{destLabel(tf.route)}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="flex min-h-[48px] items-center gap-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 px-4 py-3">
+                <Navigation size={16} className="shrink-0 text-gold-600" />
+                <span className="text-sm font-bold text-gray-900 dark:text-white">Fontainebleau</span>
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <div className="mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                {t('estimator.to')}
+              </label>
+              <button 
+                onClick={() => setIsReversed(!isReversed)}
+                className="hidden sm:flex items-center justify-center text-gray-400 hover:text-gold-600 dark:hover:text-gold-400 transition-colors absolute -left-2 lg:-left-3 bottom-2 -translate-x-1/2 z-10 bg-white dark:bg-gray-900 rounded-full border border-gray-200 dark:border-gray-700 shadow-md w-8 h-8"
+                title="Inverser le sens"
+              >
+                <ArrowRightLeft size={14} />
+              </button>
+            </div>
+            {!isReversed ? (
+              <div className="relative">
+                <MapPin size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gold-600" />
+                <select
+                  value={destIdx}
+                  onChange={(e) => setDestIdx(parseInt(e.target.value))}
+                  className="min-h-[48px] w-full appearance-none rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 py-3 pl-11 pr-8 text-sm font-bold text-gray-900 dark:text-white transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40"
+                >
+                  <option value={-1}>{t('estimator.selectDest')}</option>
+                  {TARIFS.map((tf, i) => (
+                    <option key={tf.route} value={i}>{destLabel(tf.route)}</option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="flex min-h-[48px] items-center gap-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 px-4 py-3">
+                <Navigation size={16} className="shrink-0 text-gold-600" />
+                <span className="text-sm font-bold text-gray-900 dark:text-white">Fontainebleau</span>
+              </div>
+            )}
           </div>
 
           {/* Toggles */}
