@@ -135,10 +135,10 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       }
 
       setStatus('success');
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       setStatus('error');
-      setErrorMsg(t('wizard.error') + " (Vérifiez SMTP_PASSWORD sur Vercel)");
+      setErrorMsg(err.message || t('wizard.error'));
     }
   };
 
