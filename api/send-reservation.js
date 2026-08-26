@@ -1,6 +1,4 @@
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -9,9 +7,20 @@ export default async function handler(req, res) {
 
   const { form, context } = req.body;
 
-  if (!process.env.RESEND_API_KEY) {
-    return res.status(500).json({ error: 'Veuillez configurer RESEND_API_KEY dans Vercel.' });
+  if (!process.env.SMTP_PASSWORD) {
+    return res.status(500).json({ error: 'Veuillez configurer SMTP_PASSWORD dans Vercel.' });
   }
+
+  // Configuration SMTP Haisoft
+  const transporter = nodemailer.createTransport({
+    host: 'srv04.haisoft.net',
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: 'afb@afbtaxis.com',
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
 
   const htmlTemplate = `
   <!DOCTYPE html>
@@ -121,15 +130,17 @@ export default async function handler(req, res) {
   `;
 
   try {
-    const data = await resend.emails.send({
-      from: 'Réservations AFB Taxis <onboarding@resend.dev>',
-      to: ['mahdi243@gmail.com'],
+    const info = await transporter.sendMail({
+      from: '"Réservations AFB Taxis" <afb@afbtaxis.com>',
+      to: 'mahdi243@gmail.com',
+      replyTo: form.email || undefined,
       subject: `🚨 Nouvelle course : ${form.first_name} ${form.last_name}`,
       html: htmlTemplate,
     });
 
-    return res.status(200).json(data);
+    return res.status(200).json({ success: true, messageId: info.messageId });
   } catch (error) {
+    console.error("Nodemailer error:", error);
     return res.status(500).json({ error: error.message });
   }
 }
