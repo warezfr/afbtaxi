@@ -109,6 +109,46 @@ export default async function handler(req, res) {
         + '</td></tr></table></td></tr>'
       : '')
 
+    // === QUICK ACTIONS (admin only) ===
+    + (isAdmin ? (() => {
+      const waMsg = encodeURIComponent(
+        'Bonjour ' + form.first_name + ' ' + form.last_name + ',\n\n'
+        + 'Suite a votre demande de reservation AFB Taxis :\n\n'
+        + 'Trajet : ' + form.pickup_location + ' → ' + form.dropoff_location + '\n'
+        + 'Date : ' + form.pickup_date + ' a ' + form.pickup_time + '\n'
+        + 'Passagers : ' + form.passengers + '\n'
+        + 'Type : ' + tripType + '\n'
+        + (context ? 'Tarif : ' + context + '\n' : '')
+        + '\nNous confirmons votre prise en charge. Votre chauffeur sera present a l\'heure convenue.\n\n'
+        + 'Cordialement,\nAFB Taxis Fontainebleau\n06 07 42 46 16'
+      );
+      const phoneClean = form.phone.replace(/[\s.-]/g, '').replace(/^0/, '33');
+      const waUrl = 'https://wa.me/' + phoneClean + '?text=' + waMsg;
+
+      const mailSubject = encodeURIComponent('Confirmation de votre reservation - AFB Taxis');
+      const mailBody = encodeURIComponent(
+        'Bonjour ' + form.first_name + ' ' + form.last_name + ',\n\n'
+        + 'Suite a votre demande de reservation AFB Taxis :\n\n'
+        + 'Trajet : ' + form.pickup_location + ' → ' + form.dropoff_location + '\n'
+        + 'Date : ' + form.pickup_date + ' a ' + form.pickup_time + '\n'
+        + 'Passagers : ' + form.passengers + '\n'
+        + 'Type : ' + tripType + '\n'
+        + (context ? 'Tarif : ' + context + '\n' : '')
+        + '\nNous confirmons votre prise en charge. Votre chauffeur sera present a l\'heure convenue.\n\n'
+        + 'Cordialement,\nAFB Taxis Fontainebleau\n06 07 42 46 16'
+      );
+      const mailUrl = 'mailto:' + (form.email || '') + '?subject=' + mailSubject + '&body=' + mailBody;
+
+      return '<tr><td style="background-color:#ffffff;padding:0 35px 30px;">'
+        + '<div style="font-size:11px;font-weight:800;color:#9ca3af;text-transform:uppercase;letter-spacing:2px;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #f3f4f6;">Actions rapides</div>'
+        + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>'
+        + '<td width="50%" style="padding-right:8px;"><a href="' + waUrl + '" style="display:block;background-color:#25D366;color:#ffffff;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;text-align:center;">WhatsApp ' + form.first_name + '</a></td>'
+        + '<td width="50%" style="padding-left:8px;"><a href="' + mailUrl + '" style="display:block;background-color:#111827;color:#ffffff;padding:14px 10px;border-radius:12px;font-size:14px;font-weight:800;text-decoration:none;text-align:center;">Email ' + form.first_name + '</a></td>'
+        + '</tr></table>'
+        + '<p style="margin:10px 0 0;font-size:11px;color:#9ca3af;text-align:center;">Messages pre-remplis avec les details de la reservation</p>'
+        + '</td></tr>';
+    })() : '')
+
     // === CTA (client only) ===
     + (!isAdmin
       ? '<tr><td style="background-color:#ffffff;padding:0 35px 35px;">'
