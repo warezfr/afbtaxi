@@ -13,7 +13,6 @@ import {
   MessageCircle,
   Mail,
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 import { AddressAutocomplete } from './AddressAutocomplete';
@@ -124,23 +123,48 @@ export function ReservationWizard({ open, onClose, context }: Props) {
     setErrorMsg('');
 
     try {
-      const { error } = await supabase.from('reservations').insert({
-        first_name: form.first_name,
-        last_name: form.last_name,
-        phone: form.phone,
-        email: form.email || null,
-        pickup_date: form.pickup_date,
-        pickup_time: form.pickup_time,
-        pickup_location: form.pickup_location,
-        dropoff_location: form.dropoff_location,
-        passengers: form.passengers,
-        trip_type: form.trip_type,
-        special_needs: form.special_needs || null,
-        message: form.message || null,
+      // 1. Try to send the beautiful email via our API (requires RESEND_API_KEY)
+      const res = await fetch('/api/send-reservation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ form, context })
       });
-      if (error) throw error;
+
+      if (!res.ok) {
+        const data = await res.json();
+        
+        // Fallback to FormSubmit if API key is missing or endpoint fails
+        console.warn("API Error, falling back to FormSubmit:", data.error);
+        
+        const fsRes = await fetch("https://formsubmit.co/ajax/mahdi243@gmail.com", {
+          method: "POST",
+          headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+              _subject: `Nouvelle Réservation AFB Taxis - ${form.first_name} ${form.last_name}`,
+              _template: 'box',
+              Client: `${form.first_name} ${form.last_name}`,
+              Telephone: form.phone,
+              Email: form.email || 'Non renseigné',
+              Depart: form.pickup_location,
+              Arrivee: form.dropoff_location,
+              Date_Heure: `${form.pickup_date} à ${form.pickup_time}`,
+              Passagers: form.passengers,
+              Type: form.trip_type === 'aller_retour' ? 'Aller-Retour' : 'Aller simple',
+              Contexte: context || 'Sur devis',
+              Besoins_Speciaux: form.special_needs || 'Aucun',
+              Message: form.message || 'Aucun'
+          })
+        });
+        
+        if (!fsRes.ok) throw new Error("Les deux méthodes d'envoi ont échoué.");
+      }
+
       setStatus('success');
-    } catch {
+    } catch (err) {
+      console.error(err);
       setStatus('error');
       setErrorMsg(t('wizard.error'));
     }
