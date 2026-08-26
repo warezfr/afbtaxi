@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: 'afb@afbtaxis.com',
+      user: 'reservation@afbtaxis.com',
       pass: process.env.SMTP_PASSWORD,
     },
   });
@@ -131,7 +131,7 @@ export default async function handler(req, res) {
 
   try {
     const info = await transporter.sendMail({
-      from: '"Réservations AFB Taxis" <afb@afbtaxis.com>',
+      from: '"Réservations AFB Taxis" <reservation@afbtaxis.com>',
       to: 'mahdi243@gmail.com',
       replyTo: form.email || undefined,
       subject: `🚨 Nouvelle course : ${form.first_name} ${form.last_name}`,
