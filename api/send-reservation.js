@@ -141,7 +141,7 @@ export default async function handler(req, res) {
       </div>
       <div class="footer">
         © ${new Date().getFullYear()} AFB Taxis Fontainebleau. Tous droits réservés.<br>
-        <div class="footer-contact">06 07 42 46 16 • afb@afbtaxis.com</div>
+        <div class="footer-contact">06 07 42 46 16 • reservation@afbtaxis.com</div>
       </div>
     </div>
   </body>
@@ -151,7 +151,6 @@ export default async function handler(req, res) {
   try {
     const promises = [];
 
-    // 1. Email Admin
     promises.push(
       transporter.sendMail({
         from: '"Réservations AFB Taxis" <reservation@afbtaxis.com>',
@@ -162,7 +161,6 @@ export default async function handler(req, res) {
       })
     );
 
-    // 2. Email Client Confirmation (if email provided)
     if (form.email) {
       promises.push(
         transporter.sendMail({
@@ -179,6 +177,9 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Nodemailer error:", error);
-    return res.status(500).json({ error: error.message });
+    // Return detailed debug info
+    return res.status(500).json({ 
+      error: error.message + ` [DEBUG: Vercel lit un mot de passe de ${process.env.SMTP_PASSWORD?.length || 0} caractères]` 
+    });
   }
 }
