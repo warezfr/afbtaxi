@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+import { LegalModals, LegalDocType } from './LegalModals';
 
 export function Footer() {
   const { t } = useI18n();
+  const [activeDoc, setActiveDoc] = useState<LegalDocType>(null);
 
   return (
     <footer className="border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
@@ -93,6 +96,12 @@ export function Footer() {
               <p>{t('footer.legal.form')} : {COMPANY.legalForm}</p>
               <p>{t('footer.legal.parking')} : {COMPANY.stationnement}</p>
               <p>{t('footer.legal.cpam')}</p>
+              
+              <div className="pt-3 flex flex-col gap-2">
+                <button onClick={() => setActiveDoc('mentions')} className="text-left text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gold-600 dark:hover:text-gold-400 underline decoration-gray-300 dark:decoration-gray-700 underline-offset-2">Mentions légales</button>
+                <button onClick={() => setActiveDoc('privacy')} className="text-left text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gold-600 dark:hover:text-gold-400 underline decoration-gray-300 dark:decoration-gray-700 underline-offset-2">Politique de confidentialité</button>
+                <button onClick={() => setActiveDoc('cookies')} className="text-left text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gold-600 dark:hover:text-gold-400 underline decoration-gray-300 dark:decoration-gray-700 underline-offset-2">Gestion des cookies</button>
+              </div>
             </div>
 
             <p className="mb-3 mt-6 text-xs font-bold uppercase tracking-[.18em] text-gray-900 dark:text-white">{t('footer.zones')}</p>
@@ -112,6 +121,8 @@ export function Footer() {
         </div>
       </div>
       <div className="taxi-checker h-2.5" />
+      
+      <LegalModals activeDoc={activeDoc} onClose={() => setActiveDoc(null)} />
     </footer>
   );
 }
