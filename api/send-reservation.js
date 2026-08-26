@@ -13,12 +13,16 @@ export default async function handler(req, res) {
 
   const transporter = nodemailer.createTransport({
     host: 'srv04.haisoft.net',
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // STARTTLS
     auth: {
       user: 'reservation@afbtaxis.com',
       pass: process.env.SMTP_PASSWORD,
     },
+    tls: {
+      ciphers: 'SSLv3',
+      rejectUnauthorized: false
+    }
   });
 
   const generateEmailHtml = (isAdmin) => `
@@ -177,9 +181,8 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Nodemailer error:", error);
-    // Return detailed debug info
     return res.status(500).json({ 
-      error: error.message + ` [DEBUG: Vercel lit un mot de passe de ${process.env.SMTP_PASSWORD?.length || 0} caractères]` 
+      error: error.message + ` [DEBUG: Vercel lit bien le mot de passe de ${process.env.SMTP_PASSWORD?.length || 0} caractères, vérifiez les blocages IP sur Haisoft]` 
     });
   }
 }
