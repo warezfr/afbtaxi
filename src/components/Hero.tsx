@@ -38,7 +38,7 @@ export function Hero({ onOpenBooking }: Props) {
   ];
 
   return (
-    <section id="home" className="relative overflow-hidden bg-white dark:bg-gray-950">
+    <section id="home" className="relative overflow-hidden bg-white dark:bg-gray-900">
       {/* ===== Dark hero ===== */}
       <div className="relative overflow-hidden bg-[#0a0a0a] pb-24 pt-24 sm:pb-28 lg:pb-36 lg:pt-28">
         {/* Decorative */}
@@ -152,9 +152,9 @@ export function Hero({ onOpenBooking }: Props) {
         </div>
 
         {/* Wave transition to white/dark */}
-        <div className="absolute -bottom-px left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 110" preserveAspectRatio="none" className="block h-[50px] w-full fill-white dark:fill-gray-950 sm:h-[70px] lg:h-[95px]">
-            <path d="M0,70 C240,115 480,110 720,72 C960,34 1200,26 1440,74 L1440,110 L0,110 Z" />
+        <div className="absolute -bottom-px left-0 right-0 z-10 overflow-hidden">
+          <svg viewBox="0 0 2880 110" preserveAspectRatio="none" className="block h-[50px] w-[200%] fill-white dark:fill-gray-900 sm:h-[70px] lg:h-[95px] animate-wave">
+            <path d="M0,50 C360,110 360,-10 720,50 C1080,110 1080,-10 1440,50 C1800,110 1800,-10 2160,50 C2520,110 2520,-10 2880,50 L2880,110 L0,110 Z" />
           </svg>
         </div>
       </div>
