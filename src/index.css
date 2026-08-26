@@ -76,6 +76,11 @@
     transform: translateY(-4px);
     box-shadow: 0 20px 40px -18px rgba(17, 24, 39, 0.18);
   }
+
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px;
+  }
 }
 
 /* Scroll reveal */

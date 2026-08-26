@@ -21,12 +21,14 @@ export function Home() {
       
       <Hero onOpenBooking={openBooking} />
       <Services onOpenBooking={openBooking} />
-      <Fleet onOpenBooking={openBooking} />
-      <Zones />
-      <Tarifs />
-      <Advantages />
-      <Reviews />
-      <ContactSection onOpenBooking={() => openBooking()} />
+      <div className="content-auto">
+        <Fleet onOpenBooking={openBooking} />
+        <Zones />
+        <Tarifs />
+        <Advantages />
+        <Reviews />
+        <ContactSection onOpenBooking={() => openBooking()} />
+      </div>
     </>
   );
 }
