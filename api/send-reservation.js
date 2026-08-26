@@ -179,7 +179,7 @@ export default async function handler(req, res) {
     promises.push(
       transporter.sendMail({
         from: '"Reservations AFB Taxis" <afb@afbtaxis.com>',
-        to: 'mahdi243@gmail.com',
+        to: 'afb@afbtaxis.com',
         replyTo: form.email || undefined,
         subject: 'Nouvelle course : ' + form.first_name + ' ' + form.last_name + ' - ' + form.pickup_date + ' a ' + form.pickup_time,
         html: generateEmailHtml(true),
