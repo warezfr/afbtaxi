@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     port: 465,
     secure: true,
     auth: {
-      user: 'afb@afbtaxis.com', // Login with the main account shown in screenshot
+      user: 'reservation@afbtaxis.com',
       pass: process.env.SMTP_PASSWORD,
     }
   });
