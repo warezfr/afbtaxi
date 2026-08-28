@@ -93,31 +93,7 @@ export function Tarifs() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          <div className="card-lift rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-7">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-100 dark:bg-gold-400/10">
-                <Clock size={18} className="text-gold-700 dark:text-gold-400" />
-              </div>
-              <p className="font-display text-base font-bold text-gray-900 dark:text-white">{t('tarifs.hours.title')}</p>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400"><span className="font-bold text-gray-800 dark:text-gray-300">{t('tarifs.hours.day')}</span> {t('tarifs.hours.dayValue')}</p>
-            <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400"><span className="font-bold text-gray-800 dark:text-gray-300">{t('tarifs.hours.night')}</span> {t('tarifs.hours.nightValue')}</p>
-          </div>
-          <div className="card-lift rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 sm:p-7">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-100 dark:bg-gold-400/10">
-                <Info size={18} className="text-gold-700 dark:text-gold-400" />
-              </div>
-              <p className="font-display text-base font-bold text-gray-900 dark:text-white">{t('tarifs.supplements.title')}</p>
-            </div>
-            <ul className="space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
-              <li>{t('tarifs.supplements.wait')}</li>
-              <li>{t('tarifs.supplements.paris')}</li>
-              <li>{t('tarifs.supplements.stop')}</li>
-            </ul>
-          </div>
-        </div>
+        
       </div>
     </section>
   );

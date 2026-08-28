@@ -51,7 +51,7 @@ export function Hero({ onOpenBooking }: Props) {
             <div className="animate-fade-in-up">
               <div className="inline-flex items-center gap-2.5 rounded-full border border-gold-400/40 bg-gold-400/10 px-4 py-2">
                 <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
-                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">{t('hero.badge')}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">SERVICE 24H/24 & 7J/7</span>
               </div>
 
               <h1 className="mt-6 font-display text-[2.9rem] font-black leading-[1.0] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] xl:text-[4.8rem]">
@@ -84,8 +84,17 @@ export function Hero({ onOpenBooking }: Props) {
                 </a>
               </div>
 
+              {/* HUGE 24/7 BANNER */}
+              <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-gold-400/30 bg-gold-400/10 px-5 py-3 backdrop-blur-md">
+                <span className="flex h-3 w-3 items-center justify-center">
+                  <span className="absolute inline-flex h-3 w-3 animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                </span>
+                <span className="font-display text-lg font-black tracking-widest text-gold-400">DISPONIBLE 24H/24 ET 7J/7</span>
+              </div>
+
               {/* Trust row */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-400">
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-400">
                 <span className="flex items-center gap-2">
                   <span className="flex text-gold-400">
                     {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
@@ -127,7 +136,7 @@ export function Hero({ onOpenBooking }: Props) {
                 {/* Floating pill : availability */}
                 <div className="absolute left-0 top-4 flex items-center gap-2.5 rounded-full border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-md">
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse-gold" />
-                  <span className="text-xs font-bold text-white sm:text-sm">24/7 · {t('hero.stat.availability')}</span>
+                  <span className="text-xs font-bold text-white sm:text-sm">RÉSERVATION 24H/24 & 7J/7</span>
                 </div>
 
                 {/* Vehicle name + dots */}
