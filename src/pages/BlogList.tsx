@@ -1,22 +1,29 @@
 import { useState, useMemo } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { BLOG_POSTS } from '@/lib/blog-data';
+import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { ContactSection } from '@/components/ContactSection';
 
 export function BlogList() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  const allPosts = useBlogPosts();
+
   const categories = useMemo(() => {
-    const cats = BLOG_POSTS.map(post => post.category);
+    const cats = allPosts.map(post => post.category);
     return Array.from(new Set(cats)).sort();
-  }, []);
+  }, [allPosts]);
+
+  const allTags = useMemo(() => {
+    const tags = allPosts.flatMap(post => post.tags);
+    return Array.from(new Set(tags)).filter(t => t !== 'AFB Taxis' && t !== 'Fontainebleau').sort();
+  }, [allPosts]);
 
   const filteredPosts = useMemo(() => {
-    if (!selectedCategory) return BLOG_POSTS;
-    return BLOG_POSTS.filter(post => post.category === selectedCategory);
-  }, [selectedCategory]);
+    if (!selectedCategory) return allPosts;
+    return allPosts.filter(post => post.category === selectedCategory || post.tags.includes(selectedCategory));
+  }, [selectedCategory, allPosts]);
 
   return (
     <>
@@ -72,6 +79,23 @@ export function BlogList() {
                     </li>
                   ))}
                 </ul>
+
+                {allTags.length > 0 && (
+                  <>
+                    <h3 className="font-display font-black text-gray-900 dark:text-white mt-8 mb-4 uppercase tracking-widest text-xs">Tags</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {allTags.map(tag => (
+                        <button
+                          key={tag}
+                          onClick={() => setSelectedCategory(tag)}
+                          className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-colors ${selectedCategory === tag ? 'bg-gold-500 text-gray-900 border-gold-500' : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gold-400 hover:text-gold-500'}`}
+                        >
+                          #{tag}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </aside>
 

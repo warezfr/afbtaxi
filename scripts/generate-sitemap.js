@@ -5,29 +5,22 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const blogDataPath = path.resolve(__dirname, '../src/lib/blog-data.ts');
-const blogDataContent = fs.readFileSync(blogDataPath, 'utf-8');
-
-const slugRegex = /"slug":\s*"([^"]+)"/g;
-const dateRegex = /"date":\s*"([^"]+)"/g;
-
-let slugs = [];
-let match;
-while ((match = slugRegex.exec(blogDataContent)) !== null) {
-  slugs.push(match[1]);
-}
-
-let dates = [];
-while ((match = dateRegex.exec(blogDataContent)) !== null) {
-  dates.push(match[1]);
-}
-
+const blogDir = path.resolve(__dirname, '../content/blog');
 const DOMAIN = 'https://www.afbtaxis.com';
 
-const generateSitemap = () => {
-  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+const getMdFiles = () => {
+  if (!fs.existsSync(blogDir)) return [];
+  return fs.readdirSync(blogDir).filter(f => f.endsWith('.md'));
+};
+
+const getFrontmatterField = (content, field) => {
+  const match = content.match(new RegExp(`^${field}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
+  return match ? match[1].trim() : '';
+};
+
+const files = getMdFiles();
+let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Static Pages -->
   <url>
     <loc>${DOMAIN}/</loc>
     <changefreq>weekly</changefreq>
@@ -38,24 +31,22 @@ const generateSitemap = () => {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- Blog Posts -->
 `;
 
-  slugs.forEach((slug, index) => {
-    const date = dates[index] || new Date().toISOString().split('T')[0];
-    sitemap += `  <url>
+files.forEach(filename => {
+  const slug = filename.replace('.md', '');
+  const content = fs.readFileSync(path.join(blogDir, filename), 'utf-8');
+  const date = getFrontmatterField(content, 'date');
+  sitemap += `  <url>
     <loc>${DOMAIN}/blog/${slug}</loc>
-    <lastmod>${date}</lastmod>
+    ${date ? `<lastmod>${date}</lastmod>` : ''}
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>\n`;
-  });
+});
 
-  sitemap += `</urlset>`;
+sitemap += `</urlset>`;
 
-  const publicPath = path.resolve(__dirname, '../public');
-  fs.writeFileSync(path.join(publicPath, 'sitemap.xml'), sitemap);
-  console.log(`✅ sitemap.xml generated with ${slugs.length} posts!`);
-};
-
-generateSitemap();
+const publicPath = path.resolve(__dirname, '../public');
+fs.writeFileSync(path.join(publicPath, 'sitemap.xml'), sitemap);
+console.log(`✅ sitemap.xml generated with ${files.length} posts!`);

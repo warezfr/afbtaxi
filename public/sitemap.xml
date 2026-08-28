@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Static Pages -->
   <url>
     <loc>https://www.afbtaxis.com/</loc>
     <changefreq>weekly</changefreq>
@@ -11,19 +10,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- Blog Posts -->
-  <url>
-    <loc>https://www.afbtaxis.com/blog/histoire-chateau-de-fontainebleau</loc>
-    <lastmod>2023-10-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/randonnee-nature-foret-fontainebleau</loc>
-    <lastmod>2023-10-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
   <url>
     <loc>https://www.afbtaxis.com/blog/art-culinaire-bonnes-adresses-77</loc>
     <lastmod>2023-11-05</lastmod>
@@ -31,140 +17,8 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.afbtaxis.com/blog/guide-pratique-insead-fontainebleau</loc>
-    <lastmod>2023-11-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/visiter-barbizon-village-des-peintres</loc>
-    <lastmod>2023-11-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/transfert-aeroport-cdg-orly-fontainebleau</loc>
-    <lastmod>2023-12-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/evenements-equestres-grand-parquet</loc>
-    <lastmod>2023-12-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/transport-medicalise-cpam-seine-et-marne</loc>
-    <lastmod>2023-12-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/que-faire-a-fontainebleau-week-end</loc>
-    <lastmod>2024-01-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/escalade-bloc-foret-fontainebleau</loc>
-    <lastmod>2024-01-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/histoire-chateau-fontainebleau</loc>
-    <lastmod>2026-08-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/randonnee-foret-fontainebleau</loc>
-    <lastmod>2026-08-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://www.afbtaxis.com/blog/barbizon-village-peintres</loc>
     <lastmod>2026-08-23</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/gastronomie-fontainebleau</loc>
-    <lastmod>2026-08-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/escalade-fontainebleau-blocs</loc>
-    <lastmod>2026-08-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/milly-la-foret-herbes-cyclop</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/transport-paris-fontainebleau</loc>
-    <lastmod>2026-08-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/week-end-romantique-fontainebleau</loc>
-    <lastmod>2026-08-18</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/secrets-caches-chateau-fontainebleau</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/faune-flore-foret-fontainebleau</loc>
-    <lastmod>2026-08-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/samois-sur-seine-village-django</loc>
-    <lastmod>2026-08-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/fontainebleau-en-famille-activites</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/histoire-napoleon-fontainebleau</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/cyclisme-vtt-foret-fontainebleau</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/evenements-culturels-festivals-fontainebleau</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.afbtaxis.com/blog/ou-loger-fontainebleau-hotels-gites</loc>
-    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -181,14 +35,158 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.afbtaxis.com/blog/cyclisme-vtt-foret-fontainebleau</loc>
+    <lastmod>2026-08-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/escalade-bloc-foret-fontainebleau</loc>
+    <lastmod>2024-01-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/escalade-fontainebleau-blocs</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/evenements-culturels-festivals-fontainebleau</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/evenements-equestres-grand-parquet</loc>
+    <lastmod>2023-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/faune-flore-foret-fontainebleau</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.afbtaxis.com/blog/fontainebleau-en-automne-spectacle-couleurs</loc>
     <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.afbtaxis.com/blog/fontainebleau-en-famille-activites</loc>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/gastronomie-fontainebleau</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/guide-pratique-insead-fontainebleau</loc>
+    <lastmod>2023-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/histoire-chateau-de-fontainebleau</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/histoire-chateau-fontainebleau</loc>
+    <lastmod>2026-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/histoire-napoleon-fontainebleau</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.afbtaxis.com/blog/jardins-chateau-fontainebleau</loc>
     <lastmod>2026-08-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/milly-la-foret-herbes-cyclop</loc>
+    <lastmod>2026-08-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/ou-loger-fontainebleau-hotels-gites</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/que-faire-a-fontainebleau-week-end</loc>
+    <lastmod>2024-01-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/randonnee-foret-fontainebleau</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/randonnee-nature-foret-fontainebleau</loc>
+    <lastmod>2023-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/samois-sur-seine-village-django</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/secrets-caches-chateau-fontainebleau</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/transfert-aeroport-cdg-orly-fontainebleau</loc>
+    <lastmod>2023-12-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/transport-medicalise-cpam-seine-et-marne</loc>
+    <lastmod>2023-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/transport-paris-fontainebleau</loc>
+    <lastmod>2026-08-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/visiter-barbizon-village-des-peintres</loc>
+    <lastmod>2023-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.afbtaxis.com/blog/week-end-romantique-fontainebleau</loc>
+    <lastmod>2026-08-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

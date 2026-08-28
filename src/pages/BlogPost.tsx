@@ -1,19 +1,58 @@
-import { Link, useOutletContext, useParams, Navigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useParams, Navigate, Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft } from 'lucide-react';
-import { BLOG_POSTS } from '@/lib/blog-data';
+import { useBlogPost, useBlogPosts } from '@/hooks/useBlogPosts';
 import { ContactSection } from '@/components/ContactSection';
 
+function GiscusComments() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ref.current || ref.current.querySelector('script')) return;
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'warezfr/afbtaxi');
+    script.setAttribute('data-repo-id', 'YOUR_REPO_ID');
+    script.setAttribute('data-category', 'General');
+    script.setAttribute('data-category-id', 'YOUR_CATEGORY_ID');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', 'dark');
+    script.setAttribute('data-lang', 'fr');
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    ref.current.appendChild(script);
+  }, []);
+  return <div ref={ref} className="mt-8" />;
+}
+
 export function BlogPost() {
-  const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
   const { slug } = useParams<{ slug: string }>();
-  
-  const post = BLOG_POSTS.find(p => p.slug === slug);
-  
-  if (!post) {
-    return <Navigate to="/blog" replace />;
-  }
+  const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
+  const post = useBlogPost(slug!);
+  const allPosts = useBlogPosts();
+
+  if (!post) return <Navigate to="/blog" replace />;
+
+  // Related posts: same category first, fill with others
+  const related = [
+    ...allPosts.filter(p => p.slug !== post.slug && p.category === post.category),
+    ...allPosts.filter(p => p.slug !== post.slug && p.category !== post.category),
+  ].slice(0, 3);
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    image: post.imageUrl,
+    datePublished: post.date,
+    author: { '@type': 'Organization', name: 'AFB Taxis' },
+    publisher: { '@type': 'Organization', name: 'AFB Taxis', logo: { '@type': 'ImageObject', url: 'https://www.afbtaxis.com/logo.png' } },
+  };
 
   return (
     <>
@@ -21,75 +60,78 @@ export function BlogPost() {
         <title>{post.title} | AFB Taxis</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={`https://www.afbtaxis.com/blog/${post.slug}`} />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "Article",
-              "headline": "${post.title}",
-              "image": "${post.imageUrl}",
-              "datePublished": "${post.date}",
-              "dateModified": "${post.date}",
-              "author": [{
-                  "@type": "Organization",
-                  "name": "AFB Taxis",
-                  "url": "https://www.afbtaxis.com/"
-              }]
-            }
-          `}
-        </script>
-
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.description} />
+        <meta property="og:image" content={post.imageUrl} />
+        <meta property="og:url" content={`https://www.afbtaxis.com/blog/${post.slug}`} />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.description} />
+        <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
       </Helmet>
 
       <article className="bg-white dark:bg-gray-950 pt-20">
-        {/* Full width hero image */}
+        {/* Hero image */}
         <div className="w-full h-[40vh] md:h-[50vh] lg:h-[60vh] relative overflow-hidden mb-12 lg:mb-16">
-           <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
-           <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent" />
-           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 md:px-16 md:pb-16 text-white max-w-5xl mx-auto flex flex-col justify-end h-full">
-             <div>
-               <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-6 inline-block">{post.category}</span>
-               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">{post.title}</h1>
-               <p className="mt-6 text-gray-300 font-medium tracking-wide uppercase text-sm">{new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-             </div>
-           </div>
+          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 md:px-16 md:pb-16 text-white max-w-5xl mx-auto flex flex-col justify-end h-full">
+            <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-6 inline-block">{post.category}</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">{post.title}</h1>
+            <p className="mt-4 text-gray-300 font-medium tracking-wide uppercase text-sm">
+              {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
+            {post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {post.tags.map(tag => (
+                  <Link key={tag} to={`/blog?tag=${encodeURIComponent(tag)}`}
+                    className="text-xs font-bold bg-white/10 hover:bg-gold-500/80 hover:text-gray-900 text-white px-3 py-1 rounded-full transition-colors backdrop-blur-sm">
+                    #{tag}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Content container */}
+        {/* Article content */}
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-16 lg:pb-24">
           <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-10 transition-colors">
-            <ArrowLeft size={16} /> Retour aux articles
+            ← Retour au Blog
           </Link>
+          <div className="prose prose-lg dark:prose-invert max-w-none
+            [&>h2]:font-display [&>h2]:font-black [&>h2]:text-2xl [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:text-gray-900 dark:[&>h2]:text-white
+            [&>h3]:font-display [&>h3]:font-bold [&>h3]:text-xl [&>h3]:mt-8 [&>h3]:mb-3 [&>h3]:text-gray-900 dark:[&>h3]:text-white
+            [&>p]:text-gray-600 dark:[&>p]:text-gray-400 [&>p]:leading-relaxed [&>p]:mb-5
+            [&>ul]:text-gray-600 dark:[&>ul]:text-gray-400 [&>ul]:space-y-2 [&>ul]:mb-5
+            [&>ol]:text-gray-600 dark:[&>ol]:text-gray-400 [&>ol]:space-y-2 [&>ol]:mb-5
+            [&>blockquote]:border-l-4 [&>blockquote]:border-gold-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-700 dark:[&>blockquote]:text-gray-400
+            [&_a]:text-gold-600 dark:[&_a]:text-gold-500 [&_a]:underline hover:[&_a]:text-gold-500
+            [&_img]:rounded-2xl [&_img]:shadow-md [&_img]:my-6 [&_img]:w-full [&_img]:object-cover">
+            <ReactMarkdown>{post.content}</ReactMarkdown>
+          </div>
 
-          <div className="markdown-content text-lg text-gray-600 dark:text-gray-300 leading-relaxed space-y-6 
-            [&>h2]:font-display [&>h2]:text-3xl [&>h2]:font-black [&>h2]:text-gray-900 [&>h2]:dark:text-white [&>h2]:mt-12 [&>h2]:mb-6
-            [&>h3]:font-display [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:text-gray-900 [&>h3]:dark:text-white [&>h3]:mt-10 [&>h3]:mb-4
-            [&>p]:mb-6 [&>p>strong]:text-gray-900 [&>p>strong]:dark:text-white
-            [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul>li]:mb-2 [&>ul>li>strong]:text-gray-900 [&>ul>li>strong]:dark:text-white
-            [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-6 [&>ol>li]:mb-2
-            [&>blockquote]:border-l-4 [&>blockquote]:border-gold-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-700 [&>blockquote]:dark:text-gray-400
-            [&_a]:text-gold-600 [&_a]:dark:text-gold-500 [&_a]:underline hover:[&_a]:text-gold-500"
-          >
-             <ReactMarkdown>{post.content}</ReactMarkdown>
+          {/* Comments */}
+          <div className="mt-16 pt-10 border-t border-gray-100 dark:border-gray-800">
+            <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-6">Commentaires</h3>
+            <GiscusComments />
           </div>
         </div>
       </article>
 
-
       {/* Related Posts */}
-      {relatedPosts.length > 0 && (
+      {related.length > 0 && (
         <div className="bg-gray-50 dark:bg-gray-900/50 py-16 px-6 lg:px-8">
           <div className="mx-auto max-w-5xl">
             <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 border-l-4 border-gold-500 pl-4">À lire aussi</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedPosts.map(related => (
-                <Link key={related.slug} to={`/blog/${related.slug}`} className="group block bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
-                  <div className="relative h-48 overflow-hidden">
-                    <img src={related.imageUrl} alt={`Taxi Fontainebleau - ${related.title}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {related.map(r => (
+                <Link key={r.slug} to={`/blog/${r.slug}`} className="group block bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                  <div className="relative h-44 overflow-hidden">
+                    <img src={r.imageUrl} alt={r.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   </div>
                   <div className="p-5">
-                    <h4 className="font-display font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-gold-500 transition-colors leading-tight line-clamp-2">{related.title}</h4>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-2">{related.description}</p>
+                    <span className="text-xs font-bold text-gold-500 uppercase tracking-wider">{r.category}</span>
+                    <h4 className="font-display font-bold text-lg text-gray-900 dark:text-white mt-1 group-hover:text-gold-500 transition-colors leading-tight line-clamp-2">{r.title}</h4>
                   </div>
                 </Link>
               ))}
@@ -98,6 +140,7 @@ export function BlogPost() {
         </div>
       )}
 
+      {/* CTA */}
       <div className="bg-gray-50 dark:bg-gray-900 py-16 text-center px-4">
         <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-4">Besoin d'un transport dans la région ?</h3>
         <button
