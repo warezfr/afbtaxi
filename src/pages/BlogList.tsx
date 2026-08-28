@@ -43,33 +43,33 @@ export function BlogList() {
       </Helmet>
 
       {/* Hero header */}
-      <div className="bg-gray-900 border-b border-gray-800 pt-32 pb-14 px-4">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 pt-32 pb-14 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold-400 mb-4">AFB Taxis · Fontainebleau</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight">
-            Le Mag de <span className="text-gold-400">Fontainebleau</span>
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold-500 dark:text-gold-400 mb-4">AFB Taxis · Fontainebleau</p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight">
+            Le Mag de <span className="text-gold-500 dark:text-gold-400">Fontainebleau</span>
           </h1>
-          <p className="mt-5 text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-5 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
             Tourisme, patrimoine, bons plans locaux et actualités du VTC en Seine-et-Marne.
           </p>
         </div>
       </div>
 
-      <section className="bg-gray-950 min-h-screen py-12 lg:py-20">
+      <section className="bg-gray-50 dark:bg-gray-950 min-h-screen py-12 lg:py-20 transition-colors">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-10">
 
             {/* Sidebar */}
             <aside className="lg:w-60 shrink-0">
-              <div className="sticky top-28 bg-gray-900 border border-gray-800 p-6 rounded-2xl">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-5">Catégories</h3>
+              <div className="sticky top-28 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm transition-colors">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-5">Catégories</h3>
                 <ul className="space-y-2">
                   <li>
                     <button
                       onClick={() => setSelectedFilter(null)}
-                      className={`text-left w-full text-sm font-semibold transition-colors py-1 ${!selectedFilter ? 'text-gold-400' : 'text-gray-400 hover:text-white'}`}
+                      className={`text-left w-full text-sm font-semibold transition-colors py-1 ${!selectedFilter ? 'text-gold-600 dark:text-gold-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                     >
-                      Tout voir <span className="text-gray-600 text-xs ml-1">({allPosts.length})</span>
+                      Tout voir <span className="text-gray-400 dark:text-gray-600 text-xs ml-1">({allPosts.length})</span>
                     </button>
                   </li>
                   {categories.map(cat => {
@@ -78,9 +78,9 @@ export function BlogList() {
                       <li key={cat}>
                         <button
                           onClick={() => setSelectedFilter(cat)}
-                          className={`text-left w-full text-sm font-semibold transition-colors py-1 ${selectedFilter === cat ? 'text-gold-400' : 'text-gray-400 hover:text-white'}`}
+                          className={`text-left w-full text-sm font-semibold transition-colors py-1 ${selectedFilter === cat ? 'text-gold-600 dark:text-gold-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                         >
-                          {cat} <span className="text-gray-600 text-xs ml-1">({count})</span>
+                          {cat} <span className="text-gray-400 dark:text-gray-600 text-xs ml-1">({count})</span>
                         </button>
                       </li>
                     );
@@ -89,7 +89,7 @@ export function BlogList() {
 
                 {allTags.length > 0 && (
                   <>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mt-8 mb-4">Tags</h3>
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mt-8 mb-4">Tags</h3>
                     <div className="flex flex-wrap gap-2">
                       {allTags.map(tag => (
                         <button
@@ -97,8 +97,8 @@ export function BlogList() {
                           onClick={() => setSelectedFilter(tag)}
                           className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                             selectedFilter === tag
-                              ? 'bg-gold-500 text-gray-900 border-gold-500'
-                              : 'border-gray-700 text-gray-400 hover:border-gold-500 hover:text-gold-400'
+                              ? 'bg-gold-500 text-gray-900 border-gold-500 shadow-sm'
+                              : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gold-400 hover:text-gold-500 bg-gray-50 dark:bg-transparent'
                           }`}
                         >
                           #{tag}
@@ -114,11 +114,11 @@ export function BlogList() {
             <div className="flex-1">
               {selectedFilter && (
                 <div className="flex items-center justify-between mb-8">
-                  <h2 className="font-display font-bold text-white text-xl">
+                  <h2 className="font-display font-bold text-gray-900 dark:text-white text-xl">
                     {selectedFilter}
-                    <span className="text-gray-500 text-sm font-normal ml-3">({filteredPosts.length} article{filteredPosts.length > 1 ? 's' : ''})</span>
+                    <span className="text-gray-400 dark:text-gray-500 text-sm font-normal ml-3">({filteredPosts.length} article{filteredPosts.length > 1 ? 's' : ''})</span>
                   </h2>
-                  <button onClick={() => setSelectedFilter(null)} className="text-xs text-gray-500 hover:text-gold-400 transition-colors font-medium">
+                  <button onClick={() => setSelectedFilter(null)} className="text-xs text-gray-500 hover:text-gold-600 dark:hover:text-gold-400 transition-colors font-medium">
                     ✕ Effacer le filtre
                   </button>
                 </div>
@@ -129,7 +129,7 @@ export function BlogList() {
                   <Link
                     key={post.slug}
                     to={`/blog/${post.slug}`}
-                    className="group block break-inside-avoid bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-gold-500/40 hover:shadow-[0_0_40px_rgba(202,163,82,0.08)] transition-all duration-300"
+                    className="group block break-inside-avoid bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-gold-300 dark:hover:border-gold-500/40 shadow-sm hover:shadow-xl dark:hover:shadow-[0_0_40px_rgba(202,163,82,0.08)] transition-all duration-300"
                   >
                     <div className="relative overflow-hidden">
                       <img
@@ -138,29 +138,29 @@ export function BlogList() {
                         className="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105"
                         loading={i < 6 ? 'eager' : 'lazy'}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-80 dark:opacity-100" />
                       <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
-                        <span className="bg-gold-500 text-gray-900 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full">
+                        <span className="bg-gold-500 text-gray-900 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm">
                           {post.category}
                         </span>
                         {post.tags.filter(t => t !== post.category && t !== 'AFB Taxis').slice(0, 1).map(tag => (
-                          <span key={tag} className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-full border border-white/10">
+                          <span key={tag} className="bg-black/50 backdrop-blur-md text-white text-[10px] font-semibold px-2.5 py-1 rounded-full border border-white/20 shadow-sm">
                             #{tag}
                           </span>
                         ))}
                       </div>
                     </div>
                     <div className="p-6">
-                      <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wider mb-3">
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider mb-3">
                         {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </p>
-                      <h3 className="font-display font-bold text-[1.15rem] leading-snug text-white mb-3 group-hover:text-gold-400 transition-colors">
+                      <h3 className="font-display font-bold text-[1.15rem] leading-snug text-gray-900 dark:text-white mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
                         {post.title}
                       </h3>
-                      <p className="text-gray-400 text-sm leading-relaxed mb-5 line-clamp-3">
+                      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-5 line-clamp-3">
                         {post.description}
                       </p>
-                      <span className="text-sm font-bold text-gold-400 group-hover:gap-3 flex items-center gap-2 transition-all">
+                      <span className="text-sm font-bold text-gold-600 dark:text-gold-400 group-hover:gap-3 flex items-center gap-2 transition-all">
                         Lire l'article <span className="transition-transform group-hover:translate-x-1">→</span>
                       </span>
                     </div>
@@ -171,7 +171,7 @@ export function BlogList() {
               {filteredPosts.length === 0 && (
                 <div className="text-center py-24">
                   <p className="text-gray-500 text-lg">Aucun article trouvé pour ce filtre.</p>
-                  <button onClick={() => setSelectedFilter(null)} className="mt-4 text-gold-400 hover:text-gold-300 font-semibold text-sm transition-colors">
+                  <button onClick={() => setSelectedFilter(null)} className="mt-4 text-gold-600 dark:text-gold-400 hover:text-gold-500 font-semibold text-sm transition-colors">
                     Voir tous les articles →
                   </button>
                 </div>
