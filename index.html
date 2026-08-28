@@ -119,17 +119,49 @@
     }
     </script>
 
-    <!-- JSON-LD: BreadcrumbList -->
+    <!-- JSON-LD: WebSite, SiteNavigationElement & BreadcrumbList -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.afbtaxis.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.afbtaxis.com/#services" },
-        { "@type": "ListItem", "position": 3, "name": "Flotte", "item": "https://www.afbtaxis.com/#flotte" },
-        { "@type": "ListItem", "position": 4, "name": "Tarifs", "item": "https://www.afbtaxis.com/#tarifs" },
-        { "@type": "ListItem", "position": 5, "name": "Contact", "item": "https://www.afbtaxis.com/#contact" }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.afbtaxis.com/#website",
+          "url": "https://www.afbtaxis.com/",
+          "name": "AFB Taxis",
+          "alternateName": "AFB Taxis Fontainebleau",
+          "description": "Taxi premium et VTC à Fontainebleau, transfert aéroport et CPAM.",
+          "inLanguage": "fr-FR"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Réservation",
+          "url": "https://www.afbtaxis.com/#contact"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Fontainebleau Magazine",
+          "url": "https://www.afbtaxis.com/blog"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Flotte de Véhicules",
+          "url": "https://www.afbtaxis.com/#flotte"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "name": "Questions Fréquentes (FAQ)",
+          "url": "https://www.afbtaxis.com/#faq"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.afbtaxis.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Réservation", "item": "https://www.afbtaxis.com/#contact" },
+            { "@type": "ListItem", "position": 3, "name": "Fontainebleau Magazine", "item": "https://www.afbtaxis.com/blog" },
+            { "@type": "ListItem", "position": 4, "name": "Flotte", "item": "https://www.afbtaxis.com/#flotte" }
+          ]
+        }
       ]
     }
     </script>
