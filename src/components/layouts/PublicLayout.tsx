@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { ReservationWizard } from '@/components/ReservationWizard';
 
 export function PublicLayout() {
@@ -56,7 +57,10 @@ export function PublicLayout() {
         <Outlet context={{ openBooking }} />
       </main>
       <Footer />
-      <WhatsAppButton />
+      <div className="hidden lg:block">
+        <WhatsAppButton />
+      </div>
+      <MobileBottomNav onOpenBooking={() => openBooking()} />
       <ReservationWizard
         open={wizardOpen}
         onClose={() => setWizardOpen(false)}
