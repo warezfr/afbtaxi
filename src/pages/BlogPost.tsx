@@ -1,32 +1,81 @@
-import { useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useParams, Navigate, Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import ReactMarkdown from 'react-markdown';
+import { Heart, Share2, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon, Send } from 'lucide-react';
 import { useBlogPost, useBlogPosts } from '@/hooks/useBlogPosts';
 import { ContactSection } from '@/components/ContactSection';
 
-function GiscusComments() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!ref.current || ref.current.querySelector('script')) return;
-    const script = document.createElement('script');
-    script.src = 'https://giscus.app/client.js';
-    script.setAttribute('data-repo', 'warezfr/afbtaxi');
-    script.setAttribute('data-repo-id', 'R_kgDOUB_c-w');
-    script.setAttribute('data-category', 'General');
-    script.setAttribute('data-category-id', 'DIC_kwDOUB_c-84DEYlu');
-    script.setAttribute('data-mapping', 'pathname');
-    script.setAttribute('data-strict', '0');
-    script.setAttribute('data-reactions-enabled', '1');
-    script.setAttribute('data-emit-metadata', '0');
-    script.setAttribute('data-input-position', 'bottom');
-    script.setAttribute('data-theme', 'preferred_color_scheme');
-    script.setAttribute('data-lang', 'fr');
-    script.setAttribute('crossorigin', 'anonymous');
-    script.async = true;
-    ref.current.appendChild(script);
-  }, []);
-  return <div ref={ref} className="mt-8" />;
+function ShareBar({ title, url }: { title: string; url: string }) {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const encoded = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+
+  const shares = [
+    { icon: Facebook,  label: 'Facebook',  href: `https://www.facebook.com/sharer/sharer.php?u=${encoded}`,  color: 'hover:bg-blue-600' },
+    { icon: Twitter,   label: 'X / Twitter', href: `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`, color: 'hover:bg-black' },
+    { icon: Linkedin,  label: 'LinkedIn',  href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`, color: 'hover:bg-blue-700' },
+    { icon: Send,      label: 'Telegram',  href: `https://t.me/share/url?url=${encoded}&text=${encodedTitle}`, color: 'hover:bg-sky-500' },
+    { icon: Mail,      label: 'E-mail',    href: `mailto:?subject=${encodedTitle}&body=${encoded}`, color: 'hover:bg-gray-600' },
+  ];
+
+  const handleLike = () => {
+    setLiked(prev => !prev);
+    setLikeCount(prev => prev + (liked ? -1 : 1));
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="my-10 py-8 border-t border-b border-gray-800">
+      <p className="text-sm font-bold uppercase tracking-widest text-gray-400 mb-5">Vous avez aimé cet article ?</p>
+      <div className="flex flex-wrap items-center gap-3">
+        {/* Like */}
+        <button
+          onClick={handleLike}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-300 border ${liked ? 'bg-gold-500 text-gray-900 border-gold-500 scale-105' : 'border-gray-700 text-gray-300 hover:border-gold-500 hover:text-gold-400'}`}
+        >
+          <Heart className={`w-4 h-4 ${liked ? 'fill-gray-900' : ''}`} />
+          {liked ? 'Aimé !' : 'J\'aime'}
+          {likeCount > 0 && <span className="ml-1 text-xs">({likeCount})</span>}
+        </button>
+
+        <span className="text-gray-700 text-sm font-medium flex items-center gap-1.5"><Share2 className="w-3.5 h-3.5" /> Partager :</span>
+
+        {/* Social share buttons */}
+        {shares.map(({ icon: Icon, label, href, color }) => (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={label}
+            className={`flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-gray-300 transition-all duration-200 hover:text-white hover:scale-110 ${color}`}
+          >
+            <Icon className="w-4 h-4" />
+          </a>
+        ))}
+
+        {/* Copy link */}
+        <button
+          onClick={handleCopy}
+          title="Copier le lien"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white text-sm font-medium transition-all duration-200"
+        >
+          <LinkIcon className="w-4 h-4" />
+          {copied ? '✅ Copié !' : 'Copier le lien'}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export function BlogPost() {
@@ -37,7 +86,8 @@ export function BlogPost() {
 
   if (!post) return <Navigate to="/blog" replace />;
 
-  // Related posts: same category first, fill with others
+  const pageUrl = `https://www.afbtaxis.com/blog/${post.slug}`;
+
   const related = [
     ...allPosts.filter(p => p.slug !== post.slug && p.category === post.category),
     ...allPosts.filter(p => p.slug !== post.slug && p.category !== post.category),
@@ -59,79 +109,88 @@ export function BlogPost() {
       <Helmet>
         <title>{post.title} | AFB Taxis</title>
         <meta name="description" content={post.description} />
-        <link rel="canonical" href={`https://www.afbtaxis.com/blog/${post.slug}`} />
+        <link rel="canonical" href={pageUrl} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.description} />
         <meta property="og:image" content={post.imageUrl} />
-        <meta property="og:url" content={`https://www.afbtaxis.com/blog/${post.slug}`} />
+        <meta property="og:url" content={pageUrl} />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={post.description} />
         <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
       </Helmet>
 
-      <article className="bg-white dark:bg-gray-950 pt-20">
-        {/* Hero image */}
-        <div className="w-full h-[40vh] md:h-[50vh] lg:h-[60vh] relative overflow-hidden mb-12 lg:mb-16">
-          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/90 via-gray-950/40 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12 md:px-16 md:pb-16 text-white max-w-5xl mx-auto flex flex-col justify-end h-full">
-            <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-6 inline-block">{post.category}</span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white">{post.title}</h1>
-            <p className="mt-4 text-gray-300 font-medium tracking-wide uppercase text-sm">
+      <article className="bg-gray-950 min-h-screen">
+        {/* Full-width wide hero image */}
+        <div className="w-full h-[55vh] md:h-[65vh] lg:h-[75vh] relative overflow-hidden">
+          <img
+            src={post.imageUrl}
+            alt={`Taxi Fontainebleau - ${post.title}`}
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/50 to-transparent" />
+
+          {/* Overlay content */}
+          <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-12 pb-10 sm:pb-14 max-w-5xl mx-auto">
+            <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gold-400 transition-colors mb-6">
+              ← Le Mag de Fontainebleau
+            </Link>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+                {post.category}
+              </span>
+              {post.tags.filter(t => t !== post.category).slice(0, 3).map(tag => (
+                <span key={tag} className="bg-white/10 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] font-black tracking-tight leading-tight text-white drop-shadow-lg">
+              {post.title}
+            </h1>
+            <p className="mt-4 text-base text-gray-300 leading-relaxed max-w-3xl">{post.description}</p>
+            <p className="mt-3 text-xs text-gray-500 font-medium uppercase tracking-wider">
               {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {post.tags.map(tag => (
-                  <Link key={tag} to={`/blog?tag=${encodeURIComponent(tag)}`}
-                    className="text-xs font-bold bg-white/10 hover:bg-gold-500/80 hover:text-gray-900 text-white px-3 py-1 rounded-full transition-colors backdrop-blur-sm">
-                    #{tag}
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Article content */}
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pb-16 lg:pb-24">
-          <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-10 transition-colors">
-            ← Retour au Blog
-          </Link>
-          <div className="prose prose-lg dark:prose-invert max-w-none
-            [&>h2]:font-display [&>h2]:font-black [&>h2]:text-2xl [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:text-gray-900 dark:[&>h2]:text-white
-            [&>h3]:font-display [&>h3]:font-bold [&>h3]:text-xl [&>h3]:mt-8 [&>h3]:mb-3 [&>h3]:text-gray-900 dark:[&>h3]:text-white
-            [&>p]:text-gray-600 dark:[&>p]:text-gray-400 [&>p]:leading-relaxed [&>p]:mb-5
-            [&>ul]:text-gray-600 dark:[&>ul]:text-gray-400 [&>ul]:space-y-2 [&>ul]:mb-5
-            [&>ol]:text-gray-600 dark:[&>ol]:text-gray-400 [&>ol]:space-y-2 [&>ol]:mb-5
-            [&>blockquote]:border-l-4 [&>blockquote]:border-gold-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-gray-700 dark:[&>blockquote]:text-gray-400
-            [&_a]:text-gold-600 dark:[&_a]:text-gold-500 [&_a]:underline hover:[&_a]:text-gold-500
-            [&_img]:rounded-2xl [&_img]:shadow-md [&_img]:my-6 [&_img]:w-full [&_img]:object-cover">
+        {/* Article body */}
+        <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-12 pb-16 lg:pb-24">
+          <div className="
+            prose prose-lg prose-invert max-w-none
+            prose-headings:font-display prose-headings:font-black prose-headings:text-white
+            prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-5 prose-h2:border-l-4 prose-h2:border-gold-500 prose-h2:pl-4
+            prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-gold-400
+            prose-p:text-gray-300 prose-p:leading-[1.9] prose-p:text-[1.1rem] prose-p:mb-5
+            prose-li:text-gray-300 prose-li:text-[1.05rem] prose-li:leading-relaxed
+            prose-strong:text-white prose-strong:font-bold
+            prose-a:text-gold-400 prose-a:underline hover:prose-a:text-gold-300
+            prose-blockquote:border-l-4 prose-blockquote:border-gold-500 prose-blockquote:bg-gray-900 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:rounded-r-xl
+            prose-img:rounded-2xl prose-img:shadow-xl prose-img:my-8 prose-img:w-full prose-img:object-cover
+          ">
             <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
 
-          {/* Comments */}
-          <div className="mt-16 pt-10 border-t border-gray-100 dark:border-gray-800">
-            <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-6">Commentaires</h3>
-            <GiscusComments />
-          </div>
+          {/* Like + Share bar */}
+          <ShareBar title={post.title} url={pageUrl} />
         </div>
       </article>
 
       {/* Related Posts */}
       {related.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-900/50 py-16 px-6 lg:px-8">
+        <div className="bg-gray-900 py-16 px-6 lg:px-8 border-t border-gray-800">
           <div className="mx-auto max-w-5xl">
-            <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 border-l-4 border-gold-500 pl-4">À lire aussi</h3>
+            <h3 className="font-display text-2xl font-bold text-white mb-8 border-l-4 border-gold-500 pl-4">À lire aussi</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {related.map(r => (
-                <Link key={r.slug} to={`/blog/${r.slug}`} className="group block bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                <Link key={r.slug} to={`/blog/${r.slug}`} className="group block bg-gray-800 hover:bg-gray-750 rounded-2xl overflow-hidden transition-all duration-300 border border-gray-700 hover:border-gold-500/50 hover:shadow-[0_0_30px_rgba(202,163,82,0.1)]">
                   <div className="relative h-44 overflow-hidden">
                     <img src={r.imageUrl} alt={r.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-widest bg-gold-500 text-gray-900 px-2 py-1 rounded-full">{r.category}</span>
                   </div>
                   <div className="p-5">
-                    <span className="text-xs font-bold text-gold-500 uppercase tracking-wider">{r.category}</span>
-                    <h4 className="font-display font-bold text-lg text-gray-900 dark:text-white mt-1 group-hover:text-gold-500 transition-colors leading-tight line-clamp-2">{r.title}</h4>
+                    <h4 className="font-display font-bold text-base text-white group-hover:text-gold-400 transition-colors leading-snug line-clamp-2">{r.title}</h4>
                   </div>
                 </Link>
               ))}
@@ -141,13 +200,14 @@ export function BlogPost() {
       )}
 
       {/* CTA */}
-      <div className="bg-gray-50 dark:bg-gray-900 py-16 text-center px-4">
-        <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-4">Besoin d'un transport dans la région ?</h3>
+      <div className="bg-gray-900 py-16 text-center px-4 border-t border-gray-800">
+        <h3 className="font-display text-2xl font-bold text-white mb-2">Besoin d'un taxi à Fontainebleau ?</h3>
+        <p className="text-gray-400 mb-6">Mercedes Classe S & V · Disponible 7j/7 · Transferts aéroports</p>
         <button
           onClick={() => openBooking(`Suite à la lecture : ${post.title}`)}
-          className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 py-4 font-bold text-gray-900 transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-gold-300"
+          className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-10 py-4 font-bold text-gray-900 text-lg transition-all duration-300 hover:scale-[1.03] hover:bg-gold-300 shadow-[0_0_40px_rgba(202,163,82,0.3)]"
         >
-          Réserver un chauffeur
+          Réserver un chauffeur →
         </button>
       </div>
 

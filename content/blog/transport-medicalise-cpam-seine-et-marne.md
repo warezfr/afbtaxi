@@ -9,7 +9,7 @@ tags: ["Guide Pratique", "Fontainebleau", "AFB Taxis"]
 
 ## Votre Santé, Notre Priorité
 
-![Illustration](https://images.pexels.com/photos/4047073/pexels-photo-4047073.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Si vous devez vous rendre à des examens médicaux, des séances de rééducation ou subir une hospitalisation, l'Assurance Maladie peut prendre en charge vos frais de transport, à condition d'utiliser un **taxi conventionné**.
 

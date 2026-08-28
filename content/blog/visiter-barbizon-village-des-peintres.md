@@ -9,7 +9,7 @@ tags: ["Tourisme & Culture", "Fontainebleau", "AFB Taxis"]
 
 ## Le Berceau du Pré-Impressionnisme
 
-![Illustration](https://images.pexels.com/photos/1122410/pexels-photo-1122410.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Situé à quelques kilomètres de Fontainebleau, **Barbizon** est un village de caractère mondialement connu pour avoir abrité, au XIXe siècle, les pionniers de la peinture paysagiste (Millet, Rousseau, Corot).
 

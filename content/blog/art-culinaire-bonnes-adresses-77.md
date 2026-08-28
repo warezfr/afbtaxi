@@ -11,7 +11,7 @@ tags: ["Gastronomie", "Fontainebleau", "AFB Taxis"]
 
 Fontainebleau n'est pas seulement une ville au patrimoine historique exceptionnel et une forêt domaniale mondialement connue, c'est aussi un véritable carrefour de la **gastronomie française**. Avec sa culture bourgeoise et son histoire royale, la cité impériale cultive un art de vivre où le bon goût et les produits de terroir sont rois. Après une longue journée de visite au Château, une randonnée énergique dans la forêt, ou une promenade romantique près du canal, rien de tel qu'une belle table pour couronner votre expérience. De la brasserie conviviale à l'étoilé Michelin, Fontainebleau a de quoi satisfaire les palais les plus exigeants.
 
-![Plat gastronomique raffiné dans un restaurant élégant](https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 ### Nos coups de cœur : Les meilleures adresses pour se régaler
 

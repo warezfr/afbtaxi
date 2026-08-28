@@ -9,7 +9,7 @@ tags: ["Transport", "Fontainebleau", "AFB Taxis"]
 
 ## Rejoindre Fontainebleau depuis l'Aéroport
 
-![Illustration](https://images.pexels.com/photos/804443/pexels-photo-804443.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Atterrir à Paris et devoir rejoindre le sud de la Seine-et-Marne peut vite devenir une expédition, surtout après un long vol.
 

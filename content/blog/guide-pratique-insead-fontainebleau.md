@@ -9,7 +9,7 @@ tags: ["Guide Pratique", "Fontainebleau", "AFB Taxis"]
 
 ## Le Hub International de l'Éducation
 
-![Illustration](https://images.pexels.com/photos/15312386/pexels-photo-15312386.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 L'**INSEAD** (Institut Européen d'Administration des Affaires) fait de Fontainebleau l'une des capitales mondiales de l'enseignement supérieur. Des étudiants et cadres du monde entier s'y croisent chaque jour.
 

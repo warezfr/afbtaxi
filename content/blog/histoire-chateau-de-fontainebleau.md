@@ -13,7 +13,7 @@ Surnommé la "vraie demeure des rois" par Napoléon Ier, le **Château de Fontai
 
 L'histoire du château remonte à 1137, avec un donjon et une chapelle. Au fil des siècles, de François Ier à Napoléon III, chaque souverain a laissé son empreinte, ajoutant des ailes, aménageant des cours et modifiant les décors intérieurs. Cette superposition de styles, de la Renaissance au Néoclassicisme, confère au château une richesse architecturale unique en Europe. C’est un témoignage vivant de l'évolution du goût et des arts en France.
 
-![Le magnifique Château de Fontainebleau sous un ciel bleu](https://images.pexels.com/photos/15312386/pexels-photo-15312386.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 ### Que voir absolument lors de votre visite ?
 

@@ -11,7 +11,7 @@ tags: ["Nature & Sport", "Fontainebleau", "AFB Taxis"]
 
 La **forêt domaniale de Fontainebleau**, affectueusement appelée "Bleau" par les habitués, s'étend sur plus de 25 000 hectares. Avec ses blocs de grès emblématiques aux formes parfois surréalistes, ses étendues de sable fin rappelant des paysages côtiers, ses landes et sa végétation remarquablement variée, elle attire des millions de visiteurs chaque année. Reconnue Réserve de Biosphère par l'UNESCO, elle est un véritable poumon vert et le paradis incontesté des amoureux de la nature, des randonneurs, des grimpeurs et des familles en quête de grand air à moins d'une heure de Paris.
 
-![Sentier pittoresque dans la forêt de Fontainebleau entouré d'arbres majestueux](https://images.pexels.com/photos/1036398/pexels-photo-1036398.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 ### Top 3 des promenades et randonnées incontournables :
 

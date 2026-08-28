@@ -9,7 +9,7 @@ tags: ["Nature & Sport", "Fontainebleau", "AFB Taxis"]
 
 ## La Capitale du Cheval
 
-![Illustration](https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Fontainebleau est souvent désignée comme la capitale du cheval en France. Au cœur de cette tradition se trouve **Le Grand Parquet**, un stade équestre d'exception de près de 30 hectares, niché en pleine forêt.
 

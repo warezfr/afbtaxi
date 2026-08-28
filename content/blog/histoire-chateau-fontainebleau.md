@@ -9,7 +9,7 @@ tags: ["Histoire", "Fontainebleau", "AFB Taxis"]
 
 ## Un Voyage à Travers les Siècles
 
-![Illustration](https://images.pexels.com/photos/5691079/pexels-photo-5691079.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Le Château de Fontainebleau n'est pas simplement un monument, c'est un véritable livre d'histoire de l'architecture et de l'art en France. Surnommé la « vraie demeure des rois, la maison des siècles » par Napoléon Bonaparte, il a accueilli des souverains français pendant plus de huit siècles. De ses modestes origines en tant que pavillon de chasse au XIIe siècle, il s'est transformé en un immense palais de la Renaissance.
 

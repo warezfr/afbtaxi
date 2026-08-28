@@ -9,7 +9,7 @@ tags: ["Tourisme & Culture", "Fontainebleau", "AFB Taxis"]
 
 ## Deux Jours Impériaux
 
-![Illustration](https://images.pexels.com/photos/1587927/pexels-photo-1587927.jpeg?auto=compress&cs=tinysrgb&w=1200)
+
 
 Fontainebleau est la destination idéale pour déconnecter à moins d'une heure de Paris. Voici notre suggestion d'itinéraire pour un week-end réussi.
 
