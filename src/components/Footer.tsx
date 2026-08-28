@@ -30,12 +30,24 @@ export function Footer() {
               <meta itemProp="longitude" content={String(COMPANY.lng)} />
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gold-400">
-                <span className="font-display text-base font-black text-gray-900">A</span>
-                <div className="taxi-checker absolute bottom-0 left-0 right-0 h-1.5" />
-              </div>
-              <span className="font-display text-lg font-black text-gray-900 dark:text-white">AFB<span className="text-gold-500">.</span>Taxis</span>
+            <div className="flex items-center gap-3.5 group cursor-default">
+<div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-gold-500/20 shadow-[0_0_15px_rgba(234,179,8,0.15)] group-hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all duration-300">
+            <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 2L3 22H6.5L9 16H15L17.5 22H21L12 2ZM10.5 12L12 8L13.5 12H10.5Z" fill="url(#goldGradient)"/>
+              <defs>
+                <linearGradient id="goldGradient" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#FDE047" />
+                  <stop offset="0.5" stopColor="#EAB308" />
+                  <stop offset="1" stopColor="#CA8A04" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+              <span className="font-display text-xl tracking-tight text-gray-900 dark:text-white">
+                <strong className="font-black">AFB</strong>
+                <span className="text-gold-500 mx-[1px] font-bold">.</span>
+                <span className="font-medium opacity-90">Taxis</span>
+              </span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
               {t('footer.desc')}
