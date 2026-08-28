@@ -32,8 +32,14 @@ export function Footer() {
 
             <div className="flex items-center gap-3.5 group cursor-default">
 <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-gray-900 via-black to-gray-900 border border-gold-500/20 shadow-[0_0_15px_rgba(234,179,8,0.15)] group-hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all duration-300">
-            <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2L3 22H6.5L9 16H15L17.5 22H21L12 2ZM10.5 12L12 8L13.5 12H10.5Z" fill="url(#goldGradient)"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="url(#goldGradient)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+              <path d="M10 2h4"/>
+              <path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8"/>
+              <path d="M7 14h.01"/>
+              <path d="M17 14h.01"/>
+              <rect width="18" height="8" x="3" y="10" rx="2"/>
+              <path d="M5 18v2"/>
+              <path d="M19 18v2"/>
               <defs>
                 <linearGradient id="goldGradient" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse">
                   <stop stopColor="#FDE047" />
