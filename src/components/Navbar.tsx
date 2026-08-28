@@ -20,7 +20,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
     { href: '/#services', label: t('nav.services') },
     { href: '/#flotte', label: t('nav.fleet') },
     { href: '/#tarifs', label: t('nav.tarifs') },
-    { href: '/blog', label: 'Blog' },
+    { href: '/blog', label: 'Fontainebleau Magazine' },
   ];
 
   useEffect(() => {
