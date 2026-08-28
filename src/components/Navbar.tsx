@@ -73,7 +73,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
             <Link
               key={link.href}
               to={link.href}
-              className={`text-sm font-semibold transition-colors ${light ? 'text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white' : 'text-gray-300 hover:text-white'}`}
+              className={`text-[13px] font-bold uppercase tracking-widest transition-colors ${light ? 'text-gray-900 hover:text-gold-600 dark:text-white dark:hover:text-gold-400' : 'text-white hover:text-gold-400'}`}
             >
               {link.label}
             </Link>
@@ -131,7 +131,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
           <button
             data-testid="nav-book-button"
             onClick={onOpenBooking}
-            className="rounded-full bg-gold-400 px-5 py-2.5 text-sm font-bold text-gray-900 transition-[transform,background-color] duration-300 hover:scale-105 hover:bg-gold-300"
+            className="rounded-full bg-gold-400 px-6 py-2.5 text-[13px] font-black uppercase tracking-widest text-gray-900 transition-[transform,background-color] duration-300 hover:scale-105 hover:bg-gold-300"
           >
             {t('nav.reservation')}
           </button>
@@ -175,7 +175,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
                 key={link.href}
                 to={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-3.5 text-base font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white"
+                className="rounded-xl px-4 py-3.5 text-sm font-bold uppercase tracking-widest text-gray-900 dark:text-white transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gold-600 dark:hover:text-gold-400"
               >
                 {link.label}
               </Link>
@@ -183,7 +183,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
             <button
               data-testid="nav-mobile-book-button"
               onClick={() => { onOpenBooking(); setOpen(false); }}
-              className="mt-3 min-h-[52px] rounded-full bg-gold-400 px-6 py-3.5 text-center text-base font-bold text-gray-900"
+              className="mt-3 min-h-[52px] rounded-full bg-gold-400 px-6 py-3.5 text-center text-[13px] font-black uppercase tracking-widest text-gray-900"
             >
               {t('nav.reservation')}
             </button>
