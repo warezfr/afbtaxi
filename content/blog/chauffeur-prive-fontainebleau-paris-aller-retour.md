@@ -23,6 +23,8 @@ Finis le stress des embouteillages, la recherche interminable d'une place de par
 
 Pour vos soirées ou vos rendez-vous multiples, nous proposons des forfaits de mise à disposition. Votre chauffeur vous emmène à Paris, reste à votre disposition ou vous attend le temps de votre événement, et vous raccompagne chez vous en toute sécurité au milieu de la nuit. C'est le summum de la flexibilité et du confort, avec la garantie d'un véhicule d'exception toujours prêt pour vous.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Trajet direct porte-à-porte
 - Forfaits mise à disposition sur plusieurs heures

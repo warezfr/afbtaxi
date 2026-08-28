@@ -23,6 +23,8 @@ Ce Par 72 de 6 030 mètres est réputé pour sa défense naturelle redoutable. L
 
 Le majestueux Club House en style normand abrite un restaurant prisé des golfeurs. Attention, le Golf de Fontainebleau est un club très privé. Les visiteurs green-fee sont généralement acceptés en semaine uniquement (hors jours fériés) et sous réserve de présenter un index maximum strict. L'expérience est cependant si exceptionnelle qu'elle justifie cette rigueur.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Dessiné par Tom Simpson en 1909
 - Sol sablonneux praticable en toute saison

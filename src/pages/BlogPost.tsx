@@ -169,7 +169,28 @@ export function BlogPost() {
             prose-blockquote:border-l-4 prose-blockquote:border-gold-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-900 prose-blockquote:px-8 prose-blockquote:py-5 prose-blockquote:rounded-r-2xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:my-10
             prose-img:rounded-3xl prose-img:shadow-xl prose-img:my-12 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-gray-100 dark:prose-img:border-gray-800
           ">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+            <ReactMarkdown
+              components={{
+                a: ({ node, ...props }) => {
+                  if (props.href === '#reserver') {
+                    return (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openBooking(`Réservation depuis l'article : ${post.title}`);
+                        }}
+                        className="not-prose inline-flex items-center gap-2 bg-gold-400 text-gray-900 font-bold text-base px-6 py-3 rounded-full hover:bg-gold-300 transition-all shadow-md hover:shadow-lg hover:scale-[1.02] my-4 mx-auto"
+                      >
+                        🚕 Réserver un chauffeur pour s'y rendre
+                      </button>
+                    );
+                  }
+                  return <a {...props} />;
+                }
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
 
           {/* Like + Share bar */}

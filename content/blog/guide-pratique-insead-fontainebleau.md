@@ -23,6 +23,8 @@ Le rythme intense de l'INSEAD nécessite une organisation logistique sans faille
 
 Avec des allers-retours fréquents vers les aéroports de Roissy et d'Orly pour des recrutements ou des projets internationaux, la flexibilité est clé. Les transports en commun ne sont pas toujours adaptés aux horaires décalés ou aux exigences de confort des cadres. C'est pourquoi beaucoup font appel à des chauffeurs privés pour garantir leur ponctualité lors de leurs vols professionnels.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Réservation de transferts aéroport anticipée
 - Navettes privées pour les événements de promotion (Promo Trips)

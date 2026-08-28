@@ -23,6 +23,8 @@ Le train depuis la Gare de Lyon nécessite environ 40 minutes, mais cela n'inclu
 
 En réservant un VTC, votre chauffeur vous attend au point de rendez-vous convenu directement à la gare, s'occupe de vos bagages, et vous installe dans un véhicule haut de gamme. Le trajet se fait de porte-à-porte, vous permettant de travailler grâce au Wi-Fi à bord, ou simplement de vous reposer. C'est un gain de temps inestimable et une tranquillité d'esprit assurée.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Prise en charge immédiate à la sortie du TGV
 - Aucun changement ni port de charges lourdes

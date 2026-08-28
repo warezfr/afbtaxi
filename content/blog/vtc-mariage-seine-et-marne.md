@@ -23,6 +23,8 @@ Nos berlines Mercedes Classe S, avec leur design élégant et leur confort excep
 
 La fête bat souvent son plein jusqu'au petit matin. Pour garantir la sécurité de vos convives, la mise à disposition d'un ou plusieurs vans (Mercedes Classe V) permet de mettre en place des navettes entre le domaine de réception et les hôtels environnants. Vos proches pourront ainsi profiter de la soirée sans se soucier du trajet de retour.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Décoration florale du véhicule possible
 - Chauffeur en tenue de cérémonie

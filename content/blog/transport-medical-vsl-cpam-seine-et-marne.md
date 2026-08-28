@@ -23,6 +23,8 @@ Un taxi conventionné est un professionnel du transport agréé par la Caisse Pr
 
 Se rendre à des examens lourds génère souvent du stress. Nos chauffeurs professionnels sont formés pour assurer une conduite souple et sécurisante. Ils connaissent parfaitement les différents centres hospitaliers franciliens (Pitié-Salpêtrière, Gustave Roussy, Henri Mondor) et vous déposent directement au bon pavillon, s'occupant des formalités administratives d'entrée si besoin.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Prise en charge à 100% pour les ALD (Affections de Longue Durée)
 - Aide administrative aux bureaux des admissions

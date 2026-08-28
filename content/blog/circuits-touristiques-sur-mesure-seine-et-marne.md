@@ -23,6 +23,8 @@ Nous n'imposons aucun trajet strict. Vous pouvez concevoir votre journée idéal
 
 Nos chauffeurs connaissent la région sur le bout des doigts. S'ils ne sont pas des guides conférenciers officiels pour l'intérieur des monuments, ils seront ravis de partager avec vous des anecdotes locales sur le trajet, de vous recommander les meilleurs panoramas en forêt, ou de vous déposer exactement là où la prise de photo est la plus spectaculaire. Le véhicule (Berline ou Van) reste à votre disposition à chaque étape.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Itinéraire 100% personnalisable
 - Véhicule climatisé et confortable (jusqu'à 7 places en Van)

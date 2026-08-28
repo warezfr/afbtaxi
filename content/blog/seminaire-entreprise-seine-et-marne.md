@@ -23,6 +23,8 @@ La région offre une variété de lieux prestigieux : des hôtels de luxe histor
 
 La réussite d'un séminaire repose en grande partie sur la fluidité de la logistique. Plutôt que de contraindre vos collaborateurs à utiliser leurs véhicules personnels ou à naviguer dans les transports en commun, optez pour notre flotte de vans Mercedes. Nous organisons les navettes depuis le siège de votre entreprise, les aéroports ou les gares franciliennes directement vers le lieu de votre événement.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Flotte de Vans 7 places pour transporter des groupes
 - Coordination avec les agences événementielles

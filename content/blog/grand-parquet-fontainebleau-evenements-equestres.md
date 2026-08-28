@@ -23,6 +23,8 @@ Initialement lieu de vénerie des rois de France, le site a été transformé au
 
 Chaque année, le Grand Parquet accueille des événements majeurs comme le Bonneau International Poney, le Championnat de France des Chevaux de Selle, ou encore de grands internationaux de saut d'obstacles. Ces événements attirent des milliers de spectateurs, cavaliers, propriétaires et sponsors du monde entier, créant une ambiance festive et prestigieuse autour des carrières.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Plus de 50 journées de compétition par an
 - Des infrastructures accueillant jusqu'à 1000 chevaux

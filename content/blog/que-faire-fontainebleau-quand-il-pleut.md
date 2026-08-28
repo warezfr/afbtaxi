@@ -23,6 +23,8 @@ Si le Château de Fontainebleau est une évidence (avec ses 1500 pièces, il y a
 
 Pourquoi ne pas profiter d'un après-midi pluvieux pour se détendre dans un Spa ? Plusieurs hôtels de luxe de la région ouvrent leurs espaces bien-être aux clients extérieurs (sur réservation). Ensuite, réfugiez-vous dans l'un des excellents salons de thé du centre-ville pour déguster un chocolat chaud accompagné d'une pâtisserie locale, le "Fontainebleau" (un délicieux dessert à base de fromage blanc et de crème fouettée).
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Visite approfondie des Petits Appartements du Château (sur visite guidée)
 - Découverte du Musée de la Gendarmerie de Melun

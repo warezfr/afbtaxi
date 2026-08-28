@@ -23,6 +23,8 @@ Dès les années 1830, des artistes comme Jean-François Millet, Théodore Rouss
 
 Se promener dans la Grande Rue de Barbizon, c'est découvrir une succession de galeries d'art contemporain, d'ateliers d'artistes et de charmantes boutiques. Le village compte également d'excellentes tables où la gastronomie française est à l'honneur, parfaites pour une pause déjeuner après avoir parcouru le sentier des peintres qui mène directement dans la forêt.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Visite de la Maison-Atelier de Jean-François Millet
 - Promenade sur le célèbre Circuit des Peintres en forêt

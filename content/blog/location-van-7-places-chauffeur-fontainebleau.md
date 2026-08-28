@@ -23,6 +23,8 @@ Notre flotte est équipée de vans Mercedes Classe V, la référence absolue du 
 
 Que ce soit pour une visite guidée des châteaux de la région (Fontainebleau, Vaux-le-Vicomte), une journée sur les parcours de golf locaux, ou pour transporter vos collaborateurs lors d'un séminaire d'entreprise, le van offre une capacité de chargement exceptionnelle. Fini les compromis sur les bagages ou le matériel : tout rentre sans sacrifier le confort des passagers.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Capacité de 7 passagers et nombreux bagages
 - Configuration salon VIP pour les réunions mobiles

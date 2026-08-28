@@ -23,6 +23,8 @@ Le poète, cinéaste et dessinateur Jean Cocteau a acheté la Maison du Bailli e
 
 En vous enfonçant dans la forêt de Milly, vous tomberez nez à nez avec l'une des œuvres d'art contemporain les plus surprenantes d'Europe : Le Cyclop. Cette sculpture monumentale de 22 mètres de haut, recouverte de miroirs, est l'œuvre de Jean Tinguely, Niki de Saint Phalle et de leurs amis artistes. Elle se visite de l'intérieur, offrant une expérience sonore et visuelle immersive (attention, l'accès est interdit aux enfants de moins de 8 ans).
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Visite de la Maison Jean Cocteau (réservation conseillée)
 - Découverte de la halle ancestrale du village datant de 1479

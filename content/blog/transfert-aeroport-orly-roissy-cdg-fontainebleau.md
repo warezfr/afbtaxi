@@ -24,6 +24,8 @@ Nos transferts depuis et vers **Roissy Charles de Gaulle (CDG)** ou **Paris-Orly
 
 Que vous voyagiez seul pour affaires ou en famille avec de nombreux bagages, notre flotte s'adapte. Nos berlines Mercedes Classe S offrent un luxe incomparable pour les voyageurs d'affaires, tandis que nos vans Mercedes Classe V peuvent accueillir jusqu'à 7 passagers avec de grandes valises. Le trajet devient un véritable moment de détente avant ou après votre vol.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Suivi des vols en temps réel
 - Accueil personnalisé avec pancarte aux arrivées

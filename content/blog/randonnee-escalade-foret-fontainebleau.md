@@ -23,6 +23,8 @@ Bleau, comme l'appellent les initiés, est la capitale mondiale du bloc. Ses mil
 
 Pour les marcheurs, la forêt offre plus de 300 kilomètres de sentiers balisés, dont les fameux 25 bosses, un parcours sportif réputé pour son dénivelé rappelant la montagne. Les paysages y sont d'une diversité étonnante : landes de bruyères, chaos rocheux, étendues de sable fin (les sables du cul de chien) et futaies de chênes centenaires.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - Le circuit des 25 bosses pour un défi sportif
 - Les Gorges de Franchard pour une balade familiale

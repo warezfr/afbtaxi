@@ -23,6 +23,8 @@ La ville impériale ne se contente pas d'offrir un patrimoine exceptionnel ; ell
 
 Outre les étoilés, Fontainebleau regorge d'adresses bistronomiques installées dans des bâtiments historiques de charme. Dîner en terrasse près du château ou dans une auberge rénovée en lisière de forêt apporte une dimension magique au repas. Le soir, pour profiter pleinement de ces moments sans se soucier du trajet du retour (et des contrôles d'alcoolémie), la réservation d'un véhicule avec chauffeur est la solution idéale.
 
+[Réserver un chauffeur pour s'y rendre](#reserver)
+
 ### Informations pratiques et recommandations
 - L'Axel (1 étoile Michelin)
 - Le Cercle (Atmosphère cosy et cuisine de marché)
