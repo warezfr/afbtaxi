@@ -4,7 +4,7 @@ type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (e?: React.MouseEvent | MouseEvent) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -32,8 +32,38 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  const toggleTheme = (e?: React.MouseEvent | MouseEvent) => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+
+    if (!document.startViewTransition || !e) {
+      setTheme(newTheme);
+      return;
+    }
+
+    const x = (e as React.MouseEvent).clientX || (e as MouseEvent).clientX || window.innerWidth / 2;
+    const y = (e as React.MouseEvent).clientY || (e as MouseEvent).clientY || window.innerHeight / 2;
+    const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    const transition = document.startViewTransition(() => {
+      setTheme(newTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+      document.documentElement.animate(
+        {
+          clipPath: newTheme === 'dark' ? clipPath : clipPath.reverse(),
+        },
+        {
+          duration: 500,
+          easing: 'ease-in-out',
+          pseudoElement: newTheme === 'dark' ? '::view-transition-new(root)' : '::view-transition-old(root)',
+        }
+      );
+    });
   };
 
   return (

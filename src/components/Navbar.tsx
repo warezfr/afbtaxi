@@ -87,7 +87,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
 
           {/* Theme Toggle */}
           <button
-            onClick={toggleTheme}
+            onClick={(e) => toggleTheme(e)}
             className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
               light ? 'text-gray-500 hover:text-gold-500 dark:text-gray-300 dark:hover:text-gold-400' : 'text-gray-300 hover:text-gold-400'
             }`}
@@ -146,7 +146,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
         {/* Mobile toggle */}
         <div className="flex items-center gap-2 lg:hidden">
           <button
-            onClick={toggleTheme}
+            onClick={(e) => toggleTheme(e)}
             className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
               light ? 'text-gray-500 hover:text-gold-500' : 'text-gray-300 hover:text-gold-400'
             }`}

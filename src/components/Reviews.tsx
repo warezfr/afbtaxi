@@ -77,7 +77,7 @@ export function Reviews() {
           </div>
         </div>
 
-        <div className="overflow-hidden" data-testid="reviews-carousel">
+        <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_2%,black_98%,transparent)] sm:[mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]" data-testid="reviews-carousel">
           <div
             className="flex transition-transform duration-700 ease-out"
             style={{ transform: `translateX(-${index * (100 / perView)}%)` }}

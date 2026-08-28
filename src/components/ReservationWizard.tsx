@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   X,
@@ -92,12 +92,22 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   const [form, setForm] = useState<ReservationInput>(EMPTY_FORM);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
     if (open) {
       document.body.style.overflow = 'hidden';
+      if (!dialog.open) {
+        dialog.showModal();
+      }
     } else {
       document.body.style.overflow = '';
+      if (dialog.open) {
+        dialog.close();
+      }
     }
     return () => { document.body.style.overflow = ''; };
   }, [open]);
@@ -173,8 +183,15 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700 dark:text-gray-300';
 
   return createPortal(
-    <dialog open className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4" dir={dir}>
-      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={close} />
+    <dialog 
+      ref={dialogRef}
+      onCancel={close}
+      onClick={(e) => {
+        if (e.target === dialogRef.current) close();
+      }}
+      className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4 backdrop:bg-gray-900/60 backdrop:backdrop-blur-sm" 
+      dir={dir}
+    >
       <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-900 shadow-2xl border border-transparent dark:border-gray-800">
         <div className="taxi-checker h-2.5 shrink-0" />
         {/* Header */}
