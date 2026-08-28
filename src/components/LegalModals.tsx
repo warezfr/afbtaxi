@@ -70,11 +70,7 @@ export function LegalModals({ activeDoc, onClose }: Props) {
                 <strong>Directeur de la publication :</strong> Gérant de {COMPANY.name}
               </p>
               
-              <h3 className="font-bold text-gray-900 dark:text-white text-base mt-6">Hébergement</h3>
-              <p>
-                Ce site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA.
-              </p>
-              
+
               <h3 className="font-bold text-gray-900 dark:text-white text-base mt-6">Propriété Intellectuelle</h3>
               <p>
                 L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.
