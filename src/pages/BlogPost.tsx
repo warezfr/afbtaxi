@@ -75,6 +75,29 @@ export function BlogPost() {
         </div>
       </article>
 
+
+      {/* Related Posts */}
+      {relatedPosts.length > 0 && (
+        <div className="bg-gray-50 dark:bg-gray-900/50 py-16 px-6 lg:px-8">
+          <div className="mx-auto max-w-5xl">
+            <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 border-l-4 border-gold-500 pl-4">À lire aussi</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {relatedPosts.map(related => (
+                <Link key={related.slug} to={`/blog/${related.slug}`} className="group block bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800">
+                  <div className="relative h-48 overflow-hidden">
+                    <img src={related.imageUrl} alt={`Taxi Fontainebleau - ${related.title}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-display font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-gold-500 transition-colors leading-tight line-clamp-2">{related.title}</h4>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-2">{related.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-gray-50 dark:bg-gray-900 py-16 text-center px-4">
         <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-4">Besoin d'un transport dans la région ?</h3>
         <button

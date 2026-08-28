@@ -8,6 +8,7 @@ import { Tarifs } from '@/components/Tarifs';
 import { Advantages } from '@/components/Advantages';
 import { Reviews } from '@/components/Reviews';
 import { ContactSection } from '@/components/ContactSection';
+import { FAQ } from '@/components/FAQ';
 
 export function Home() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
@@ -27,6 +28,7 @@ export function Home() {
         <Tarifs />
         <Advantages />
         <Reviews />
+        <FAQ />
         <ContactSection onOpenBooking={() => openBooking()} />
       </div>
     </>

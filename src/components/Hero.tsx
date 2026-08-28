@@ -113,7 +113,7 @@ export function Hero({ onOpenBooking }: Props) {
                   >
                     <img
                       src={slide.image}
-                      alt={slide.name}
+                      alt={`Chauffeur Privé Fontainebleau - ${slide.name}`}
                       className="h-full w-full object-cover"
                       loading={i === 0 ? 'eager' : 'lazy'}
                       fetchPriority={i === 0 ? 'high' : 'auto'}

@@ -56,7 +56,7 @@ function VehicleCard({ vehicle, t, onOpenBooking }: { vehicle: typeof VEHICLES[n
       className="card-lift group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-[0_10px_30px_-18px_rgba(17,24,39,0.15)] dark:shadow-none"
     >
       <div className="relative h-52 overflow-hidden sm:h-56">
-        <img src={vehicle.image} alt={vehicle.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+        <img src={vehicle.image} alt={`Taxi Fontainebleau - ${vehicle.name}`} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
         <span className="glass-light dark:bg-gray-900/80 dark:border-gray-700 dark:text-white absolute right-4 top-4 rounded-full px-3 py-1.5 text-[11px] font-bold text-gray-900">
           {vehicle.seatCount} {t('fleet.seats')}
         </span>

@@ -84,7 +84,7 @@ export function BlogList() {
                       <div className="absolute top-4 left-4 z-10 bg-gray-900/80 backdrop-blur-sm text-gold-400 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
                         {post.category}
                       </div>
-                      <img src={post.imageUrl} alt={post.title} className="w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                      <img src={post.imageUrl} alt={post.title} className="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                     </div>
                     <div className="p-6">
                       <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider mb-3">{new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
