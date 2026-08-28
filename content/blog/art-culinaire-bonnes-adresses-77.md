@@ -1,10 +1,14 @@
 ---
 title: "Gastronomie : Les Bonnes Adresses à Fontainebleau"
-description: "Où manger à Fontainebleau ? Découvrez notre sélection des meilleurs restaurants, de la gastronomie française aux bistrots conviviaux."
-category: "Gastronomie"
-date: "2023-11-05"
-imageUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80"
-tags: ["Gastronomie", "Fontainebleau", "AFB Taxis"]
+description: Où manger à Fontainebleau ? Découvrez notre sélection des meilleurs
+  restaurants, de la gastronomie française aux bistrots conviviaux.
+category: Gastronomie
+date: 2026-08-28
+imageUrl: https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80
+tags:
+  - Gastronomie
+  - Fontainebleau
+  - AFB Taxis
 ---
 
 ## Saveurs et Terroir : L'Art de Vivre Bellifontain
