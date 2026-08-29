@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+import { Link } from 'react-router-dom';
 import { LegalModals, LegalDocType } from './LegalModals';
 
 export function Footer() {
@@ -103,6 +104,7 @@ export function Footer() {
               <a href="#tarifs" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.tarifs')}</a>
               <a href="#zones" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.zones')}</a>
               <a href="#contact" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.contact')}</a>
+              <Link to="/partenaires" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white font-semibold">Partenariat (Hôtels / Entreprises)</Link>
             </nav>
           </div>
 
