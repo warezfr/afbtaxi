@@ -64,10 +64,10 @@ export function Footer() {
                 <Phone size={14} className="text-gold-600" />
                 <span>{COMPANY.phone}</span>
               </a>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors hover:text-gold-600 dark:hover:text-gold-400">
+              <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))} className="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors hover:text-gold-600 dark:hover:text-gold-400">
                 <Mail size={14} className="text-gold-600" />
                 <span>{COMPANY.email}</span>
-              </a>
+              </button>
               <a href={COMPANY.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300 transition-colors hover:text-gold-600 dark:hover:text-gold-400">
                 <MapPin size={14} className="mt-0.5 shrink-0 text-gold-600" />
                 <span>{COMPANY.address}</span>

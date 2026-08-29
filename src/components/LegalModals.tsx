@@ -64,7 +64,7 @@ export function LegalModals({ activeDoc, onClose }: Props) {
               </p>
               <p>
                 <strong>Téléphone :</strong> {COMPANY.phone}<br/>
-                <strong>Email :</strong> <a href={`mailto:${COMPANY.email}`} className="text-gold-600 hover:underline">{COMPANY.email}</a>
+                <strong>Email :</strong> <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))} className="text-gold-600 hover:underline">{COMPANY.email}</button>
               </p>
               <p>
                 <strong>Directeur de la publication :</strong> Gérant de {COMPANY.name}
@@ -102,7 +102,7 @@ export function LegalModals({ activeDoc, onClose }: Props) {
               
               <h3 className="font-bold text-gray-900 dark:text-white text-base mt-6">Vos droits (RGPD)</h3>
               <p>
-                Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données. Pour exercer ce droit, vous pouvez nous contacter à l'adresse : <a href={`mailto:${COMPANY.email}`} className="text-gold-600 hover:underline">{COMPANY.email}</a>.
+                Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données. Pour exercer ce droit, vous pouvez nous contacter à l'adresse : <button onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))} className="text-gold-600 hover:underline">{COMPANY.email}</button>.
               </p>
             </>
           )}

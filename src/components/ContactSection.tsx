@@ -64,8 +64,8 @@ export function ContactSection({ onOpenBooking }: { onOpenBooking: () => void })
                 </div>
               </a>
 
-              <a
-                href={`mailto:${COMPANY.email}`}
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
                 data-testid="contact-email-card"
                 className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition-[border-color,background-color] duration-300 hover:border-gold-400/50 hover:bg-gold-400/10"
               >
@@ -76,7 +76,7 @@ export function ContactSection({ onOpenBooking }: { onOpenBooking: () => void })
                   <p className="text-[11px] font-bold uppercase tracking-wider text-gray-500">{t('contact.email')}</p>
                   <p className="truncate text-base font-bold text-white">{COMPANY.email}</p>
                 </div>
-              </a>
+              </button>
 
               <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10">

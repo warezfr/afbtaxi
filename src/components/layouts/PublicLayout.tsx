@@ -5,6 +5,7 @@ import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { ReservationWizard } from '@/components/ReservationWizard';
+import { ContactModal } from '@/components/ContactModal';
 
 export function PublicLayout() {
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -61,6 +62,7 @@ export function PublicLayout() {
         <WhatsAppButton />
       </div>
       <MobileBottomNav onOpenBooking={() => openBooking()} />
+      <ContactModal />
       <ReservationWizard
         open={wizardOpen}
         onClose={() => setWizardOpen(false)}

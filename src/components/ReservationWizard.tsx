@@ -158,10 +158,36 @@ export function ReservationWizard({ open, onClose, context }: Props) {
     window.open(url, '_blank');
   };
 
-  const handleEmail = () => {
-    const subject = encodeURIComponent(`${t('wizard.email.subject')} - ${form.first_name} ${form.last_name}`);
-    const body = encodeURIComponent(buildEmailBody(form, context));
-    window.open(`mailto:${COMPANY.email}?subject=${subject}&body=${body}`, '_self');
+  const handleEmail = async () => {
+    setStatus('loading');
+    try {
+      const subject = `${t('wizard.email.subject')} - ${form.first_name} ${form.last_name}`;
+      const body = buildEmailBody(form, context);
+      
+      const response = await fetch(`https://formsubmit.co/ajax/${COMPANY.email}`, {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: subject,
+            Message: body,
+            Nom: `${form.first_name} ${form.last_name}`,
+            Email: form.email,
+            Telephone: form.phone
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'envoi");
+      }
+      
+      setStatus('success');
+    } catch (err: any) {
+      setStatus('error');
+      setErrorMsg("Impossible d'envoyer la demande. Veuillez utiliser WhatsApp.");
+    }
   };
 
   const reset = () => {

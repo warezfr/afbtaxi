@@ -4,7 +4,7 @@ export const COMPANY = {
   phoneRaw: '0607424616',
   phoneIntl: '+33607424616',
   whatsapp: '33607424616',
-  email: 'contact@afbtaxis.fr',
+  email: 'afb@afbtaxis.com',
   website: 'https://www.afbtaxis.fr',
   address: '312 Route de Vosves, 77190 Dammarie-les-Lys',
   street: '312 Route de Vosves',
