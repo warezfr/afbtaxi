@@ -4,6 +4,8 @@
   "rewrites": [
     { "source": "/blog", "destination": "/blog/index.html" },
     { "source": "/blog/(.*)", "destination": "/blog/$1/index.html" },
+    { "source": "/trajets/(.*)", "destination": "/trajets/$1/index.html" },
+    { "source": "/partenaires", "destination": "/partenaires/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

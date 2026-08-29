@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "taxi-fontainebleau-orly",
+    "title": "Taxi Fontainebleau ↔ Aéroport Orly (ORY)",
+    "description": "Réservez votre navette VTC et Taxi entre Fontainebleau et l'Aéroport de Paris-Orly. Chauffeur privé, prix fixe garanti, réservation 24/7.",
+    "h1": "Transfert Aéroport Fontainebleau ↔ Orly",
+    "origin": "Fontainebleau",
+    "destination": "Aéroport d'Orly (ORY)",
+    "distance": "55 km",
+    "duration": "50 min",
+    "priceCar": "115 €",
+    "priceVan": "150 €",
+    "tags": ["Aéroport", "Transfert", "Orly"],
+    "content": "L'aéroport de Paris-Orly est le deuxième plus grand aéroport de France. Pour vos départs en vacances ou vos voyages d'affaires, AFB Taxis vous garantit un transfert ponctuel et sans stress depuis Fontainebleau ou sa région. Oubliez les navettes partagées et les files d'attente, votre chauffeur privé vous accueille avec une pancarte personnalisée."
+  },
+  {
+    "slug": "taxi-fontainebleau-roissy-cdg",
+    "title": "Taxi Fontainebleau ↔ Aéroport Roissy CDG",
+    "description": "Votre chauffeur privé entre Fontainebleau et l'Aéroport Roissy Charles de Gaulle. Tarif fixe, véhicule premium, ponctualité absolue.",
+    "h1": "Transfert Aéroport Fontainebleau ↔ Roissy CDG",
+    "origin": "Fontainebleau",
+    "destination": "Aéroport Roissy-Charles de Gaulle (CDG)",
+    "distance": "85 km",
+    "duration": "1h15",
+    "priceCar": "168 €",
+    "priceVan": "210 €",
+    "tags": ["Aéroport", "Roissy CDG", "International"],
+    "content": "Rejoindre l'aéroport international de Roissy Charles de Gaulle depuis Fontainebleau nécessite une anticipation parfaite du trafic francilien. Nos chauffeurs expérimentés empruntent les meilleurs itinéraires pour vous garantir une arrivée dans les temps. Service premium disponible 24/7."
+  },
+  {
+    "slug": "taxi-fontainebleau-paris-centre",
+    "title": "Taxi Fontainebleau ↔ Paris Centre",
+    "description": "Déplacement en VTC et Taxi entre Fontainebleau et Paris Centre. Un service de chauffeur haut de gamme pour vos rendez-vous professionnels et sorties.",
+    "h1": "Chauffeur Privé Fontainebleau ↔ Paris",
+    "origin": "Fontainebleau",
+    "destination": "Paris Centre",
+    "distance": "65 km",
+    "duration": "1h00",
+    "priceCar": "135 €",
+    "priceVan": "200 €",
+    "tags": ["Paris", "Gares", "Shopping", "Affaires"],
+    "content": "Que ce soit pour un rendez-vous professionnel dans le quartier d'affaires de la Défense, une session shopping sur les Champs-Élysées, ou un dîner romantique à Paris, notre service de mise à disposition et de transfert vous offre un confort absolu, de porte à porte."
+  },
+  {
+    "slug": "taxi-barbizon-orly",
+    "title": "Taxi Barbizon ↔ Aéroport Orly",
+    "description": "Réservez votre transfert direct entre le village des peintres de Barbizon et l'Aéroport de Paris-Orly. VTC premium et discret.",
+    "h1": "Transfert Barbizon ↔ Aéroport d'Orly",
+    "origin": "Barbizon",
+    "destination": "Aéroport d'Orly (ORY)",
+    "distance": "45 km",
+    "duration": "40 min",
+    "priceCar": "105 €",
+    "priceVan": "140 €",
+    "tags": ["Aéroport", "Barbizon", "Orly"],
+    "content": "Le village de Barbizon attire des visiteurs du monde entier. AFB Taxis assure vos navettes privées depuis les hôtels et résidences de Barbizon directement vers les terminaux de l'aéroport d'Orly. Un service sur-mesure pour une clientèle exigeante."
+  }
+]

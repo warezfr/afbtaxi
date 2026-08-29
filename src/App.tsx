@@ -20,6 +20,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/blog" element={<BlogList />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/trajets/:slug" element={<TrajetTemplate />} />
+        <Route path="/partenaires" element={<Partenaires />} />
                 <Route path="/:slug" element={<SeoLandingPage />} />
               </Route>
             </Routes>

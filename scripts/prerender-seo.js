@@ -91,4 +91,46 @@ const blogRootPath = path.join(distPath, 'blog');
 if (!fs.existsSync(blogRootPath)) fs.mkdirSync(blogRootPath, { recursive: true });
 fs.writeFileSync(path.join(blogRootPath, 'index.html'), blogIndexHtml);
 
+
+// ==========================================
+// 4. PRÉ-RENDU DU SEO PROGRAMMATIQUE (TRAJETS)
+// ==========================================
+const trajetsRaw = fs.readFileSync(path.resolve(__dirname, '../src/data/trajets.json'), 'utf-8');
+const trajets = JSON.parse(trajetsRaw);
+const trajetsDir = path.resolve(__dirname, '../dist/trajets');
+if (!fs.existsSync(trajetsDir)) fs.mkdirSync(trajetsDir);
+
+for (const trajet of trajets) {
+  const trajetDir = path.join(trajetsDir, trajet.slug);
+  if (!fs.existsSync(trajetDir)) fs.mkdirSync(trajetDir);
+
+  let html = template;
+  html = html.replace(/<title>.*?<\/title>/, `<title>${trajet.title} | AFB Taxis</title>`);
+  html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${trajet.description}"`);
+  html = html.replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${trajet.title}"`);
+  html = html.replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${trajet.description}"`);
+  html = html.replace(/<meta property="og:url" content="[^"]*"/g, `<meta property="og:url" content="https://www.afbtaxis.com/trajets/${trajet.slug}"`);
+  html = html.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/trajets/${trajet.slug}"`);
+  
+  const seoTextDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${trajet.h1}. ${trajet.content} Distance: ${trajet.distance}. Temps estimé: ${trajet.duration}.</div>`;
+  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${seoTextDiv}\n${internalLinksHtml}`);
+
+  fs.writeFileSync(path.join(trajetDir, 'index.html'), html);
+  console.log(`✅ Prerendered Trajet: ${trajet.slug}`);
+}
+
+// ==========================================
+// 5. PRÉ-RENDU DE LA PAGE PARTENAIRES
+// ==========================================
+const partDir = path.resolve(__dirname, '../dist/partenaires');
+if (!fs.existsSync(partDir)) fs.mkdirSync(partDir);
+let partHtml = template;
+partHtml = partHtml.replace(/<title>.*?<\/title>/, `<title>Espace Partenaires B2B, Hôtels et Entreprises | AFB Taxis</title>`);
+partHtml = partHtml.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="AFB Taxis met à votre disposition une flotte premium et un service prioritaire pour vos clients les plus exigeants."`);
+partHtml = partHtml.replace(/<meta property="og:url" content="[^"]*"/g, `<meta property="og:url" content="https://www.afbtaxis.com/partenaires"`);
+partHtml = partHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/partenaires"`);
+partHtml = partHtml.replace('<div id="root"></div>', `<div id="root"></div>\n<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">Espace Entreprises & Hôtels. Le partenaire VTC de confiance pour vos clients les plus exigeants. Hôtels de luxe, conciergeries, administration de l'INSEAD et grandes entreprises.</div>\n${internalLinksHtml}`);
+fs.writeFileSync(path.join(partDir, 'index.html'), partHtml);
+console.log('✅ Prerendered Partenaires');
+
 console.log(`✅ SEO Pre-rendering done for ${files.length} posts + Homepage + Blog Index!`);
