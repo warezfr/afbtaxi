@@ -22,16 +22,18 @@ export function Partenaires() {
       <Navbar onOpenBooking={() => setWizardOpen(true)} />
       <main className="flex-1 bg-white dark:bg-gray-950">
         
+        
         {/* HERO SECTION AVEC IMAGE */}
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div className="relative overflow-hidden bg-gray-900 pt-32 pb-20 lg:pt-48 lg:pb-40">
           <div className="absolute inset-0 z-0">
             <img 
-              src="https://images.pexels.com/photos/7533346/pexels-photo-7533346.jpeg?auto=compress&cs=tinysrgb&w=2000" 
+              src="https://images.unsplash.com/photo-1563911302283-d2bc129e7570?q=80&w=2000&auto=format&fit=crop" 
               alt="Partenaires et Conciergerie AFB Taxis"
-              className="w-full h-full object-cover opacity-90 dark:opacity-40"
+              className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/40 dark:from-gray-950 dark:via-gray-950/80 dark:to-gray-950/40" />
-            <div className="absolute inset-0 bg-gray-900/60 dark:bg-black/60 mix-blend-multiply" />
+            {/* Dark gradient overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-gray-900/90" />
+            <div className="absolute inset-0 bg-black/40" />
           </div>
 
           <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
@@ -62,7 +64,14 @@ export function Partenaires() {
               </a>
             </div>
           </div>
-        </section>
+
+          {/* Wave transition to white/dark */}
+          <div className="absolute -bottom-px left-0 right-0 z-10 overflow-hidden">
+            <svg viewBox="0 0 2880 110" preserveAspectRatio="none" className="block h-[50px] w-[200%] fill-gray-50 dark:fill-gray-900 sm:h-[70px] lg:h-[95px] animate-wave">
+              <path d="M0,50 C360,110 360,-10 720,50 C1080,110 1080,-10 1440,50 C1800,110 1800,-10 2160,50 C2520,110 2520,-10 2880,50 L2880,110 L0,110 Z" />
+            </svg>
+          </div>
+        </div>
 
         {/* MOTS CLÉS SEO CACHÉS */}
         <div className="opacity-0 pointer-events-none w-0 h-0 absolute overflow-hidden" aria-hidden="true">
