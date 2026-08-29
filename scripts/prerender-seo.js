@@ -23,13 +23,28 @@ const getFrontmatterField = (content, field) => {
 
 const files = fs.readdirSync(blogDir).filter(f => f.endsWith('.md'));
 
+let internalLinksHtml = `<div id="seo-links" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">
+  <a href="/">Accueil</a>
+  <a href="/#services">Services</a>
+  <a href="/#flotte">Flotte</a>
+  <a href="/#tarifs">Tarifs</a>
+  <a href="/blog">Fontainebleau Magazine</a>\n`;
+
 files.forEach(filename => {
   const slug = filename.replace('.md', '');
   const content = fs.readFileSync(path.join(blogDir, filename), 'utf-8');
   const title = getFrontmatterField(content, 'title');
   const description = getFrontmatterField(content, 'description');
   const imageUrl = getFrontmatterField(content, 'imageUrl');
-  const date = getFrontmatterField(content, 'date');
+  
+  // Clean markdown for text content
+  const cleanText = content
+    .replace(/---[\s\S]*?---/, '') // remove frontmatter
+    .replace(/[#*`_]/g, '')        // remove basic markdown chars
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // remove link syntax but keep text
+    .trim();
+
+  internalLinksHtml += `  <a href="/blog/${slug}">${title}</a>\n`;
 
   let html = template;
   html = html.replace(/<title>.*?<\/title>/g, `<title>${title} | AFB Taxis</title>`);
@@ -38,12 +53,32 @@ files.forEach(filename => {
   html = html.replace(/<meta property="og:description" content="[^"]*"/g, `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}"`);
   html = html.replace(/<meta property="og:image" content="[^"]*"/g, `<meta property="og:image" content="${imageUrl}"`);
   html = html.replace(/<meta property="og:url" content="[^"]*"/g, `<meta property="og:url" content="https://www.afbtaxis.com/blog/${slug}"`);
-  html = html.replace(/<meta name="twitter:title" content="[^"]*"/g, `<meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}"`);
-  html = html.replace(/<meta name="twitter:description" content="[^"]*"/g, `<meta name="twitter:description" content="${description.replace(/"/g, '&quot;')}"`);
+  
+  // Inject the raw text into the HTML outside of the root div so React hydration ignores it but crawlers read it
+  const seoTextDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${title}. ${description}. ${cleanText}</div>`;
+  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${seoTextDiv}`);
 
   const postDir = path.join(distPath, 'blog', slug);
   if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
   fs.writeFileSync(path.join(postDir, 'index.html'), html);
 });
 
-console.log(`✅ SEO Pre-rendering done for ${files.length} posts!`);
+internalLinksHtml += `</div>`;
+
+// Now process the homepage (dist/index.html)
+let homeHtml = template;
+const homeSeoText = "AFB Taxis Fontainebleau. Chauffeur privé VTC. Transferts aéroports Orly, Roissy CDG, Paris. Transport sanitaire conventionné CPAM 77. Réservation 24h/24 et 7j/7. Flotte de véhicules Mercedes, berlines et vans. Circuits touristiques Château de Fontainebleau, Barbizon.";
+const homeSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${homeSeoText}</div>`;
+homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${homeSeoDiv}\n${internalLinksHtml}`);
+fs.writeFileSync(indexHtmlPath, homeHtml);
+
+// And generate dist/blog/index.html to fix the P1 404
+let blogIndexHtml = template;
+blogIndexHtml = blogIndexHtml.replace(/<title>.*?<\/title>/g, `<title>Fontainebleau Magazine - Blog AFB Taxis</title>`);
+const blogIndexSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">Découvrez notre blog Fontainebleau Magazine. Articles sur le tourisme, le château de Fontainebleau, les transferts aéroports, et nos services VTC.</div>`;
+blogIndexHtml = blogIndexHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${blogIndexSeoDiv}\n${internalLinksHtml}`);
+const blogRootPath = path.join(distPath, 'blog');
+if (!fs.existsSync(blogRootPath)) fs.mkdirSync(blogRootPath, { recursive: true });
+fs.writeFileSync(path.join(blogRootPath, 'index.html'), blogIndexHtml);
+
+console.log(`✅ SEO Pre-rendering done for ${files.length} posts + Homepage + Blog Index!`);
