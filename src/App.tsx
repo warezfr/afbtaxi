@@ -8,6 +8,8 @@ import { Home } from '@/pages/Home';
 import { SeoLandingPage } from '@/pages/SeoLandingPage';
 import { BlogList } from '@/pages/BlogList';
 import { BlogPost } from '@/pages/BlogPost';
+import { TrajetTemplate } from '@/pages/TrajetTemplate';
+import { Partenaires } from '@/pages/Partenaires';
 
 function App() {
   return (
@@ -20,8 +22,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/blog" element={<BlogList />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/trajets/:slug" element={<TrajetTemplate />} />
-        <Route path="/partenaires" element={<Partenaires />} />
+                <Route path="/trajets/:slug" element={<TrajetTemplate />} />
+                <Route path="/partenaires" element={<Partenaires />} />
                 <Route path="/:slug" element={<SeoLandingPage />} />
               </Route>
             </Routes>
