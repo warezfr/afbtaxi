@@ -53,6 +53,14 @@ files.forEach(filename => {
   html = html.replace(/<meta property="og:description" content="[^"]*"/g, `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}"`);
   html = html.replace(/<meta property="og:image" content="[^"]*"/g, `<meta property="og:image" content="${imageUrl}"`);
   html = html.replace(/<meta property="og:url" content="[^"]*"/g, `<meta property="og:url" content="https://www.afbtaxis.com/blog/${slug}"`);
+  // Fix canonical URL and inject internal links for P2 fix
+  html = html.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog/${slug}"`);
+  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${internalLinksHtml}`);
+
+  // Fix canonical URL and inject internal links for P2 fix
+  html = html.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog/${slug}"`);
+  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${internalLinksHtml}`);
+
   
   // Inject the raw text into the HTML outside of the root div so React hydration ignores it but crawlers read it
   const seoTextDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${title}. ${description}. ${cleanText}</div>`;
@@ -75,6 +83,8 @@ fs.writeFileSync(indexHtmlPath, homeHtml);
 // And generate dist/blog/index.html to fix the P1 404
 let blogIndexHtml = template;
 blogIndexHtml = blogIndexHtml.replace(/<title>.*?<\/title>/g, `<title>Fontainebleau Magazine - Blog AFB Taxis</title>`);
+blogIndexHtml = blogIndexHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog"`);
+blogIndexHtml = blogIndexHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog"`);
 const blogIndexSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">Découvrez notre blog Fontainebleau Magazine. Articles sur le tourisme, le château de Fontainebleau, les transferts aéroports, et nos services VTC.</div>`;
 blogIndexHtml = blogIndexHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${blogIndexSeoDiv}\n${internalLinksHtml}`);
 const blogRootPath = path.join(distPath, 'blog');
