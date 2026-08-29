@@ -5,7 +5,7 @@ import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ReservationWizard } from '@/components/ReservationWizard';
 import { useState, useEffect } from 'react';
 import { Star, Building2, CalendarCheck, CreditCard, MessageCircle } from 'lucide-react';
-import { WHATSAPP_URL } from '@/lib/constants';
+import { COMPANY } from '@/lib/constants';
 
 export function Partenaires() {
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -32,7 +32,7 @@ export function Partenaires() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a 
-              href={WHATSAPP_URL}
+              href={`https://wa.me/${COMPANY.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[#20bd5a] transition-all shadow-xl hover:scale-105"
