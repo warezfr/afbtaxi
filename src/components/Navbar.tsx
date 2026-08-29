@@ -21,6 +21,7 @@ export function Navbar({ onOpenBooking }: NavbarProps) {
     { href: '/#flotte', label: t('nav.fleet') },
     { href: '/#tarifs', label: t('nav.tarifs') },
     { href: '/blog', label: 'Fontainebleau Magazine' },
+    { href: '/partenaires', label: 'Espace Partenaires' },
   ];
 
   useEffect(() => {

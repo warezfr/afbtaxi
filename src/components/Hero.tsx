@@ -51,7 +51,7 @@ export function Hero({ onOpenBooking }: Props) {
             <div className="animate-fade-in-up">
               <div className="inline-flex items-center gap-2.5 rounded-full border border-gold-400/40 bg-gold-400/10 px-4 py-2">
                 <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
-                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">SERVICE 24H/24 & 7J/7</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">FONTAINEBLEAU & ÎLE-DE-FRANCE</span>
               </div>
 
               <h1 className="mt-6 font-display text-[2.9rem] font-black leading-[1.0] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] xl:text-[4.8rem]">
@@ -133,11 +133,7 @@ export function Hero({ onOpenBooking }: Props) {
                   </div>
                 ))}
 
-                {/* Floating pill : availability */}
-                <div className="absolute left-0 top-4 flex items-center gap-2.5 rounded-full border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-md">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse-gold" />
-                  <span className="text-xs font-bold text-white sm:text-sm">RÉSERVATION 24H/24 & 7J/7</span>
-                </div>
+                
 
                 {/* Vehicle name + dots */}
                 <div className="absolute bottom-2 left-0 flex items-center gap-4">
