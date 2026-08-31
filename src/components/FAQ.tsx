@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { useI18n } from '../lib/i18n';
 
 const FAQ_DATA = [
   {
@@ -26,7 +25,6 @@ const FAQ_DATA = [
 ];
 
 export function FAQ() {
-  const { t } = useI18n();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqSchema = {

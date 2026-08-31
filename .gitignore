@@ -23,3 +23,13 @@ dist-ssr
 .env
 .vercel
 .env*
+
+# Rapports SEO générés localement (ne pas committer)
+seo-report.md
+SEO-AUDIT-PROGRESS.md
+ROUTES-INVENTORY.md
+
+# Artefacts de migration one-shot
+content_*.txt
+chunk*.json
+temp-data.mjs

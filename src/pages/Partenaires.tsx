@@ -4,7 +4,7 @@ import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ReservationWizard } from '@/components/ReservationWizard';
 import { useState, useEffect } from 'react';
-import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send, MapPin } from 'lucide-react';
+import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 
 export function Partenaires() {
@@ -127,7 +127,7 @@ export function Partenaires() {
                 </p>
               </div>
 
-              <form action="https://formsubmit.co/afb@afbtaxis.com" method="POST" className="space-y-6">
+              <form action={`https://formsubmit.co/${COMPANY.email}`} method="POST" className="space-y-6">
                 {/* Auto-response pour le client */}
                 <input type="hidden" name="_autoresponse" value="Bonjour ! Nous avons bien reçu votre demande d'ouverture de compte partenaire B2B chez AFB Taxis. Notre équipe commerciale va l'étudier avec soin et vous recontactera d'ici 24 heures maximum. À très vite ! L'équipe AFB Taxis." />
                 <input type="hidden" name="_subject" value="Nouvelle Demande de Partenariat B2B !" />

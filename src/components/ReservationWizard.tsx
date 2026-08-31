@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+
+type TranslateFn = ReturnType<typeof useI18n>['t'];
 import { AddressAutocomplete } from './AddressAutocomplete';
 import type { ReservationInput } from '@/lib/types';
 
@@ -45,7 +47,7 @@ interface Props {
   context?: string;
 }
 
-function useBuildWhatsAppMessage(t: (k: any) => string) {
+function useBuildWhatsAppMessage(t: TranslateFn) {
   return (form: ReservationInput, context?: string): string => {
     let msg = `${t('wizard.wa.greeting')} ${COMPANY.name},\n\n${t('wizard.wa.intro')}\n\n`;
     if (context) msg += `${t('wizard.wa.service')} : ${context}\n`;
@@ -65,7 +67,7 @@ function useBuildWhatsAppMessage(t: (k: any) => string) {
   };
 }
 
-function useBuildEmailBody(t: (k: any) => string) {
+function useBuildEmailBody(t: TranslateFn) {
   return (form: ReservationInput, context?: string): string => {
     let body = '';
     if (context) body += `${t('wizard.wa.service')} : ${context}\n`;
@@ -145,10 +147,10 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       }
 
       setStatus('success');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setStatus('error');
-      setErrorMsg(err.message || t('wizard.error'));
+      setErrorMsg(err instanceof Error ? err.message : t('wizard.error'));
     }
   };
 
@@ -184,7 +186,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       }
       
       setStatus('success');
-    } catch (err: any) {
+    } catch {
       setStatus('error');
       setErrorMsg("Impossible d'envoyer la demande. Veuillez utiliser WhatsApp.");
     }

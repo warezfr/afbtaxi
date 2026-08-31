@@ -1,4 +1,3 @@
-import { Clock, Info } from 'lucide-react';
 import { TARIFS } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 

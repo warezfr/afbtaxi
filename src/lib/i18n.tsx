@@ -879,7 +879,7 @@ const translations = {
   },
 } as const;
 
-type TranslationKey = keyof (typeof translations)['fr'];
+export type TranslationKey = keyof (typeof translations)['fr'];
 
 interface I18nContextValue {
   locale: Locale;
