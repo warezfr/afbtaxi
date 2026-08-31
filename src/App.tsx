@@ -5,11 +5,13 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { PublicLayout } from '@/components/layouts/PublicLayout';
 import { Home } from '@/pages/Home';
-import { SeoLandingPage } from '@/pages/SeoLandingPage';
-import { BlogList } from '@/pages/BlogList';
-import { BlogPost } from '@/pages/BlogPost';
-import { TrajetTemplate } from '@/pages/TrajetTemplate';
-import { Partenaires } from '@/pages/Partenaires';
+import { Suspense, lazy } from 'react';
+
+const SeoLandingPage = lazy(() => import('@/pages/SeoLandingPage').then(module => ({ default: module.SeoLandingPage })));
+const BlogList = lazy(() => import('@/pages/BlogList').then(module => ({ default: module.BlogList })));
+const BlogPost = lazy(() => import('@/pages/BlogPost').then(module => ({ default: module.BlogPost })));
+const TrajetTemplate = lazy(() => import('@/pages/TrajetTemplate').then(module => ({ default: module.TrajetTemplate })));
+const Partenaires = lazy(() => import('@/pages/Partenaires').then(module => ({ default: module.Partenaires })));
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
       <HelmetProvider>
         <I18nProvider>
           <BrowserRouter>
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-950"><div className="w-8 h-8 border-4 border-gold-400 border-t-transparent rounded-full animate-spin"></div></div>}>
             <Routes>
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<Home />} />
@@ -27,6 +30,7 @@ function App() {
                 <Route path="/:slug" element={<SeoLandingPage />} />
               </Route>
             </Routes>
+            </Suspense>
           </BrowserRouter>
         </I18nProvider>
       </HelmetProvider>
