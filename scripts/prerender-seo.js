@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { clampTitle, formatDocumentTitle } from './lib/seo-title.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -210,7 +211,7 @@ for (const filename of blogFiles) {
     }
   );
   let html = applyHead(template, {
-    title: `${title} | AFB Taxis`,
+    title: formatDocumentTitle(title),
     description,
     canonical,
     ogImage: imageUrl,
@@ -247,7 +248,7 @@ for (const filename of blogFiles) {
     }
   );
   let html = applyHead(template, {
-    title: 'Blog Fontainebleau : tourisme, actualités et transport | AFB Taxis',
+    title: clampTitle('Blog Fontainebleau : tourisme, actualités et transport | AFB Taxis'),
     description: 'Articles sur Fontainebleau, le château, la forêt, l\'INSEAD et vos transports en Seine-et-Marne avec AFB Taxis.',
     canonical,
     jsonLd,
@@ -274,7 +275,7 @@ for (const trajet of trajets) {
     }
   );
   let html = applyHead(template, {
-    title: `${trajet.title} | AFB Taxis`,
+    title: formatDocumentTitle(trajet.title),
     description: trajet.description,
     canonical,
     jsonLd,
@@ -330,7 +331,7 @@ for (const page of SEO_LANDINGS) {
     }
   );
   let html = applyHead(template, {
-    title: page.title,
+    title: clampTitle(page.title),
     description: page.description,
     canonical,
     jsonLd,

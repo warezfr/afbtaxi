@@ -6,6 +6,7 @@ import { Tarifs } from '@/components/Tarifs';
 import { ContactSection } from '@/components/ContactSection';
 import { SEO_PAGES } from '@/lib/seo-data';
 import { NotFound } from '@/pages/NotFound';
+import { clampTitle } from '@/lib/seo-title';
 
 export function SeoLandingPage() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
@@ -35,7 +36,7 @@ export function SeoLandingPage() {
   return (
     <>
       <Helmet>
-        <title>{pageData.title}</title>
+        <title>{clampTitle(pageData.title)}</title>
         <meta name="description" content={pageData.description} />
         <link rel="canonical" href={pageUrl} />
         <meta property="og:title" content={pageData.title} />

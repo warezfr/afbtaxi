@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import { Heart, Share2, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon, Send } from 'lucide-react';
 import { useBlogPost, useBlogPosts } from '@/hooks/useBlogPosts';
 import { ContactSection } from '@/components/ContactSection';
+import { formatDocumentTitle } from '@/lib/seo-title';
 
 function ShareBar({ title, url }: { title: string; url: string }) {
   const [liked, setLiked] = useState(false);
@@ -116,7 +117,7 @@ export function BlogPost() {
   return (
     <>
       <Helmet>
-        <title>{post.title} | AFB Taxis</title>
+        <title>{formatDocumentTitle(post.title)}</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={pageUrl} />
         <meta property="og:title" content={post.title} />
