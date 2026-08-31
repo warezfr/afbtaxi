@@ -5,45 +5,43 @@ import { Fleet } from '@/components/Fleet';
 import { Tarifs } from '@/components/Tarifs';
 import { ContactSection } from '@/components/ContactSection';
 import { SEO_PAGES } from '@/lib/seo-data';
+import { NotFound } from '@/pages/NotFound';
 
 export function SeoLandingPage() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
   const { slug } = useParams<{ slug: string }>();
-  
   const pageData = SEO_PAGES.find(p => p.slug === slug);
-  
-  if (!pageData) {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <h1 className="text-2xl font-bold text-gray-900">Page introuvable</h1>
-      </div>
-    );
-  }
 
-  // We customize the hero title/subtitle contextually based on the SEO data, but fallback to translations
-  // Since Hero component uses t('hero.title1') internally, we would need to pass props to override it, 
-  // but to adhere to "surgical changes", we'll just wrap the page and provide specific SEO tags, 
-  // letting the user interact with the standard UI. For true custom heroes, we would refactor Hero.tsx.
-  // For now, we will add a specific header block above Hero if needed, or just rely on the standard Hero.
+  if (!pageData) {
+    return <NotFound />;
+  }
   
+  const pageUrl = `https://www.afbtaxis.com/${pageData.slug}`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: pageData.title,
+    description: pageData.description,
+    url: pageUrl,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.afbtaxis.com/' },
+        { '@type': 'ListItem', position: 2, name: pageData.h1, item: pageUrl },
+      ],
+    },
+  };
+
   return (
     <>
       <Helmet>
         <title>{pageData.title}</title>
         <meta name="description" content={pageData.description} />
-        <link rel="canonical" href={`https://www.afbtaxis.com/${pageData.slug}`} />
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "WebPage",
-              "name": "${pageData.title}",
-              "description": "${pageData.description}",
-              "url": "https://www.afbtaxis.com/${pageData.slug}"
-            }
-          `}
-        </script>
-
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:title" content={pageData.title} />
+        <meta property="og:description" content={pageData.description} />
+        <meta property="og:url" content={pageUrl} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
       
       {/* Optional: Add a localized H1 here if we want to force the keyword for SEO before the standard Hero */}

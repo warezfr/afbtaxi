@@ -1,4 +1,41 @@
+# AFB Taxis — robots.txt
+# Decision (docs/10): this is a local service business whose goal is to be
+# cited in both Google and AI answer engines. Retrieval crawlers are allowed.
+# Training crawlers are also allowed — we are not a publisher protecting a
+# content corpus. Re-verify user-agents quarterly; the list changes.
+
 User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+
+# Retrieval / answer-engine crawlers
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Training crawlers (explicitly allowed — same decision as above)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://www.afbtaxis.com/sitemap.xml

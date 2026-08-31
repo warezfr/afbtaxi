@@ -16,8 +16,12 @@ export function Home() {
   return (
     <>
       <Helmet>
-        <title>AFB Taxis | Chauffeur Privé et VTC à Fontainebleau & Région Parisienne</title>
-        <meta name="description" content="Réservez votre taxi ou chauffeur privé à Fontainebleau. Navettes aéroports (Orly, CDG), gares, transport médicalisé (conventionné CPAM). Service Premium 24/7." />
+        <title>AFB Taxis — Taxi Fontainebleau | Transfert Orly CDG | 7j/7</title>
+        <meta name="description" content="Taxi et chauffeur privé à Fontainebleau. Transferts Orly et CDG, gares, transport sanitaire CPAM 77. Mercedes. Réservation 7j/7 au 06 07 42 46 16." />
+        <link rel="canonical" href="https://www.afbtaxis.com/" />
+        <meta property="og:title" content="AFB Taxis — Taxi premium Fontainebleau | Transfert aéroport 7j/7" />
+        <meta property="og:description" content="Taxi et chauffeur privé à Fontainebleau. Transferts Orly, CDG, gares. Réservation 06 07 42 46 16." />
+        <meta property="og:url" content="https://www.afbtaxis.com/" />
       </Helmet>
       
       <Hero onOpenBooking={openBooking} />

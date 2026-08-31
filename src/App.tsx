@@ -12,6 +12,7 @@ const BlogList = lazy(() => import('@/pages/BlogList').then(module => ({ default
 const BlogPost = lazy(() => import('@/pages/BlogPost').then(module => ({ default: module.BlogPost })));
 const TrajetTemplate = lazy(() => import('@/pages/TrajetTemplate').then(module => ({ default: module.TrajetTemplate })));
 const Partenaires = lazy(() => import('@/pages/Partenaires').then(module => ({ default: module.Partenaires })));
+const NotFound = lazy(() => import('@/pages/NotFound').then(module => ({ default: module.NotFound })));
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/trajets/:slug" element={<TrajetTemplate />} />
                 <Route path="/partenaires" element={<Partenaires />} />
                 <Route path="/:slug" element={<SeoLandingPage />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
             </Suspense>

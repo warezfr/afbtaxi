@@ -99,12 +99,20 @@ export function Footer() {
           <div>
             <p className="mb-4 text-xs font-bold uppercase tracking-[.18em] text-gray-900 dark:text-white">{t('footer.nav')}</p>
             <nav className="flex flex-col gap-2.5">
-              <a href="#services" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.services')}</a>
-              <a href="#flotte" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.fleet')}</a>
-              <a href="#tarifs" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.tarifs')}</a>
-              <a href="#zones" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.zones')}</a>
-              <a href="#contact" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.contact')}</a>
+              <Link to="/#services" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.services')}</Link>
+              <Link to="/#flotte" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.fleet')}</Link>
+              <Link to="/#tarifs" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.tarifs')}</Link>
+              <Link to="/#zones" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.zones')}</Link>
+              <Link to="/#contact" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">{t('footer.nav.contact')}</Link>
+              <Link to="/blog" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Fontainebleau Magazine</Link>
               <Link to="/partenaires" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white font-semibold">Partenariat (Hôtels / Entreprises)</Link>
+              <Link to="/transfert-aeroport-orly" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Transfert Aéroport Orly</Link>
+              <Link to="/taxi-gare-fontainebleau-avon" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Taxi Gare Fontainebleau-Avon</Link>
+              <Link to="/transport-sanitaire-conventionne-77" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Taxi conventionné CPAM 77</Link>
+              <Link to="/trajets/taxi-fontainebleau-orly" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Fontainebleau ↔ Orly</Link>
+              <Link to="/trajets/taxi-fontainebleau-roissy-cdg" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Fontainebleau ↔ CDG</Link>
+              <Link to="/trajets/taxi-fontainebleau-paris-centre" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Fontainebleau ↔ Paris</Link>
+              <Link to="/trajets/taxi-barbizon-orly" className="text-sm text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">Barbizon ↔ Orly</Link>
             </nav>
           </div>
 
