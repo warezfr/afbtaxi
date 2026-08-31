@@ -1,34 +1,46 @@
-import { useParams, Navigate } from 'react-router-dom';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { ReservationWizard } from '@/components/ReservationWizard';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { useState, useEffect } from 'react';
+import { useParams, useOutletContext } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowRight, MapPin, Clock, Car, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import trajets from '@/data/trajets.json';
+import { NotFound } from '@/pages/NotFound';
 
 export function TrajetTemplate() {
   const { slug } = useParams<{ slug: string }>();
+  const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
   const trajet = trajets.find((t) => t.slug === slug);
-  const [wizardOpen, setWizardOpen] = useState(false);
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
 
   if (!trajet) {
-    return <Navigate to="/" replace />;
+    return <NotFound />;
   }
 
-  const openBooking = () => {
-    setWizardOpen(true);
+  const pageUrl = `https://www.afbtaxis.com/trajets/${trajet.slug}`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: trajet.title,
+    description: trajet.description,
+    url: pageUrl,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.afbtaxis.com/' },
+        { '@type': 'ListItem', position: 2, name: trajet.title, item: pageUrl },
+      ],
+    },
   };
 
   return (
     <>
-      <Navbar onOpenBooking={openBooking} />
-      <main className="flex-1 bg-white dark:bg-gray-950">
+      <Helmet>
+        <title>{trajet.title} | AFB Taxis</title>
+        <meta name="description" content={trajet.description} />
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:title" content={trajet.title} />
+        <meta property="og:description" content={trajet.description} />
+        <meta property="og:url" content={pageUrl} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+      <div className="bg-white dark:bg-gray-950">
         
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -55,7 +67,7 @@ export function TrajetTemplate() {
               {trajet.description}
             </p>
             <button 
-              onClick={openBooking}
+              onClick={() => openBooking(`Réservation: ${trajet.origin} ↔ ${trajet.destination}`)}
               className="inline-flex items-center justify-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gold-500 hover:text-gray-900 transition-all shadow-xl hover:scale-105"
             >
               Réserver ce trajet <ArrowRight size={20} />
@@ -127,7 +139,7 @@ export function TrajetTemplate() {
                     <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Arrivée</label>
                     <input type="text" readOnly value={trajet.destination} className="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white font-medium focus:outline-none" />
                   </div>
-                  <button onClick={openBooking} className="w-full mt-4 bg-gold-400 hover:bg-gold-500 text-gray-900 font-black uppercase tracking-widest py-4 rounded-xl transition-colors">
+                  <button onClick={() => openBooking(`Réservation: ${trajet.origin} ↔ ${trajet.destination}`)} className="w-full mt-4 bg-gold-400 hover:bg-gold-500 text-gray-900 font-black uppercase tracking-widest py-4 rounded-xl transition-colors">
                     Continuer la réservation
                   </button>
                   <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4 flex items-center justify-center gap-2">
@@ -139,19 +151,7 @@ export function TrajetTemplate() {
           </div>
         </section>
 
-      </main>
-      <Footer />
-      
-      <div className="hidden lg:block">
-        <WhatsAppButton />
       </div>
-      <MobileBottomNav onOpenBooking={openBooking} />
-      
-      <ReservationWizard
-        open={wizardOpen}
-        onClose={() => setWizardOpen(false)}
-        context={`Réservation: ${trajet.origin} ↔ ${trajet.destination}`}
-      />
     </>
   );
 }

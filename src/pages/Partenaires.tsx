@@ -1,26 +1,37 @@
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { ReservationWizard } from '@/components/ReservationWizard';
-import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 
 export function Partenaires() {
-  const [wizardOpen, setWizardOpen] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const whatsappMessage = "Bonjour, je souhaite ouvrir un compte partenaire / conciergerie avec AFB Taxis.";
   const whatsappUrl = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+  const pageUrl = 'https://www.afbtaxis.com/partenaires';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Espace Partenaires B2B, Hôtels et Entreprises',
+    description: 'Flotte premium et service prioritaire pour hôtels, conciergeries et entreprises à Fontainebleau.',
+    url: pageUrl,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.afbtaxis.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Partenaires', item: pageUrl },
+      ],
+    },
+  };
 
   return (
     <>
-      <Navbar onOpenBooking={() => setWizardOpen(true)} />
-      <main className="flex-1 bg-white dark:bg-gray-950">
+      <Helmet>
+        <title>Espace Partenaires B2B, Hôtels et Entreprises | AFB Taxis</title>
+        <meta name="description" content="Flotte premium et service prioritaire pour hôtels, conciergeries, INSEAD et entreprises à Fontainebleau." />
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:title" content="Espace Partenaires B2B | AFB Taxis" />
+        <meta property="og:url" content={pageUrl} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+      <div className="bg-white dark:bg-gray-950">
         
         
         {/* HERO SECTION AVEC IMAGE */}
@@ -30,6 +41,8 @@ export function Partenaires() {
               src="https://images.unsplash.com/photo-1563911302283-d2bc129e7570?q=80&w=2000&auto=format&fit=crop" 
               alt="Partenaires et Conciergerie AFB Taxis"
               className="w-full h-full object-cover"
+              width={2000}
+              height={1333}
             />
             {/* Dark gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-gray-900/90" />
@@ -71,11 +84,6 @@ export function Partenaires() {
               <path d="M0,50 C360,110 360,-10 720,50 C1080,110 1080,-10 1440,50 C1800,110 1800,-10 2160,50 C2520,110 2520,-10 2880,50 L2880,110 L0,110 Z" />
             </svg>
           </div>
-        </div>
-
-        {/* MOTS CLÉS SEO CACHÉS */}
-        <div className="opacity-0 pointer-events-none w-0 h-0 absolute overflow-hidden" aria-hidden="true">
-          Partenaires VTC Fontainebleau, Conciergerie Aigle Noir Fontainebleau, Navette INSEAD Fontainebleau, Hôtel Demeures de Campagne Parc de Fontainebleau, VTC L'Axel Fontainebleau, Hôtels de luxe Fontainebleau, Transport Château de Fontainebleau, VTC Château de Vaux-le-Vicomte, Transport partenaires Barbizon, Navette entreprise Fontainebleau, Chauffeur de direction Seine-et-Marne, Transport VIP INSEAD.
         </div>
 
         {/* POURQUOI NOUS CHOISIR */}
@@ -179,18 +187,7 @@ export function Partenaires() {
           </div>
         </section>
 
-      </main>
-      <Footer />
-      
-      <div className="hidden lg:block">
-        <WhatsAppButton />
       </div>
-      <MobileBottomNav onOpenBooking={() => setWizardOpen(true)} />
-      
-      <ReservationWizard
-        open={wizardOpen}
-        onClose={() => setWizardOpen(false)}
-      />
     </>
   );
 }

@@ -6,6 +6,8 @@
     { "source": "/blog/(.*)", "destination": "/blog/$1/index.html" },
     { "source": "/trajets/(.*)", "destination": "/trajets/$1/index.html" },
     { "source": "/partenaires", "destination": "/partenaires/index.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/transfert-aeroport-orly", "destination": "/transfert-aeroport-orly/index.html" },
+    { "source": "/taxi-gare-fontainebleau-avon", "destination": "/taxi-gare-fontainebleau-avon/index.html" },
+    { "source": "/transport-sanitaire-conventionne-77", "destination": "/transport-sanitaire-conventionne-77/index.html" }
   ]
 }

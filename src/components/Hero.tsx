@@ -124,6 +124,8 @@ export function Hero({ onOpenBooking }: Props) {
                       src={slide.image}
                       alt={`Chauffeur Privé Fontainebleau - ${slide.name}`}
                       className="h-full w-full object-cover"
+                      width={1600}
+                      height={900}
                       loading={i === 0 ? 'eager' : 'lazy'}
                       fetchPriority={i === 0 ? 'high' : 'auto'}
                     />

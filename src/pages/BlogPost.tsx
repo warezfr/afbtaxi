@@ -95,13 +95,22 @@ export function BlogPost() {
 
   const articleSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
     image: post.imageUrl,
     datePublished: post.date,
     author: { '@type': 'Organization', name: 'AFB Taxis' },
     publisher: { '@type': 'Organization', name: 'AFB Taxis', logo: { '@type': 'ImageObject', url: 'https://www.afbtaxis.com/logo.png' } },
+    mainEntityOfPage: pageUrl,
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.afbtaxis.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Fontainebleau Magazine', item: 'https://www.afbtaxis.com/blog' },
+        { '@type': 'ListItem', position: 3, name: post.title, item: pageUrl },
+      ],
+    },
   };
 
   return (
