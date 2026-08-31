@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowRight, MapPin, Clock, Car, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import trajets from '@/data/trajets.json';
 import { NotFound } from '@/pages/NotFound';
+import { formatDocumentTitle } from '@/lib/seo-title';
 
 export function TrajetTemplate() {
   const { slug } = useParams<{ slug: string }>();
@@ -32,7 +33,7 @@ export function TrajetTemplate() {
   return (
     <>
       <Helmet>
-        <title>{trajet.title} | AFB Taxis</title>
+        <title>{formatDocumentTitle(trajet.title)}</title>
         <meta name="description" content={trajet.description} />
         <link rel="canonical" href={pageUrl} />
         <meta property="og:title" content={trajet.title} />

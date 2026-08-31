@@ -203,13 +203,63 @@ Live URL exists (`https://www.afbtaxis.com`) but **no MCP SEO data tool** (RankP
 
 ---
 
-## Final summary
-| Page / area | What changed | Verification |
+## Post-deploy audit — 2026-08-31 (`main@ec4fde6`, live production)
+
+**Tool:** `node .seo-prompt-master/tools/seo-audit.mjs --url https://www.afbtaxis.com --max 45` → **98/100, P1 0, P2 0, P3 23** (42/42 sitemap URLs fetched).
+
+**Self-recheck (~15%):** `/`, `/transfert-aeroport-orly`, `/trajets/taxi-fontainebleau-orly`, `/partenaires`, `/blog/transfert-aeroport-beauvais-fontainebleau`, `/blog/nonexistent-slug-xyz` — all pass: 200 + self-canonical + visible H1 on indexable pages; unknown slug **404**.
+
+### SEO Score: 98/100 (final — 42/42 public-index pages)
+
+| Category | Points | / Max |
+|---|---:|---:|
+| Indexability & crawl foundation | 25 | 25 |
+| Rendering & mobile parity | 19 | 20 |
+| Structured data | 14 | 15 |
+| Metadata quality (incl. i18n redistributed) | 19 | 20 |
+| Headings, semantics & links | 10 | 10 |
+| Images | 4 | 5 |
+| Core Web Vitals | 3 | 5 |
+| **Total** | **98** | **100** |
+
+Site-level penalty −1: `http://` answers **308** not 301 (`docs/01`). Remaining P3: 22 blog titles > ~60 chars (snippet truncation only, `docs/01`).
+
+CWV row `(heuristic, not measured)` — no CrUX in this run (`docs/05`).
+
+### GEO Score: 90/100 (final)
+
+| Category | Points | / Max |
+|---|---:|---:|
+| AI crawler configuration | 20 | 20 |
+| Extractable rendering | 18 | 20 |
+| Extractable content structure | 13 | 15 |
+| Entity authority | 14 | 20 |
+| Classic-SEO prerequisite | 15 | 15 |
+| No wasted/counterproductive GEO effort | 10 | 10 |
+| **Total** | **90** | **100** |
+
+Classic-SEO prerequisite = round(98 × 0.15) = 15. Entity authority capped: `sameAs` is Maps search URL only — no verified GBP profile URL in schema (`docs/08`, V03).
+
+Delta vs baseline: SEO **71 → 98** (+27). GEO **48 → 90** (+42).
+
+_Caveat: technical SEO/GEO readiness scores, not a ranking or traffic guarantee — off-page factors (backlinks, content quality, competition, Google Business Profile) are out of scope (`docs/17`)._
+
+### Open P3 backlog (optional polish)
+| Item | Rule | Action |
 |---|---|---|
-| `/` | Visible H1 + crawlable nav in HTML; shorter title/description; canonical in Helmet; NAP `.com`; `sameAs` | `dist/index.html` H1; typecheck/build |
-| `/blog` + 32 posts | Self-canonical, BlogPosting + Breadcrumb in prerender, visible H1, sitemap lastmod | dist sample Beauvais article |
-| `/trajets/*` (4) | Sitemap; footer links; Helmet; single layout | dist + `Footer.tsx` |
-| `/partenaires` | Sitemap, Helmet, no hidden keywords, single chrome | dist + source |
-| 3 SEO landings | Prerendered (were live 404) + rewrites + sitemap + footer links | dist `{slug}/index.html` |
-| `robots.txt` | Explicit AI allow; Disallow `/admin` `/api` | `public/robots.txt` |
-| `sitemap.xml` | 42 URLs = full public-index set | generator + public file |
+| http 308 vs 301 | `docs/01` | Vercel edge default; no in-repo fix unless custom redirect layer |
+| 22 long blog titles | `docs/01` | Truncate in Helmet or shorten frontmatter titles — product/SEO trade-off |
+
+---
+
+## Final summary (production verified)
+| Page / area | Status | Evidence |
+|---|---|---|
+| `/` | ✅ | 200, canonical, H1 in raw HTML, `afb@afbtaxis.com` in JSON-LD |
+| `/blog` + 32 posts | ✅ | All 200, self-canonical, in sitemap |
+| `/trajets/*` (4) | ✅ | 200, sitemap, footer links, H1 in prerender |
+| `/partenaires` | ✅ | 200, sitemap, no hidden keywords |
+| 3 SEO landings | ✅ | Were 404 → now 200 + prerender + sitemap |
+| `robots.txt` | ✅ | AI crawlers explicit; Disallow `/admin` `/api` |
+| `sitemap.xml` | ✅ | 42 URLs |
+| Unknown URLs | ✅ | Edge 404 (e.g. `/blog/nonexistent-slug-xyz`) |

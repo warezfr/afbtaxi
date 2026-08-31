@@ -3,6 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { ContactSection } from '@/components/ContactSection';
+import { clampTitle } from '@/lib/seo-title';
 
 export function BlogList() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
@@ -30,7 +31,7 @@ export function BlogList() {
   return (
     <>
       <Helmet>
-        <title>Blog Fontainebleau : tourisme, actualités et transport | AFB Taxis</title>
+        <title>{clampTitle('Blog Fontainebleau : tourisme, actualités et transport | AFB Taxis')}</title>
         <meta name="description" content="Articles sur Fontainebleau, le château, la forêt, l'INSEAD et vos transports en Seine-et-Marne avec AFB Taxis." />
         <link rel="canonical" href="https://www.afbtaxis.com/blog" />
         <script type="application/ld+json">{JSON.stringify({
