@@ -2,10 +2,7 @@ import { useParams, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, MapPin, Clock, Car, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import trajets from '@/data/trajets.json';
-<<<<<<< HEAD
-=======
 import { NotFound } from '@/pages/NotFound';
->>>>>>> 4724571 (fix(seo): prerender landings, complete sitemap, and stop hidden-text dumps)
 
 export function TrajetTemplate() {
   const { slug } = useParams<{ slug: string }>();
