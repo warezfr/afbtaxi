@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Crown, Gauge, Leaf, Users, ChevronRight } from 'lucide-react';
+import { Check, Crown, Leaf, Users, ChevronRight } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 
 interface FleetProps {
@@ -54,7 +54,6 @@ export function Fleet({ onOpenBooking }: FleetProps) {
   const [activeTab, setActiveTab] = useState(VEHICLES[0].id);
   
   const activeCar = VEHICLES.find(v => v.id === activeTab) || VEHICLES[0];
-  const Icon = activeCar.icon;
 
   return (
     <section id="flotte" className="relative overflow-hidden bg-gray-50 dark:bg-gray-950 py-16 lg:py-28" style={{ contentVisibility: 'auto' }}>

@@ -171,7 +171,7 @@ export function BlogPost() {
           ">
             <ReactMarkdown
               components={{
-                a: ({ node, ...props }) => {
+                a: ({ ...props }) => {
                   if (props.href === '#reserver') {
                     return (
                       <button

@@ -4,7 +4,7 @@ import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ReservationWizard } from '@/components/ReservationWizard';
 import { useState, useEffect } from 'react';
-import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send, MapPin } from 'lucide-react';
+import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 
 export function Partenaires() {

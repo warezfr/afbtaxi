@@ -1,7 +1,6 @@
 import { useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Hero } from '@/components/Hero';
-import { TrustMarquee } from '@/components/TrustMarquee';
 import { Services } from '@/components/Services';
 import { Fleet } from '@/components/Fleet';
 import { Zones } from '@/components/Zones';

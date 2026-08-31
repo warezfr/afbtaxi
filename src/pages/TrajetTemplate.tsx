@@ -7,7 +7,6 @@ import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { useState, useEffect } from 'react';
 import { ArrowRight, MapPin, Clock, Car, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import trajets from '@/data/trajets.json';
-import { useI18n } from '@/lib/i18n';
 
 export function TrajetTemplate() {
   const { slug } = useParams<{ slug: string }>();

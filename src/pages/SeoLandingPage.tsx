@@ -1,17 +1,14 @@
 import { useOutletContext, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Hero } from '@/components/Hero';
 import { Services } from '@/components/Services';
 import { Fleet } from '@/components/Fleet';
 import { Tarifs } from '@/components/Tarifs';
 import { ContactSection } from '@/components/ContactSection';
-import { useI18n } from '@/lib/i18n';
 import { SEO_PAGES } from '@/lib/seo-data';
 
 export function SeoLandingPage() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
   const { slug } = useParams<{ slug: string }>();
-  const { t } = useI18n();
   
   const pageData = SEO_PAGES.find(p => p.slug === slug);
   
