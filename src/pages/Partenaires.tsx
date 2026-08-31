@@ -1,13 +1,4 @@
-<<<<<<< HEAD
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { ReservationWizard } from '@/components/ReservationWizard';
-import { useState, useEffect } from 'react';
-=======
 import { Helmet } from 'react-helmet-async';
->>>>>>> 4724571 (fix(seo): prerender landings, complete sitemap, and stop hidden-text dumps)
 import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send } from 'lucide-react';
 import { COMPANY } from '@/lib/constants';
 
