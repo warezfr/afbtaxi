@@ -4,8 +4,8 @@ description: "Réservez votre transfert privé entre le campus INSEAD de Fontain
 category: "Services VTC"
 date: "2026-09-20"
 updated: "2026-10-10"
-imageUrl: "https://images.pexels.com/photos/1427541/pexels-photo-1427541.jpeg?auto=compress&cs=tinysrgb&w=1280"
-imageAlt: "Valises de voyage prêtes pour un transfert vers l'aéroport"
+imageUrl: "https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg?auto=compress&cs=tinysrgb&w=1280"
+imageAlt: "Voyageuse avec sa valise devant un terminal d'aéroport"
 tags:
   - "INSEAD"
   - "Transfert aéroport"
