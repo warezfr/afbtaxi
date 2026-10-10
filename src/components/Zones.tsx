@@ -12,14 +12,15 @@ function KineticMarquee({ text }: { text: string }) {
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
   const smooth = useSpring(velocity, { damping: 50, stiffness: 300 });
-  const factor = useTransform(smooth, [-1500, 0, 1500], [-6, 1, 6], { clamp: false });
+  const factor = useTransform(smooth, [-2000, 0, 2000], [-4, 1, 4]);
   const direction = useRef(1);
 
   useAnimationFrame((_, delta) => {
     if (!motionOk) return;
     const f = factor.get();
     if (f < 0) direction.current = -1; else if (f > 0) direction.current = 1;
-    let next = x.get() - direction.current * Math.abs(f) * (delta / 1000) * 60;
+    // base drift: about 3% of the track per second, up to 4x with scroll
+    let next = x.get() - direction.current * Math.abs(f) * (delta / 1000) * 3;
     // wrap: content is duplicated 4x, each copy is 25% of the track
     if (next <= -50) next += 25; else if (next > -25) next -= 25;
     x.set(next);
