@@ -47,6 +47,24 @@ files.forEach(filename => {
   </url>\n`;
 });
 
+// Static pages: partenaires, programmatic trajets, SEO landings
+const staticPages = ['/partenaires'];
+try {
+  const trajets = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../src/data/trajets.json'), 'utf-8'));
+  trajets.forEach((t) => staticPages.push(`/trajets/${t.slug}`));
+} catch {}
+try {
+  const seoSrc = fs.readFileSync(path.resolve(__dirname, '../src/lib/seo-data.ts'), 'utf-8');
+  [...seoSrc.matchAll(/slug:\s*'([^']+)'/g)].forEach((m) => staticPages.push(`/${m[1]}`));
+} catch {}
+staticPages.forEach((p) => {
+  sitemap += `  <url>
+    <loc>${DOMAIN}${p}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>\n`;
+});
+
 sitemap += `</urlset>`;
 
 const publicPath = path.resolve(__dirname, '../public');

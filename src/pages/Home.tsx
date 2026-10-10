@@ -19,7 +19,7 @@ export function Home() {
         <title>AFB Taxis | Taxi et chauffeur privé à Fontainebleau, aéroports, CPAM</title>
         <meta
           name="description"
-          content="Taxi et chauffeur privé à Fontainebleau et Seine-et-Marne. Transferts Orly, Roissy CDG, gares, Paris, transport conventionné CPAM. Mercedes Classe S, E, V. Réservation 24h/24 au 06 07 42 46 16."
+          content="Taxi et chauffeur privé à Fontainebleau et Seine-et-Marne : aéroports Orly et CDG, gares, Paris, transport conventionné CPAM. Réservation 24h/24 au 06 07 42 46 16."
         />
         <link rel="canonical" href="https://www.afbtaxis.com/" />
       </Helmet>

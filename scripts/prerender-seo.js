@@ -196,11 +196,42 @@ posts.forEach((post) => {
 });
 
 // Now process the homepage (dist/index.html)
-let homeHtml = template;
-const homeSeoText = "AFB Taxis Fontainebleau. Chauffeur privé VTC. Transferts aéroports Orly, Roissy CDG, Paris. Transport sanitaire conventionné CPAM 77. Réservation 24h/24 et 7j/7. Flotte de véhicules Mercedes, berlines et vans. Circuits touristiques Château de Fontainebleau, Barbizon.";
-const homeSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${homeSeoText}</div>`;
-homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${homeSeoDiv}\n${internalLinksHtml}`);
-fs.writeFileSync(indexHtmlPath, homeHtml);
+{
+  const homeSeoDiv = `<div id="seo-content" style="${HIDDEN_STYLE}"><h1>Taxi et chauffeur privé à Fontainebleau</h1><p>AFB Taxis, taxi conventionné et chauffeur privé à Fontainebleau, Avon et Seine-et-Marne depuis 2004. Transferts aéroports Orly, Roissy CDG et Beauvais, gares parisiennes, Paris, Disneyland, transport sanitaire conventionné CPAM 77. Mercedes Classe S, Classe E, Classe V 7 places et Tesla Model Y. Prix annoncé à la réservation, 24h/24 et 7j/7 au 06 07 42 46 16.</p></div>`;
+  const homeHtml = sub(template, /<div id="root"><\/div>/, `<div id="root"></div>\n${homeSeoDiv}\n${internalLinksHtml}`);
+  fs.writeFileSync(indexHtmlPath, homeHtml);
+}
+
+// Custom 404 (Vercel serves 404.html with a real 404 status for unknown paths)
+{
+  let nf = applyHead(template, {
+    title: 'Page introuvable | AFB Taxis',
+    description: 'Cette page n\'existe pas ou plus. Retrouvez nos services de taxi et chauffeur privé à Fontainebleau depuis l\'accueil.',
+    url: `${SITE}/`,
+    image: '',
+    type: 'website',
+  });
+  nf = sub(nf, /<meta name="robots" content="[^"]*"/, '<meta name="robots" content="noindex, follow"');
+  nf = sub(nf, /<link rel="canonical" href="[^"]*" \/>\n?/, '');
+  nf = sub(nf, /<div id="root"><\/div>/, `<div id="root"></div>\n<div id="seo-content" style="${HIDDEN_STYLE}"><h1>Page introuvable</h1><p><a href="/">Retour à l\'accueil</a></p></div>`);
+  fs.writeFileSync(path.join(distPath, '404.html'), nf);
+}
+
+// SEO landing pages (src/lib/seo-data.ts) -> dist/<slug>/index.html
+{
+  const seoSrc = fs.readFileSync(path.resolve(__dirname, '../src/lib/seo-data.ts'), 'utf-8');
+  const entries = [...seoSrc.matchAll(/slug:\s*'([^']+)'[\s\S]*?title:\s*'((?:\\'|[^'])*)'[\s\S]*?description:\s*'((?:\\'|[^'])*)'[\s\S]*?h1:\s*'((?:\\'|[^'])*)'[\s\S]*?subtitle:\s*'((?:\\'|[^'])*)'/g)]
+    .map((m) => ({ slug: m[1], title: m[2].replace(/\\'/g, "'"), description: m[3].replace(/\\'/g, "'"), h1: m[4].replace(/\\'/g, "'"), subtitle: m[5].replace(/\\'/g, "'") }));
+  for (const page of entries) {
+    let html = applyHead(template, { title: page.title, description: page.description, url: `${SITE}/${page.slug}`, image: '', type: 'website' });
+    const seoDiv = `<div id="seo-content" style="${HIDDEN_STYLE}"><h1>${escText(page.h1)}</h1><p>${escText(page.subtitle)}</p><p>${escText(page.description)}</p></div>`;
+    html = injectBody(html, seoDiv);
+    const dir = path.join(distPath, page.slug);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, 'index.html'), html);
+    console.log(`Prerendered landing: ${page.slug}`);
+  }
+}
 
 // Generate dist/blog/index.html
 {
