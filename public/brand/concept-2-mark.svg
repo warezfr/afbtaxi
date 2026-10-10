@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="28" stroke="#D9B257" stroke-width="2" />
+  <text x="32" y="38" font-family="Outfit, sans-serif" font-weight="800" font-size="18" text-anchor="middle" fill="currentColor" letter-spacing="0.05em">AFB</text>
+  <path d="M 18 48 A 20 20 0 0 0 46 48" stroke="currentColor" stroke-width="3" stroke-dasharray="4 4" fill="none"/>
+</svg>

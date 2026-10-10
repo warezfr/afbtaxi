@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; font-family: sans-serif; display: flex; background: #18181b; color: white; min-height: 100vh; }
+  .col { flex: 1; padding: 2rem; display: flex; flex-direction: column; gap: 4rem; }
+  .light { background: #fafafa; color: #18181b; }
+  .dark { background: #09090b; color: #fafafa; }
+  .section { display: flex; flex-direction: column; gap: 2rem; }
+  .sizes { display: flex; align-items: flex-end; gap: 2rem; border-bottom: 1px solid #3f3f46; padding-bottom: 1rem;}
+  .light .sizes { border-color: #d4d4d8; }
+  .img-bg { background: url('https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg') center/cover; padding: 2rem; border-radius: 1rem; color: white;}
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  h2 { font-size: 1.5rem; margin: 0; }
+  .svg-wrap svg { width: auto; }
+</style>
+</head>
+<body>
+
+<div class="col light">
+  <h1>Concepts (Light)</h1>
+  <div id="light-concepts"></div>
+</div>
+
+<div class="col dark">
+  <h1>Concepts (Dark)</h1>
+  <div id="dark-concepts"></div>
+</div>
+
+<script>
+  const concepts = [
+    { id: 1, name: '1. Monogramme route' },
+    { id: 2, name: '2. Sceau Fontainebleau' },
+    { id: 3, name: '3. Chevron de route' }
+  ];
+
+  function renderConcept(c) {
+    const markUrl = `concept-${c.id}-mark.svg`;
+    const horizUrl = `concept-${c.id}-horizontal.svg`;
+    
+    return `
+      <div class="section">
+        <h2>${c.name}</h2>
+        <div class="sizes">
+          <img src="${markUrl}" style="height: 24px;" />
+          <img src="${horizUrl}" style="height: 24px;" />
+          <img src="${horizUrl}" style="height: 48px;" />
+          <img src="${markUrl}" style="height: 160px;" />
+        </div>
+        <div class="img-bg">
+          <div class="nav">
+            <img src="${horizUrl}" style="height: 24px; color: white;" />
+            <div style="display:flex;gap:1rem;font-size:0.875rem;"><span>Services</span><span>Flotte</span><span>Contact</span></div>
+          </div>
+          <div style="padding: 4rem 0; font-size: 2rem; font-weight: bold;">
+            <img src="${markUrl}" style="height: 64px; color: white;" />
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  const html = concepts.map(renderConcept).join('');
+  document.getElementById('light-concepts').innerHTML = html;
+  document.getElementById('dark-concepts').innerHTML = html;
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="80" rx="14" fill="#09090b" />
+  <g transform="translate(8, 8)">
+    
+  <path d="M 32 4 L 10 52 L 23 52 L 27 42 L 37 42 L 41 52 L 54 52 Z M 32 16 L 35 26 L 29 26 Z" fill="white" />
+  <rect x="26" y="32" width="4" height="4" fill="#D9B257"/>
+  <rect x="30" y="32" width="4" height="4" fill="white"/>
+  <rect x="34" y="32" width="4" height="4" fill="#D9B257"/>
+  <rect x="26" y="36" width="4" height="4" fill="white"/>
+  <rect x="30" y="36" width="4" height="4" fill="#D9B257"/>
+  <rect x="34" y="36" width="4" height="4" fill="white"/>
+  <text x="32" y="62" font-family="Outfit, sans-serif" font-weight="700" font-size="7" letter-spacing="0.1em" text-anchor="middle" fill="white">FONTAINEBLEAU</text>
+
+  </g>
+</svg>

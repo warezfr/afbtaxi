@@ -1,0 +1,8 @@
+<svg viewBox="0 0 320 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0, 0)">
+    <path d="M 12 36 L 32 12 L 52 36 L 42 36 L 32 24 L 22 36 Z" fill="#D9B257" />
+    <path d="M 12 52 L 32 28 L 52 52 L 42 52 L 34 42 L 34 32 L 30 32 L 30 42 L 22 52 Z" fill="currentColor" />
+  </g>
+  <text x="76" y="44" font-family="Outfit, sans-serif" font-weight="800" font-size="32" fill="currentColor">AFB Taxis</text>
+  <text x="78" y="56" font-family="Outfit, sans-serif" font-weight="600" font-size="9" letter-spacing="0.2em" fill="currentColor">FONTAINEBLEAU</text>
+</svg>

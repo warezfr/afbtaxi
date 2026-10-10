@@ -5,7 +5,7 @@ export const COMPANY = {
   phoneIntl: '+33607424616',
   whatsapp: '33607424616',
   email: 'afb@afbtaxis.com',
-  website: 'https://www.afbtaxis.fr',
+  website: 'https://www.afbtaxis.com',
   address: '312 Route de Vosves, 77190 Dammarie-les-Lys',
   street: '312 Route de Vosves',
   city: 'Dammarie-les-Lys',
@@ -20,8 +20,7 @@ export const COMPANY = {
   foundedYear: 2004,
   stationnement: 'Fontainebleau / Avon',
   googleMapsUrl: 'https://maps.google.com/?q=AFB+Taxis+Fontainebleau',
-  logoUrl:
-    'https://www.pagesjaunes.fr/media/newdam/preset-thumbnail-logo-desktop/76/1a/30/00/00/c6/31/76/be/cb/6925761a300000c63176becb/6925761a300000c63176becc.jpg',
+  logoUrl: 'https://www.afbtaxis.com/logo.png',
 };
 
 export const SERVICES = [
