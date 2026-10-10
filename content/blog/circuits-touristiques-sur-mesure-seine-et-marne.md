@@ -4,8 +4,8 @@ description: "Découvrez la Seine-et-Marne en circuit touristique sur mesure ave
 category: "Tourisme"
 date: "2024-02-15"
 updated: "2026-10-10"
-imageUrl: "https://images.pexels.com/photos/1043458/pexels-photo-1043458.jpeg?auto=compress&cs=tinysrgb&w=1280"
-imageAlt: "Circuit touristique privé en berline avec chauffeur à travers la Seine-et-Marne"
+imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Ch%C3%A2teau_de_Fontainebleau-Cour_d%27honneur-20120722-.jpg/1280px-Ch%C3%A2teau_de_Fontainebleau-Cour_d%27honneur-20120722-.jpg"
+imageAlt: "Cour d'honneur du château de Fontainebleau, point de départ des circuits en Seine-et-Marne"
 tags:
   - "Circuits touristiques"
   - "Chauffeur privé"
@@ -49,8 +49,8 @@ Votre chauffeur adapte les horaires de départ et l'ordre des étapes pour conto
 
 Nos prestations touristiques privées sont proposées sous forme de forfaits sur mesure avec tarifs transparents :
 
-* **Formule demi-journée (4 heures) :** à partir de 250 €, idéale pour associer la visite d'un grand monument et un déjeuner de terroir dans une auberge de charme.
-* **Formule journée complète (8 heures) :** à partir de 480 €, recommandée pour explorer deux châteaux majeurs, flâner dans les villages voisins et traverser la forêt.
+* **Formule demi-journée (4 heures) :** sur devis, idéale pour associer la visite d'un grand monument et un déjeuner de terroir dans une auberge de charme.
+* **Formule journée complète (8 heures) :** sur devis, recommandée pour explorer deux châteaux majeurs, flâner dans les villages voisins et traverser la forêt.
 * **Prestations sur mesure :** durée et parcours ajustables sur simple demande. Consultez notre [grille des tarifs](/#tarifs) pour une estimation personnalisée.
 
 À bord, profitez de boissons fraîches, de chargeurs, d'un accès Wi-Fi et de parapluies. Votre chauffeur vous dépose au plus près des entrées et reste joignable en permanence.

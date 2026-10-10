@@ -1,15 +1,15 @@
 ---
 title: "Escalade à Fontainebleau en 2026 : Nouveaux Secteurs et Accès"
-description: "Découvrez les secteurs de bloc émergents en forêt de Fontainebleau en 2026. Guide pratique pour les grimpeurs et solutions de transport avec chauffeur pour vos crash pads."
+description: "Découvrez les secteurs de bloc émergents en forêt de Fontainebleau en 2026, avec un guide pratique et un transport en chauffeur pour vos crash pads."
 category: "Sport & Nature"
 date: "2026-07-28"
 updated: "2026-10-10"
-imageUrl: "https://images.pexels.com/photos/13861/IMG_3496b.jpg?auto=compress&cs=tinysrgb&w=1280"
-imageAlt: "Grimpeur en forêt de Fontainebleau en pleine séance d'escalade de bloc sur du grès au crépuscule"
+imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/For%C3%AAt_de_Fontainebleau-Rochers_du_Mont_Ussy_%281%29-20180523.jpg/1280px-For%C3%AAt_de_Fontainebleau-Rochers_du_Mont_Ussy_%281%29-20180523.jpg"
+imageAlt: "Blocs de grès des rochers du Mont Ussy en forêt de Fontainebleau, terrain d'escalade"
 tags:
   - "Escalade"
   - "Bloc"
-  - "Forêt de Fontainebleau"
+  - "Forêt"
   - "Sport & Nature"
 ---
 
@@ -49,11 +49,11 @@ Pour planifier votre sortie sportive, voici les durées moyennes constatées ave
 
 Nos prestations sont assurées avec des tarifs transparents fixés à l'avance, sans supplément pour vos équipements :
 
-* Transfert aéroport depuis Paris-Orly : à partir de 110 €
-* Transfert aéroport depuis Paris-Charles-de-Gaulle : à partir de 160 €
-* Trajet direct depuis Paris centre ou la Gare de Lyon : à partir de 140 €
-* Mise à disposition demi-journée (4 heures) : à partir de 250 €
-* Mise à disposition journée complète (8 heures) : à partir de 480 €
+* Transfert aéroport depuis Paris-Orly : à partir de 115 €
+* Transfert aéroport depuis Paris-Charles-de-Gaulle : à partir de 168 €
+* Trajet direct depuis Paris (rive gauche ou rive droite) : à partir de 132 €
+* Mise à disposition demi-journée (4 heures) : sur devis
+* Mise à disposition journée complète (8 heures) : sur devis
 
 Planifiez vos [transferts aéroport depuis Orly ou Roissy-CDG](/blog/transfert-aeroport-orly-roissy-cdg-fontainebleau) avec un accueil personnalisé à la sortie de votre vol.
 

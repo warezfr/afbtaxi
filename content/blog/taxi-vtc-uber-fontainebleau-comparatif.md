@@ -4,8 +4,8 @@ description: "Taxi, VTC ou Uber à Fontainebleau : comparez disponibilité en zo
 category: "Guide Pratique"
 date: "2026-09-08"
 updated: "2026-10-10"
-imageUrl: "https://images.pexels.com/photos/13861/IMG_3496b.jpg?auto=compress&cs=tinysrgb&w=1280"
-imageAlt: "Véhicule avec chauffeur circulant sur une route forestière près de Fontainebleau"
+imageUrl: "https://images.pexels.com/photos/3787839/pexels-photo-3787839.jpeg?auto=compress&cs=tinysrgb&w=1280"
+imageAlt: "Chauffeur professionnel au volant, comparatif entre taxi, VTC et Uber"
 tags:
   - "VTC"
   - "Transport"
