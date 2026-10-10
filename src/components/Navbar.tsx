@@ -1,47 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
-import { useI18n } from '../lib/i18n';
-import { useTheme } from '../lib/ThemeContext';
-import { COMPANY } from '../lib/constants';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { Sun, MoonStars, Phone, List, X, ArrowUpRight } from '@phosphor-icons/react';
+import { useI18n, LOCALE_LABELS, type Locale } from '@/lib/i18n';
+import { useTheme } from '@/lib/ThemeContext';
+import { COMPANY } from '@/lib/constants';
 import { Logo } from './Logo';
-import { Sun, MoonStars, Globe, Phone, List, X } from '@phosphor-icons/react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
+import { EASE, useMotionOk } from './motion';
 
-const locales = ['fr', 'en', 'es', 'ar'] as const;
-const LOCALE_LABELS = { fr: 'FR', en: 'EN', es: 'ES', ar: 'عربي' };
+const LOCALES: Locale[] = ['fr', 'en', 'es', 'ar'];
 
 export function Navbar({ onOpenBooking }: { onOpenBooking: () => void }) {
   const { t, locale, setLocale } = useI18n();
   const { theme, toggleTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const { scrollY } = useScroll();
   const location = useLocation();
+  const motionOk = useMotionOk();
+  const [condensed, setCondensed] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrolled(latest > 40);
-  });
-
-  // Close mobile menu on route change
+  useMotionValueEvent(scrollY, 'change', (v) => setCondensed(v > 24));
+  useEffect(() => { setOpen(false); }, [location]);
   useEffect(() => {
-    setOpen(false);
-  }, [location]);
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
-  const NAV_LINKS = [
+  const onDark = !condensed && !location.pathname.startsWith('/blog');
+
+  const LINKS = [
     { href: '/#services', label: t('nav.services') },
     { href: '/#flotte', label: t('nav.fleet') },
     { href: '/#tarifs', label: t('nav.tarifs') },
@@ -49,234 +37,149 @@ export function Navbar({ onOpenBooking }: { onOpenBooking: () => void }) {
     { href: '/partenaires', label: 'Partenariat' },
   ];
 
-  const isDarkHero = !scrolled && !location.pathname.startsWith('/blog');
-
-  const headerVariants = {
-    top: {
-      backgroundColor: 'rgba(255, 255, 255, 0)',
-      borderBottomColor: 'rgba(255, 255, 255, 0)',
-    },
-    scrolled: {
-      backgroundColor: 'rgba(255, 255, 255, 0.85)',
-      borderBottomColor: 'rgba(228, 228, 231, 0.7)', // zinc-200/70
-    },
-    scrolledDark: {
-      backgroundColor: 'rgba(9, 9, 11, 0.80)', // zinc-950/80
-      borderBottomColor: 'rgba(255, 255, 255, 0.1)', // white/10
-    }
-  };
-
-  const getHeaderVariant = () => {
-    if (!scrolled) return 'top';
-    return theme === 'dark' ? 'scrolledDark' : 'scrolled';
-  };
+  const ink = onDark ? 'text-white' : 'text-ink dark:text-white';
 
   return (
-    <motion.header
-      variants={headerVariants}
-      initial={false}
-      animate={getHeaderVariant()}
-      transition={{ duration: 0.3 }}
-      className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl ${!scrolled ? 'dark:border-transparent dark:bg-transparent' : ''}`}
-    >
-      <nav className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
-        {/* Left: Logo */}
-        <Link to="/" data-testid="nav-logo" className={`flex items-center transition-colors ${isDarkHero ? 'text-white' : 'text-zinc-900 dark:text-zinc-50'}`}>
-          <Logo variant="horizontal" className="h-8" />
-        </Link>
-
-        {/* Center: Links (Desktop) */}
-        <div className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => {
-            const isActive = location.pathname + location.hash === link.href;
-            return (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`relative py-1 text-[13px] font-bold uppercase tracking-widest transition-colors ${isDarkHero ? 'text-white hover:text-gold-400' : 'text-zinc-900 dark:text-zinc-50 hover:text-gold-600 dark:hover:text-gold-400'}`}
-              >
-                {link.label}
-                {isActive && (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className="absolute -bottom-[1px] left-0 right-0 h-0.5 bg-gold-400"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Right: Actions (Desktop) */}
-        <div className="hidden items-center gap-6 lg:flex">
-          <button
-            onClick={(e) => toggleTheme(e as unknown as MouseEvent)}
-            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${isDarkHero ? 'text-zinc-300 hover:text-gold-400' : 'text-zinc-500 hover:text-gold-500 dark:text-zinc-400 dark:hover:text-gold-400'}`}
-            aria-label="Toggle theme"
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 pointer-events-none">
+        <motion.nav
+          initial={false}
+          animate={condensed ? 'condensed' : 'top'}
+          variants={{
+            top: { paddingTop: 20, paddingBottom: 0 },
+            condensed: { paddingTop: 10, paddingBottom: 0 },
+          }}
+          transition={{ duration: 0.4, ease: EASE }}
+          className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+        >
+          {/* Brand pill */}
+          <Link
+            to="/"
+            data-testid="nav-logo"
+            className={`pointer-events-auto flex h-12 items-center rounded-full px-3 pr-4 transition-colors duration-500 ${condensed ? 'glass' : ''} ${ink}`}
           >
-            {theme === 'dark' ? <Sun size={20} /> : <MoonStars size={20} />}
-          </button>
+            <Logo variant="horizontal" className="h-8" />
+          </Link>
 
-          <div className="relative">
-            <button
-              data-testid="nav-lang-button"
-              onClick={() => setLangOpen(!langOpen)}
-              className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
-                isDarkHero 
-                  ? 'border-white/20 text-zinc-300 hover:border-gold-400 hover:text-white'
-                  : 'border-zinc-200 text-zinc-600 hover:border-gold-400 hover:text-zinc-900 dark:border-white/10 dark:text-zinc-400 dark:hover:border-gold-400 dark:hover:text-zinc-50'
-              }`}
-            >
-              <Globe size={16} />
-              {LOCALE_LABELS[locale]}
-            </button>
-            <AnimatePresence>
-              {langOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 4 }}
-                  className="absolute right-0 top-full mt-2 w-32 overflow-hidden rounded-card border border-zinc-200 bg-white shadow-[0_24px_60px_-28px_rgba(24,24,27,0.25)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none"
+          {/* Center links (desktop) */}
+          <motion.div
+            layout
+            className={`pointer-events-auto hidden items-center gap-1 rounded-full p-1.5 transition-colors duration-500 lg:flex ${condensed ? 'glass' : ''}`}
+          >
+            {LINKS.map((l) => {
+              const active = location.pathname + location.hash === l.href || (l.href === '/blog' && location.pathname.startsWith('/blog'));
+              return (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  className={`relative rounded-full px-4 py-2 text-[13px] font-semibold tracking-wide transition-colors ${ink} ${active ? '' : 'opacity-75 hover:opacity-100'}`}
                 >
-                  {locales.map((l) => (
-                    <button
-                      key={l}
-                      onClick={() => { setLocale(l); setLangOpen(false); }}
-                      className={`block w-full px-4 py-2.5 text-left text-sm font-semibold transition-colors ${
-                        l === locale ? 'bg-gold-50 text-gold-700 dark:bg-zinc-800 dark:text-gold-400' : 'text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800'
-                      }`}
-                    >
+                  {active && (
+                    <motion.span layoutId="nav-pill" transition={{ type: 'spring', stiffness: 350, damping: 30 }} className="absolute inset-0 rounded-full bg-gold-400/90" />
+                  )}
+                  <span className={`relative ${active ? 'text-ink' : ''}`}>{l.label}</span>
+                </Link>
+              );
+            })}
+          </motion.div>
+
+          {/* Right actions */}
+          <div className={`pointer-events-auto flex items-center gap-1.5 rounded-full p-1.5 transition-colors duration-500 ${condensed ? 'glass' : ''}`}>
+            <button
+              onClick={(e) => toggleTheme(e as unknown as MouseEvent)}
+              aria-label="Changer de thème"
+              className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-ink/5 dark:hover:bg-white/10 ${ink}`}
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <MoonStars size={18} />}
+            </button>
+            <div className="relative hidden sm:block">
+              <select
+                data-testid="nav-lang-button"
+                aria-label="Langue"
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as Locale)}
+                className={`h-9 cursor-pointer appearance-none rounded-full bg-transparent px-3 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 ${ink}`}
+              >
+                {LOCALES.map((l) => <option key={l} value={l} className="text-ink">{LOCALE_LABELS[l]}</option>)}
+              </select>
+            </div>
+            <a
+              href={`tel:${COMPANY.phoneRaw}`}
+              data-testid="nav-phone-link"
+              className={`hidden h-9 items-center gap-2 rounded-full px-3 font-mono text-[13px] font-semibold transition-colors hover:bg-ink/5 dark:hover:bg-white/10 md:flex ${ink}`}
+            >
+              <Phone size={16} className="text-gold-500" />
+              {COMPANY.phone}
+            </a>
+            <button
+              data-testid="nav-book-button"
+              onClick={onOpenBooking}
+              className="hidden h-9 items-center gap-1.5 rounded-full bg-ink px-4 text-[13px] font-bold text-white transition-transform hover:-translate-y-px active:scale-[0.98] dark:bg-gold-400 dark:text-ink lg:flex"
+            >
+              {t('common.book')} <ArrowUpRight size={14} weight="bold" />
+            </button>
+            <button
+              data-testid="nav-mobile-menu-toggle"
+              onClick={() => setOpen((o) => !o)}
+              aria-label="Menu"
+              aria-expanded={open}
+              className={`flex h-9 w-9 items-center justify-center rounded-full lg:hidden ${ink}`}
+            >
+              {open ? <X size={20} /> : <List size={20} />}
+            </button>
+          </div>
+        </motion.nav>
+      </header>
+
+      {createPortal(
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={motionOk ? { opacity: 0 } : false}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-40 flex flex-col bg-paper px-6 pb-10 pt-24 dark:bg-[#0B0B0C] lg:hidden"
+            >
+              <motion.ul
+                initial="hidden"
+                animate="show"
+                variants={{ show: { transition: { staggerChildren: 0.06, delayChildren: 0.1 } } }}
+                className="flex flex-col"
+              >
+                {LINKS.map((l, i) => (
+                  <motion.li key={l.href} variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } } }} className="border-b border-ink/10 dark:border-white/10">
+                    <Link to={l.href} onClick={() => setOpen(false)} className="flex items-baseline justify-between py-5 font-display text-4xl font-semibold tracking-tightest text-ink dark:text-white">
+                      {l.label}
+                      <span className="font-mono text-xs text-ink/40 dark:text-white/40">0{i + 1}</span>
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+              <div className="mt-auto space-y-4">
+                <a href={`tel:${COMPANY.phoneRaw}`} data-testid="nav-mobile-phone" className="flex items-center gap-3 font-mono text-xl font-semibold text-ink dark:text-white">
+                  <Phone size={22} className="text-gold-500" /> {COMPANY.phone}
+                </a>
+                <button
+                  data-testid="nav-mobile-book-button"
+                  onClick={() => { onOpenBooking(); setOpen(false); }}
+                  className="flex min-h-[56px] w-full items-center justify-center rounded-full bg-ink text-base font-bold text-white dark:bg-gold-400 dark:text-ink"
+                >
+                  {t('common.book')}
+                </button>
+                <div className="flex gap-2">
+                  {LOCALES.map((l) => (
+                    <button key={l} onClick={() => { setLocale(l); setOpen(false); }} className={`min-h-[44px] rounded-full px-4 text-sm font-bold ${l === locale ? 'bg-gold-400 text-ink' : 'bg-ink/5 text-ink dark:bg-white/10 dark:text-white'}`}>
                       {LOCALE_LABELS[l]}
                     </button>
                   ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <a
-            href={`tel:${COMPANY.phoneRaw}`}
-            className={`flex items-center gap-2 text-sm font-bold transition-colors ${isDarkHero ? 'text-white hover:text-gold-400' : 'text-zinc-900 hover:text-gold-600 dark:text-zinc-50 dark:hover:text-gold-400'}`}
-            data-testid="nav-phone-link"
-          >
-            <Phone size={18} className="text-gold-500" />
-            {COMPANY.phone}
-          </a>
-
-          <button
-            data-testid="nav-book-button"
-            onClick={onOpenBooking}
-            className="rounded-full bg-gold-400 px-6 py-2.5 text-[13px] font-black uppercase tracking-widest text-zinc-950 transition-transform duration-300 hover:scale-105"
-          >
-            {t('nav.reservation')}
-          </button>
-        </div>
-
-        {/* Mobile toggle */}
-        <div className="flex items-center gap-3 lg:hidden">
-          <button
-            onClick={(e) => toggleTheme(e as unknown as MouseEvent)}
-            className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-              isDarkHero ? 'text-zinc-300 hover:text-gold-400' : 'text-zinc-500 hover:text-gold-500 dark:text-zinc-400 dark:hover:text-gold-400'
-            }`}
-          >
-            {theme === 'dark' ? <Sun size={22} /> : <MoonStars size={22} />}
-          </button>
-          
-          <button
-            onClick={() => setOpen(!open)}
-            className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
-              isDarkHero ? 'border-white/20 text-white' : 'border-zinc-200 text-zinc-900 dark:border-white/10 dark:text-zinc-50'
-            }`}
-            aria-label="Menu"
-            data-testid="nav-mobile-menu-toggle"
-          >
-            {open ? <X size={22} /> : <List size={22} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Fullscreen */}
-      {createPortal(
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 top-[68px] z-40 flex flex-col bg-white dark:bg-zinc-950 lg:hidden"
-          >
-            <div className="flex flex-1 flex-col overflow-y-auto px-6 py-8">
-              <motion.div 
-                initial="closed"
-                animate="open"
-                variants={{
-                  open: { transition: { staggerChildren: 0.1 } },
-                  closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
-                }}
-                className="flex flex-col gap-6"
-              >
-                {NAV_LINKS.map((link) => (
-                  <motion.div key={link.href} variants={{
-                    open: { opacity: 1, y: 0 },
-                    closed: { opacity: 0, y: 20 }
-                  }}>
-                    <Link
-                      to={link.href}
-                      onClick={() => setOpen(false)}
-                      className="text-2xl font-display font-bold text-zinc-900 dark:text-zinc-50"
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                ))}
-                
-                <motion.div variants={{
-                    open: { opacity: 1, y: 0 },
-                    closed: { opacity: 0, y: 20 }
-                }} className="mt-8 border-t border-zinc-200 dark:border-white/10 pt-8">
-                  <a
-                    href={`tel:${COMPANY.phoneRaw}`}
-                    data-testid="nav-mobile-phone"
-                    className="flex items-center gap-3 text-xl font-bold text-zinc-900 dark:text-zinc-50"
-                  >
-                    <Phone size={24} className="text-gold-500" />
-                    {COMPANY.phone}
-                  </a>
-                  
-                  <button
-                    data-testid="nav-mobile-book-button"
-                    onClick={() => { onOpenBooking(); setOpen(false); }}
-                    className="mt-6 w-full min-h-[56px] rounded-full bg-gold-400 px-6 text-center text-[15px] font-black uppercase tracking-widest text-zinc-950"
-                  >
-                    {t('nav.reservation')}
-                  </button>
-                  
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    {locales.map((l) => (
-                      <button
-                        key={l}
-                        onClick={() => { setLocale(l); setOpen(false); }}
-                        className={`min-h-[44px] rounded-full px-5 py-2 text-sm font-bold transition-colors ${
-                          l === locale ? 'bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900' : 'bg-zinc-100 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400'
-                        }`}
-                      >
-                        {LOCALE_LABELS[l]}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>,
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
         document.body
       )}
-
-      {langOpen && <div className="fixed inset-0 z-[-1]" onClick={() => setLangOpen(false)} />}
-    </motion.header>
+    </>
   );
 }

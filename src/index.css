@@ -4,69 +4,94 @@
 
 @layer base {
   :root {
-    --scrollbar-track: #f4f4f5;
-    --scrollbar-thumb: #d4d4d8;
-    --scrollbar-thumb-hover: #a1a1aa;
+    --scrollbar-track: #efede7;
+    --scrollbar-thumb: #cfccc3;
+    --scrollbar-thumb-hover: #a3a09a;
     color-scheme: light;
   }
 
   html.dark {
     color-scheme: dark;
-    --scrollbar-track: #18181b;
-    --scrollbar-thumb: #3f3f46;
-    --scrollbar-thumb-hover: #71717a;
+    --scrollbar-track: #151517;
+    --scrollbar-thumb: #3a3a3f;
+    --scrollbar-thumb-hover: #6b6b72;
   }
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
+    scroll-padding-top: 6rem;
     scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   }
 
   body {
-    background-color: #fafafa;
-    color: #18181b;
+    background-color: #F6F5F0;
+    color: #111113;
+    font-feature-settings: "ss01", "cv11";
   }
 
   .dark body {
-    background-color: #09090b;
-    color: #fafafa;
+    background-color: #0B0B0C;
+    color: #F6F5F0;
   }
 
   ::selection {
-    background: #D9B257;
-    color: #18181b;
+    background: #E3B53E;
+    color: #111113;
+  }
+
+  h1, h2, h3, .font-display {
+    font-variation-settings: "opsz" 96, "wdth" 100;
   }
 }
 
 @layer utilities {
   .taxi-checker {
-    background-image: conic-gradient(#18181b 90deg, #D9B257 90deg 180deg, #18181b 180deg 270deg, #D9B257 270deg);
-    background-size: 16px 16px;
-  }
-
-  .taxi-checker-soft {
-    background-image: conic-gradient(#fafafa 90deg, #D9B257 90deg 180deg, #fafafa 180deg 270deg, #D9B257 270deg);
+    background-image: conic-gradient(#111113 90deg, #E3B53E 90deg 180deg, #111113 180deg 270deg, #E3B53E 270deg);
     background-size: 14px 14px;
   }
 
   .content-auto {
     content-visibility: auto;
-    contain-intrinsic-size: 1px 1000px;
+    contain-intrinsic-size: 1px 900px;
   }
 
-  .grain {
-    position: relative;
-  }
-  .grain::before {
-    content: "";
-    position: absolute;
+  /* Film grain, fixed and non-interactive: one layer for the whole page */
+  .grain-layer {
+    position: fixed;
     inset: 0;
     pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.035;
-    z-index: 10;
+    z-index: 60;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
   }
+  .dark .grain-layer { mix-blend-mode: screen; opacity: 0.06; }
+
+  /* Liquid glass: blur + inner refraction edge */
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid rgba(17, 17, 19, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 30px 60px -30px rgba(17, 17, 19, 0.35);
+  }
+  .dark .glass {
+    background: rgba(20, 20, 22, 0.66);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass { background: #ffffff; backdrop-filter: none; }
+    .dark .glass { background: #141416; }
+  }
+
+  .text-outline {
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+  }
+
+  .hide-scrollbar { scrollbar-width: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -84,7 +109,6 @@
   }
 }
 
-/* Date & time pickers */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
@@ -105,5 +129,5 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
 
 ::backdrop {
   backdrop-filter: blur(8px);
-  background: rgba(24, 24, 27, 0.6);
+  background: rgba(17, 17, 19, 0.6);
 }

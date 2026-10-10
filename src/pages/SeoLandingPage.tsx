@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { NotFound } from '@/pages/NotFound';
 import { Services } from '@/components/Services';
 import { Fleet } from '@/components/Fleet';
-import { Tarifs } from '@/components/Tarifs';
+import { RouteLine } from '@/components/RouteLine';
 import { ContactSection } from '@/components/ContactSection';
 import { SEO_PAGES } from '@/lib/seo-data';
 
@@ -59,7 +59,7 @@ export function SeoLandingPage() {
 
       <Services onOpenBooking={openBooking} />
       <Fleet onOpenBooking={openBooking} />
-      <Tarifs />
+      <RouteLine />
       <ContactSection onOpenBooking={() => openBooking(pageData.h1)} />
     </>
   );

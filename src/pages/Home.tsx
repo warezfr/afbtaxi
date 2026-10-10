@@ -1,12 +1,11 @@
 import { useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Hero } from '@/components/Hero';
-import { ProofBar } from '@/components/ProofBar';
 import { Services } from '@/components/Services';
+import { RouteLine } from '@/components/RouteLine';
 import { Fleet } from '@/components/Fleet';
 import { Zones } from '@/components/Zones';
-import { Tarifs } from '@/components/Tarifs';
-import { Advantages } from '@/components/Advantages';
+import { Stats } from '@/components/Stats';
 import { Reviews } from '@/components/Reviews';
 import { FAQ } from '@/components/FAQ';
 import { ContactSection } from '@/components/ContactSection';
@@ -26,12 +25,11 @@ export function Home() {
       </Helmet>
 
       <Hero onOpenBooking={openBooking} />
-      <ProofBar onOpenBooking={openBooking} />
       <Services onOpenBooking={openBooking} />
+      <RouteLine />
       <Fleet onOpenBooking={openBooking} />
       <Zones />
-      <Tarifs />
-      <Advantages />
+      <Stats />
       <Reviews />
       <FAQ />
       <ContactSection onOpenBooking={() => openBooking()} />

@@ -44,6 +44,7 @@ export function PublicLayout() {
         Aller au contenu
       </a>
       <Navbar onOpenBooking={() => openBooking()} />
+      <div className="grain-layer" aria-hidden="true" />
       <main id="main">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

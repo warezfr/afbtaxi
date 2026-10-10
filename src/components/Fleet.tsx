@@ -1,170 +1,97 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, Users, Suitcase, Compass } from '@phosphor-icons/react';
+import { Users, Suitcase, ArrowUpRight } from '@phosphor-icons/react';
 import { useI18n } from '@/lib/i18n';
-import { fadeUp, viewportSoon, useMotionOk } from './motion';
+import { EASE, fadeUp, viewportSoon } from './motion';
+import { SplitText } from './ui/SplitText';
 
 interface FleetProps {
   onOpenBooking: (context?: string) => void;
 }
 
 const VEHICLES = [
-  {
-    id: 'berline',
-    name: 'Mercedes Classe E',
-    tagKey: 'fleet.tag.sedan' as const,
-    image: 'https://images.pexels.com/photos/9459158/pexels-photo-9459158.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    featureKeys: ['fleet.classeE.feat1' as const, 'fleet.classeE.feat2' as const, 'fleet.classeE.feat3' as const],
-    seats: 4,
-    luggage: 3,
-    use: 'Affaires, aéroports, Paris',
-  },
-  {
-    id: 'van',
-    name: 'Mercedes Classe V',
-    tagKey: 'fleet.tag.van' as const,
-    image: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    featureKeys: ['fleet.classeV.feat1' as const, 'fleet.classeV.feat2' as const, 'fleet.classeV.feat3' as const],
-    seats: 7,
-    luggage: 7,
-    use: 'Familles, groupes, Disneyland',
-  },
-  {
-    id: 'vip',
-    name: 'Mercedes Classe S',
-    tagKey: 'fleet.tag.vip' as const,
-    image: 'https://images.pexels.com/photos/10638649/pexels-photo-10638649.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    featureKeys: ['fleet.classeS.feat1' as const, 'fleet.classeS.feat2' as const, 'fleet.classeS.feat3' as const],
-    seats: 3,
-    luggage: 3,
-    use: 'VIP, mariages, direction',
-  },
-  {
-    id: 'tesla',
-    name: 'Tesla Model Y',
-    tagKey: 'fleet.tag.electric' as const,
-    image: 'https://images.pexels.com/photos/20019462/pexels-photo-20019462.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    featureKeys: ['fleet.teslaY.feat1' as const, 'fleet.teslaY.feat2' as const, 'fleet.teslaY.feat3' as const],
-    seats: 4,
-    luggage: 4,
-    use: 'Courses locales, Melun, gares',
-  },
+  { id: 'berline', name: 'Mercedes Classe E', tagKey: 'fleet.tag.sedan' as const, image: 'https://images.pexels.com/photos/9459158/pexels-photo-9459158.jpeg?auto=compress&cs=tinysrgb&w=1400', featureKeys: ['fleet.classeE.feat1', 'fleet.classeE.feat2', 'fleet.classeE.feat3'] as const, seats: 4, luggage: 3 },
+  { id: 'van', name: 'Mercedes Classe V', tagKey: 'fleet.tag.van' as const, image: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1400', featureKeys: ['fleet.classeV.feat1', 'fleet.classeV.feat2', 'fleet.classeV.feat3'] as const, seats: 7, luggage: 7 },
+  { id: 'vip', name: 'Mercedes Classe S', tagKey: 'fleet.tag.vip' as const, image: 'https://images.pexels.com/photos/10638649/pexels-photo-10638649.jpeg?auto=compress&cs=tinysrgb&w=1400', featureKeys: ['fleet.classeS.feat1', 'fleet.classeS.feat2', 'fleet.classeS.feat3'] as const, seats: 3, luggage: 3 },
+  { id: 'tesla', name: 'Tesla Model Y', tagKey: 'fleet.tag.electric' as const, image: 'https://images.pexels.com/photos/20019462/pexels-photo-20019462.jpeg?auto=compress&cs=tinysrgb&w=1400', featureKeys: ['fleet.teslaY.feat1', 'fleet.teslaY.feat2', 'fleet.teslaY.feat3'] as const, seats: 4, luggage: 4 },
 ];
 
+/** Accordion image slider: four strips, the active one opens wide. */
 export function Fleet({ onOpenBooking }: FleetProps) {
   const { t } = useI18n();
-  const motionOk = useMotionOk();
-  const [activeId, setActiveId] = useState(VEHICLES[0].id);
-  const active = VEHICLES.find((v) => v.id === activeId) ?? VEHICLES[0];
-
-  const specs = [
-    { icon: Users, value: active.seats, label: t('fleet.seats') },
-    { icon: Suitcase, value: active.luggage, label: t('fleet.luggage') },
-    { icon: Compass, value: active.use, label: t('fleet.use') },
-  ];
+  const [active, setActive] = useState(0);
 
   return (
-    <section id="flotte" className="content-auto bg-white py-20 dark:bg-zinc-950 lg:py-28">
+    <section id="flotte" className="content-auto bg-ink py-24 text-white lg:py-36">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewportSoon} className="max-w-2xl">
-          <h2 className="font-display text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">
-            {t('fleet.title1')}{t('fleet.title2')}
-          </h2>
-          <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">{t('fleet.subtitle')}</p>
-        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-12">
+          <SplitText as="h2" text={`${t('fleet.title1')}${t('fleet.title2')}`} className="font-display text-4xl font-semibold leading-[0.95] tracking-tightest md:text-5xl lg:col-span-6 lg:text-7xl" />
+          <p className="max-w-[40ch] self-end text-base leading-relaxed text-white/60 lg:col-span-5 lg:col-start-8">{t('fleet.subtitle')}</p>
+        </div>
 
-        {/* Desktop: selector + image. Mobile: horizontal snap cards. */}
-        <div className="mt-12 hidden gap-10 lg:grid lg:grid-cols-[0.8fr_1.2fr]">
-          <ul className="divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-white/10 dark:border-white/10">
-            {VEHICLES.map((v) => {
-              const isActive = v.id === active.id;
-              return (
-                <li key={v.id}>
-                  <button
-                    onClick={() => setActiveId(v.id)}
-                    aria-pressed={isActive}
-                    className="group flex w-full items-center justify-between gap-4 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
-                  >
-                    <div>
-                      <p className={`font-display text-xl font-bold tracking-tight transition-colors ${isActive ? 'text-gold-600 dark:text-gold-400' : 'text-zinc-900 group-hover:text-gold-600 dark:text-zinc-50 dark:group-hover:text-gold-400'}`}>
-                        {v.name}
-                      </p>
-                      <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">{t(v.tagKey)} · {v.seats} {t('fleet.seats')}</p>
-                    </div>
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewportSoon} className="mt-14 flex h-[560px] flex-col gap-3 lg:h-[600px] lg:flex-row">
+          {VEHICLES.map((v, i) => {
+            const isActive = i === active;
+            return (
+              <motion.button
+                key={v.id}
+                type="button"
+                onMouseEnter={() => setActive(i)}
+                onFocus={() => setActive(i)}
+                onClick={() => setActive(i)}
+                aria-pressed={isActive}
+                animate={{ flex: isActive ? 4 : 1 }}
+                transition={{ duration: 0.7, ease: EASE }}
+                className="group relative min-h-0 overflow-hidden rounded-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+              >
+                <img src={v.image} alt={`${v.name}, ${t(v.tagKey)}`} loading="lazy" width={1400} height={933} className={`absolute inset-0 h-full w-full object-cover transition-[filter,transform] duration-700 ${isActive ? 'scale-100' : 'scale-105 grayscale'}`} />
+                <div className={`absolute inset-0 transition-opacity duration-700 ${isActive ? 'bg-gradient-to-t from-ink/85 via-ink/20 to-transparent opacity-100' : 'bg-ink/50 opacity-100'}`} />
+
+                {/* Closed label: vertical on desktop */}
+                <AnimatePresence>
+                  {!isActive && (
                     <motion.span
-                      animate={{ width: isActive ? 40 : 12, backgroundColor: isActive ? '#D9B257' : 'rgba(161,161,170,0.5)' }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                      className="h-1 rounded-full"
-                    />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-x-5 bottom-5 font-display text-xl font-semibold tracking-tight lg:left-6 lg:top-6 lg:origin-top-left lg:rotate-90 lg:whitespace-nowrap"
+                    >
+                      {v.name}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
 
-          <div>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-card bg-zinc-100 dark:bg-zinc-900">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.img
-                  key={active.id}
-                  src={active.image}
-                  alt={`${active.name}, ${t(active.tagKey)}`}
-                  width={1200}
-                  height={750}
-                  loading="lazy"
-                  initial={motionOk ? { opacity: 0, scale: 1.04 } : false}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={motionOk ? { opacity: 0, scale: 0.98 } : undefined}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </AnimatePresence>
-            </div>
-            <div className="mt-6 grid grid-cols-3 divide-x divide-zinc-200 dark:divide-white/10">
-              {specs.map(({ icon: IconCmp, value, label }, i) => (
-                <div key={i} className="px-5 first:pl-0">
-                  <IconCmp size={18} className="text-gold-600 dark:text-gold-400" />
-                  <p className="mt-2 font-display text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-50">{value}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">{label}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
-              {active.featureKeys.map((k) => (
-                <span key={k} className="inline-flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                  <Check size={14} weight="bold" className="text-gold-600 dark:text-gold-400" /> {t(k)}
-                </span>
-              ))}
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={() => onOpenBooking(active.name)}
-              className="mt-7 inline-flex min-h-[48px] items-center justify-center rounded-full bg-zinc-950 px-7 text-sm font-bold text-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:bg-gold-400 dark:text-zinc-950 dark:hover:bg-gold-300"
-            >
-              {t('fleet.book')}
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Mobile */}
-        <div className="-mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 lg:hidden [scrollbar-width:none]">
-          {VEHICLES.map((v) => (
-            <article key={v.id} className="w-[82%] shrink-0 snap-center overflow-hidden rounded-card border border-zinc-200 bg-white dark:border-white/10 dark:bg-zinc-900 sm:w-[60%]">
-              <img src={v.image} alt={`${v.name}, ${t(v.tagKey)}`} width={1200} height={750} loading="lazy" className="aspect-[16/10] w-full object-cover" />
-              <div className="p-5">
-                <p className="text-xs font-semibold text-gold-600 dark:text-gold-400">{t(v.tagKey)}</p>
-                <h3 className="mt-1 font-display text-lg font-bold text-zinc-900 dark:text-zinc-50">{v.name}</h3>
-                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{v.seats} {t('fleet.seats')} · {v.luggage} {t('fleet.luggage')} · {v.use}</p>
-                <button
-                  onClick={() => onOpenBooking(v.name)}
-                  className="mt-4 inline-flex min-h-[44px] items-center rounded-full bg-zinc-950 px-5 text-sm font-bold text-white dark:bg-gold-400 dark:text-zinc-950"
-                >
-                  {t('fleet.book')}
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE, delay: 0.25 } }}
+                      exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                      className="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8 lg:inset-x-10 lg:bottom-10"
+                    >
+                      <p className="text-xs font-semibold text-gold-400">{t(v.tagKey)}</p>
+                      <p className="mt-1 font-display text-3xl font-semibold tracking-tightest sm:text-4xl lg:text-5xl">{v.name}</p>
+                      <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-sm text-white/80">
+                        <span className="inline-flex items-center gap-1.5"><Users size={15} className="text-gold-400" /> {v.seats} {t('fleet.seats')}</span>
+                        <span className="inline-flex items-center gap-1.5"><Suitcase size={15} className="text-gold-400" /> {v.luggage} {t('fleet.luggage')}</span>
+                        <span className="hidden text-white/50 sm:inline">{v.featureKeys.map((k) => t(k)).join(' · ')}</span>
+                      </div>
+                      <span
+                        role="link"
+                        tabIndex={0}
+                        onClick={(e) => { e.stopPropagation(); onOpenBooking(v.name); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); onOpenBooking(v.name); } }}
+                        className="mt-5 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-white px-5 text-sm font-bold text-ink transition-colors hover:bg-gold-400"
+                      >
+                        {t('fleet.pick')} <ArrowUpRight size={14} weight="bold" />
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

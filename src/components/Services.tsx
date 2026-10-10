@@ -1,101 +1,102 @@
-import { motion } from 'motion/react';
-import { AirplaneTilt, Train, FirstAid, Clock, UsersThree, Car, ArrowUpRight, type Icon } from '@phosphor-icons/react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, type MotionValue } from 'motion/react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { useI18n } from '@/lib/i18n';
-import { fadeUp, stagger, viewportSoon } from './motion';
+import { useMotionOk } from './motion';
+import { SplitText } from './ui/SplitText';
 
 interface ServicesProps {
   onOpenBooking: (context?: string) => void;
 }
 
-type Tone = 'photo' | 'light' | 'gold' | 'dark';
+type Card = { key: string; title: string; tag: string; desc: string; image: string; alt: string };
 
-const AIRPORT_PHOTO = 'https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=1200';
+const IMG = {
+  airport: 'https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  station: 'https://images.pexels.com/photos/2031758/pexels-photo-2031758.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  medical: 'https://images.pexels.com/photos/9459158/pexels-photo-9459158.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  disposal: 'https://images.pexels.com/photos/10638649/pexels-photo-10638649.jpeg?auto=compress&cs=tinysrgb&w=1600',
+  group: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1600',
+};
+
+function StickyCard({ card, index, total, progress, onOpenBooking, t }: { card: Card; index: number; total: number; progress: MotionValue<number>; onOpenBooking: (c?: string) => void; t: (k: 'services.book') => string }) {
+  const motionOk = useMotionOk();
+  // Each card shrinks and dims as the next one arrives on top of it.
+  const start = index / total;
+  const end = (index + 1) / total;
+  const scale = useTransform(progress, [start, end], [1, 0.94]);
+
+  return (
+    <motion.article
+      data-testid={`service-card-${card.key}`}
+      style={motionOk ? { scale, top: `calc(6rem + ${index * 14}px)` } : { top: '6rem' }}
+      className="sticky mb-8 origin-top overflow-hidden rounded-card bg-ink text-white shadow-[0_40px_80px_-40px_rgba(17,17,19,0.6)] lg:mb-12"
+    >
+      <div className="relative grid min-h-[420px] lg:grid-cols-12">
+        <div className="relative order-2 lg:order-1 lg:col-span-6">
+          <img src={card.image} alt={card.alt} loading="lazy" width={1600} height={1067} className="h-64 w-full object-cover lg:absolute lg:inset-0 lg:h-full" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-ink" />
+        </div>
+        <div className="order-1 flex flex-col justify-between p-7 sm:p-10 lg:order-2 lg:col-span-6 lg:p-14">
+          <div className="flex items-start justify-between">
+            <span className="font-mono text-sm text-gold-400">0{index + 1} / 0{total}</span>
+            <span className="rounded-full border border-white/15 px-3 py-1 text-[11px] font-semibold text-white/70">{card.tag}</span>
+          </div>
+          <div>
+            <h3 className="mt-16 font-display text-4xl font-semibold leading-[0.95] tracking-tightest sm:text-5xl lg:text-6xl">{card.title}</h3>
+            <p className="mt-5 max-w-[42ch] text-base leading-relaxed text-white/65">{card.desc}</p>
+            <button
+              onClick={() => onOpenBooking(card.title)}
+              className="group mt-8 inline-flex min-h-[48px] items-center gap-3 rounded-full bg-white pl-6 pr-2 text-sm font-bold text-ink transition-colors hover:bg-gold-400 active:scale-[0.98]"
+            >
+              {t('services.book')}
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white transition-transform group-hover:rotate-45">
+                <ArrowUpRight size={16} weight="bold" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
 
 export function Services({ onOpenBooking }: ServicesProps) {
   const { t } = useI18n();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 20%', 'end 90%'] });
 
-  const CELLS: { key: string; icon: Icon; title: string; tag: string; desc: string; tone: Tone; span: string }[] = [
-    { key: 'airport', icon: AirplaneTilt, title: t('services.airport.title'), tag: t('services.airport.tag'), desc: t('services.airport.desc'), tone: 'photo', span: 'md:col-span-4' },
-    { key: 'station', icon: Train, title: t('services.station.title'), tag: t('services.station.tag'), desc: t('services.station.desc'), tone: 'light', span: 'md:col-span-2' },
-    { key: 'medical', icon: FirstAid, title: t('services.medical.title'), tag: t('services.medical.tag'), desc: t('services.medical.desc'), tone: 'gold', span: 'md:col-span-2' },
-    { key: 'disposal', icon: Clock, title: t('services.disposal.title'), tag: t('services.disposal.tag'), desc: t('services.disposal.desc'), tone: 'light', span: 'md:col-span-2' },
-    { key: 'group', icon: UsersThree, title: t('services.group.title'), tag: t('services.group.tag'), desc: t('services.group.desc'), tone: 'light', span: 'md:col-span-2' },
-    { key: 'local', icon: Car, title: t('services.local.title'), tag: t('services.local.tag'), desc: t('services.local.desc'), tone: 'dark', span: 'md:col-span-4' },
+  const CARDS: Card[] = [
+    { key: 'airport', title: t('services.airport.title'), tag: t('services.airport.tag'), desc: t('services.airport.desc'), image: IMG.airport, alt: 'Avion au décollage, transfert aéroport' },
+    { key: 'station', title: t('services.station.title'), tag: t('services.station.tag'), desc: t('services.station.desc'), image: IMG.station, alt: 'Trains à quai dans une gare' },
+    { key: 'medical', title: t('services.medical.title'), tag: t('services.medical.tag'), desc: t('services.medical.desc'), image: IMG.medical, alt: 'Mercedes Classe E noire, taxi conventionné' },
+    { key: 'disposal', title: t('services.disposal.title'), tag: t('services.disposal.tag'), desc: t('services.disposal.desc'), image: IMG.disposal, alt: 'Mercedes Classe S, mise à disposition avec chauffeur' },
+    { key: 'group', title: t('services.group.title'), tag: t('services.group.tag'), desc: t('services.group.desc'), image: IMG.group, alt: 'Mercedes Classe V, van 7 places' },
   ];
 
-  const toneCls: Record<Tone, string> = {
-    photo: 'bg-zinc-950 text-white',
-    light: 'border border-zinc-200 bg-white text-zinc-900 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-50',
-    gold: 'bg-gold-50 text-zinc-900 dark:bg-gold-400/10 dark:text-zinc-50',
-    dark: 'bg-zinc-950 text-white dark:bg-zinc-900',
-  };
-  const mutedCls: Record<Tone, string> = {
-    photo: 'text-zinc-300',
-    light: 'text-zinc-600 dark:text-zinc-400',
-    gold: 'text-zinc-700 dark:text-zinc-300',
-    dark: 'text-zinc-400',
-  };
-
   return (
-    <section id="services" className="bg-zinc-50 py-20 dark:bg-zinc-950 lg:py-28">
+    <section id="services" className="bg-paper py-24 text-ink dark:bg-[#0B0B0C] dark:text-white lg:py-36">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewportSoon} className="max-w-2xl">
-          <h2 className="font-display text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">
-            {t('services.title1')}{t('services.title2')}
-          </h2>
-          <p className="mt-4 max-w-[60ch] text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
-            {t('services.subtitle')}
-          </p>
-        </motion.div>
+        <div className="grid gap-6 lg:grid-cols-12">
+          <SplitText as="h2" text={t('services.sticky')} className="font-display text-4xl font-semibold leading-[0.95] tracking-tightest md:text-5xl lg:col-span-6 lg:text-7xl" />
+          <p className="max-w-[40ch] self-end text-base leading-relaxed text-ink/65 dark:text-white/60 lg:col-span-5 lg:col-start-8">{t('services.subtitle')}</p>
+        </div>
 
-        <motion.div
-          variants={stagger(0.07)}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewportSoon}
-          className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6"
-        >
-          {CELLS.map(({ key, icon: IconCmp, title, tag, desc, tone, span }) => (
-            <motion.article
-              key={key}
-              variants={fadeUp}
-              data-testid={`service-card-${key}`}
-              className={`group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-card p-6 sm:p-7 ${span} ${toneCls[tone]}`}
-            >
-              {tone === 'photo' && (
-                <>
-                  <img
-                    src={AIRPORT_PHOTO}
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                    width={1200}
-                    height={800}
-                    className="absolute inset-0 h-full w-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-zinc-950/20" />
-                </>
-              )}
-              <div className="relative flex items-start justify-between">
-                <span className={`flex h-11 w-11 items-center justify-center rounded-full ${tone === 'light' ? 'bg-zinc-100 text-zinc-900 dark:bg-white/10 dark:text-zinc-50' : tone === 'gold' ? 'bg-gold-400 text-zinc-950' : 'bg-white/10 text-gold-400'}`}>
-                  <IconCmp size={22} />
-                </span>
-                <span className={`text-[11px] font-semibold ${mutedCls[tone]}`}>{tag}</span>
-              </div>
-              <div className="relative mt-8">
-                <h3 className="font-display text-xl font-bold tracking-tight">{title}</h3>
-                <p className={`mt-1.5 max-w-[42ch] text-sm leading-relaxed ${mutedCls[tone]}`}>{desc}</p>
-                <button
-                  onClick={() => onOpenBooking(title)}
-                  className={`mt-5 inline-flex min-h-[44px] items-center gap-2 text-sm font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 ${tone === 'light' ? 'text-zinc-900 hover:text-gold-600 dark:text-zinc-50 dark:hover:text-gold-400' : tone === 'gold' ? 'text-zinc-900 hover:text-gold-700 dark:text-zinc-50' : 'text-gold-400 hover:text-gold-300'}`}
-                >
-                  {t('services.book')}
-                  <ArrowUpRight size={16} weight="bold" className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </button>
-              </div>
-            </motion.article>
+        <div ref={ref} className="relative mt-14">
+          {CARDS.map((c, i) => (
+            <StickyCard key={c.key} card={c} index={i} total={CARDS.length} progress={scrollYProgress} onOpenBooking={onOpenBooking} t={t} />
           ))}
-        </motion.div>
+          {/* local service, plain line, not a card */}
+          <div data-testid="service-card-local" className="flex flex-wrap items-center justify-between gap-4 border-t border-ink/15 pt-8 dark:border-white/15">
+            <div>
+              <p className="font-display text-2xl font-semibold tracking-tight">{t('services.local.title')}</p>
+              <p className="mt-1 text-sm text-ink/60 dark:text-white/60">{t('services.local.desc')}</p>
+            </div>
+            <button onClick={() => onOpenBooking(t('services.local.title'))} className="inline-flex min-h-[44px] items-center gap-2 text-sm font-bold underline decoration-gold-400 decoration-2 underline-offset-4 hover:text-gold-600 dark:hover:text-gold-400">
+              {t('services.book')} <ArrowUpRight size={14} weight="bold" />
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
