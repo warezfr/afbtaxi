@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router';
+import { createPortal } from 'react-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useI18n } from '../lib/i18n';
 import { useTheme } from '../lib/ThemeContext';
 import { COMPANY } from '../lib/constants';
@@ -198,6 +199,7 @@ export function Navbar({ onOpenBooking }: { onOpenBooking: () => void }) {
       </nav>
 
       {/* Mobile Menu Fullscreen */}
+      {createPortal(
       <AnimatePresence>
         {open && (
           <motion.div
@@ -270,7 +272,9 @@ export function Navbar({ onOpenBooking }: { onOpenBooking: () => void }) {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+        document.body
+      )}
 
       {langOpen && <div className="fixed inset-0 z-[-1]" onClick={() => setLangOpen(false)} />}
     </motion.header>
