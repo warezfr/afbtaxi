@@ -2,17 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
   X,
-  Send,
-  CheckCircle2,
-  Loader2,
-  ChevronRight,
-  ChevronLeft,
+  PaperPlaneTilt as Send,
+  CheckCircle as CheckCircle2,
+  CircleNotch as Loader2,
+  CaretRight as ChevronRight,
+  CaretLeft as ChevronLeft,
   User,
   MapPin,
-  ClipboardList,
-  MessageCircle,
-  Mail,
-} from 'lucide-react';
+  ClipboardText as ClipboardList,
+  WhatsappLogo as MessageCircle,
+  EnvelopeSimple as Mail,
+} from '@phosphor-icons/react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
 import { AddressAutocomplete } from './AddressAutocomplete';
@@ -45,7 +45,7 @@ interface Props {
   context?: string;
 }
 
-function useBuildWhatsAppMessage(t: (k: any) => string) {
+function useBuildWhatsAppMessage(t: ReturnType<typeof useI18n>['t']) {
   return (form: ReservationInput, context?: string): string => {
     let msg = `${t('wizard.wa.greeting')} ${COMPANY.name},\n\n${t('wizard.wa.intro')}\n\n`;
     if (context) msg += `${t('wizard.wa.service')} : ${context}\n`;
@@ -65,7 +65,7 @@ function useBuildWhatsAppMessage(t: (k: any) => string) {
   };
 }
 
-function useBuildEmailBody(t: (k: any) => string) {
+function useBuildEmailBody(t: ReturnType<typeof useI18n>['t']) {
   return (form: ReservationInput, context?: string): string => {
     let body = '';
     if (context) body += `${t('wizard.wa.service')} : ${context}\n`;
@@ -145,10 +145,10 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       }
 
       setStatus('success');
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setStatus('error');
-      setErrorMsg(err.message || t('wizard.error'));
+      setErrorMsg(err instanceof Error && err.message ? err.message : t('wizard.error'));
     }
   };
 
@@ -184,7 +184,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       }
       
       setStatus('success');
-    } catch (err: any) {
+    } catch {
       setStatus('error');
       setErrorMsg("Impossible d'envoyer la demande. Veuillez utiliser WhatsApp.");
     }
@@ -205,8 +205,8 @@ export function ReservationWizard({ open, onClose, context }: Props) {
   if (!open) return null;
 
   const inputCls =
-    'w-full min-h-[48px] rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-400/40';
-  const labelCls = 'mb-1.5 block text-sm font-bold text-gray-700 dark:text-gray-300';
+    'w-full min-h-[48px] rounded-xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-950 px-4 py-3 text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/40';
+  const labelCls = 'mb-1.5 block text-sm font-bold text-zinc-700 dark:text-zinc-300';
 
   return createPortal(
     <dialog 
@@ -215,20 +215,20 @@ export function ReservationWizard({ open, onClose, context }: Props) {
       onClick={(e) => {
         if (e.target === dialogRef.current) close();
       }}
-      className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4 backdrop:bg-gray-900/60 backdrop:backdrop-blur-sm" 
+      className="fixed inset-0 z-[9999] m-0 flex h-full max-h-none w-full max-w-none items-center justify-center border-none bg-transparent p-4 backdrop:bg-zinc-950/60 backdrop:backdrop-blur-sm" 
       dir={dir}
     >
-      <div className="relative flex max-h-[92vh] w-full max-w-lg animate-slideUp flex-col overflow-hidden rounded-3xl bg-white dark:bg-gray-900 shadow-2xl border border-transparent dark:border-gray-800">
+      <div className="relative flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-card bg-white dark:bg-zinc-900 shadow-2xl border border-transparent dark:border-white/10">
         <div className="taxi-checker h-2.5 shrink-0" />
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 dark:border-gray-800 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 dark:border-white/10 px-6 py-4">
           <div>
-            <h2 className="font-display text-lg font-bold text-gray-900 dark:text-white">{t('wizard.title')}</h2>
+            <h2 className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-50">{t('wizard.title')}</h2>
             {context && (
               <p className="mt-0.5 text-xs font-bold text-gold-600">{context}</p>
             )}
           </div>
-          <button data-testid="wizard-close-button" onClick={close} className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white">
+          <button data-testid="wizard-close-button" onClick={close} className="rounded-full p-2 text-zinc-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-50">
             <X size={20} />
           </button>
         </div>
@@ -239,13 +239,13 @@ export function ReservationWizard({ open, onClose, context }: Props) {
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gold-100">
               <CheckCircle2 size={36} className="text-gold-600" />
             </div>
-            <h3 className="mb-2 font-display text-xl font-bold text-gray-900 dark:text-white">{t('wizard.success.title')}</h3>
-            <p className="mb-6 text-gray-500 dark:text-gray-400">{t('wizard.success.text')}</p>
+            <h3 className="mb-2 font-display text-xl font-bold text-zinc-900 dark:text-zinc-50">{t('wizard.success.title')}</h3>
+            <p className="mb-6 text-zinc-500 dark:text-zinc-400">{t('wizard.success.text')}</p>
             <div className="flex justify-center gap-3">
-              <button onClick={() => { reset(); }} className="min-h-[44px] rounded-full border border-gray-200 dark:border-gray-700 px-5 py-2.5 text-sm font-bold text-gray-600 dark:text-gray-300 transition-colors hover:border-gray-400 dark:hover:border-gray-500">
+              <button onClick={() => { reset(); }} className="min-h-[44px] rounded-full border border-zinc-200 dark:border-white/15 px-5 py-2.5 text-sm font-bold text-zinc-600 dark:text-zinc-300 transition-colors hover:border-zinc-500 dark:hover:border-white/30">
                 {t('wizard.success.newBooking')}
               </button>
-              <button data-testid="wizard-success-ok" onClick={close} className="min-h-[44px] rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300">
+              <button data-testid="wizard-success-ok" onClick={close} className="min-h-[44px] rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-zinc-900 transition-colors hover:bg-gold-300">
                 OK
               </button>
             </div>
@@ -260,14 +260,14 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                 const isDone = i < step;
                 return (
                   <div key={i} className="flex items-center gap-2">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-gold-400 text-gray-900' : isDone ? 'bg-gold-100 text-gold-700' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500'}`}>
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-gold-400 text-zinc-900' : isDone ? 'bg-gold-100 text-gold-700' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-500'}`}>
                       <Icon size={16} />
                     </div>
-                    <span className={`hidden text-xs font-bold sm:block ${isActive ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
+                    <span className={`hidden text-xs font-bold sm:block ${isActive ? 'text-zinc-900 dark:text-zinc-50' : 'text-zinc-500 dark:text-zinc-500'}`}>
                       {t(s.key)}
                     </span>
                     {i < STEPS.length - 1 && (
-                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                      <div className={`mx-1 h-px w-8 ${i < step ? 'bg-gold-400' : 'bg-zinc-200 dark:bg-zinc-700'}`} />
                     )}
                   </div>
                 );
@@ -365,9 +365,9 @@ export function ReservationWizard({ open, onClose, context }: Props) {
             </div>
 
             {/* Footer buttons */}
-            <div className="flex shrink-0 items-center justify-between border-t border-gray-100 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-950/60 px-6 py-4">
+            <div className="flex shrink-0 items-center justify-between border-t border-zinc-200 dark:border-white/10 bg-zinc-50/60 dark:bg-zinc-950/60 px-6 py-4">
               {step > 0 ? (
-                <button data-testid="wizard-prev-button" onClick={() => setStep(step - 1)} className="flex min-h-[44px] items-center gap-1 text-sm font-bold text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-900 dark:hover:text-white">
+                <button data-testid="wizard-prev-button" onClick={() => setStep(step - 1)} className="flex min-h-[44px] items-center gap-1 text-sm font-bold text-zinc-500 dark:text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-50">
                   <ChevronLeft size={16} /> {t('wizard.prev')}
                 </button>
               ) : <span />}
@@ -377,7 +377,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                   data-testid="wizard-next-button"
                   onClick={() => setStep(step + 1)}
                   disabled={!canProceed()}
-                  className="flex min-h-[48px] items-center gap-1 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex min-h-[48px] items-center gap-1 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-zinc-900 transition-colors hover:bg-gold-300 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {t('wizard.next')} <ChevronRight size={16} />
                 </button>
@@ -395,7 +395,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     data-testid="wizard-email-button"
                     onClick={handleEmail}
                     title={t('wizard.sendEmail')}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors hover:bg-zinc-200 dark:hover:bg-zinc-700"
                   >
                     <Mail size={18} />
                   </button>
@@ -403,7 +403,7 @@ export function ReservationWizard({ open, onClose, context }: Props) {
                     data-testid="wizard-submit-button"
                     onClick={handleSubmit}
                     disabled={status === 'loading'}
-                    className="flex min-h-[48px] items-center gap-2 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-gray-900 transition-colors hover:bg-gold-300 disabled:opacity-50"
+                    className="flex min-h-[48px] items-center gap-2 rounded-full bg-gold-400 px-6 py-2.5 text-sm font-bold text-zinc-900 transition-colors hover:bg-gold-300 disabled:opacity-50"
                   >
                     {status === 'loading' ? (
                       <><Loader2 size={16} className="animate-spin" /> {t('wizard.sending')}</>

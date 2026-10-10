@@ -10,68 +10,190 @@ const distPath = path.resolve(__dirname, '../dist');
 const indexHtmlPath = path.join(distPath, 'index.html');
 
 if (!fs.existsSync(indexHtmlPath)) {
-  console.error('❌ dist/index.html not found. Run after vite build.');
+  console.error('dist/index.html not found. Run after vite build.');
   process.exit(1);
 }
 
 const template = fs.readFileSync(indexHtmlPath, 'utf-8');
 
-const getFrontmatterField = (content, field) => {
-  const match = content.match(new RegExp(`^${field}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
-  return match ? match[1].trim() : '';
+const SITE = 'https://www.afbtaxis.com';
+const HIDDEN_STYLE = 'position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;';
+
+const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const escText = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+/** Minimal frontmatter parser: scalars (quoted or not), inline lists, block lists. */
+const unquote = (value) => {
+  const v = value.trim();
+  if (v.length >= 2 && v.startsWith('"') && v.endsWith('"')) return v.slice(1, -1).replace(/\\"/g, '"');
+  if (v.length >= 2 && v.startsWith("'") && v.endsWith("'")) return v.slice(1, -1).replace(/''/g, "'");
+  return v;
 };
 
-const files = fs.readdirSync(blogDir).filter(f => f.endsWith('.md'));
+const parseFrontmatter = (raw) => {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) return { data: {}, content: raw };
+  const data = {};
+  let listKey = null;
+  for (const line of match[1].split(/\r?\n/)) {
+    const item = line.match(/^\s+-\s+(.*)$/);
+    if (item && listKey) {
+      data[listKey].push(unquote(item[1]));
+      continue;
+    }
+    const kv = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!kv) continue;
+    const value = kv[2].trim();
+    listKey = null;
+    if (value === '') {
+      data[kv[1]] = [];
+      listKey = kv[1];
+    } else if (value.startsWith('[') && value.endsWith(']')) {
+      data[kv[1]] = value.slice(1, -1).split(',').map(unquote).filter(Boolean);
+    } else {
+      data[kv[1]] = unquote(value);
+    }
+  }
+  return { data, content: match[2] || '' };
+};
 
-let internalLinksHtml = `<div id="seo-links" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">
+/** Simple markdown to HTML: headings, paragraphs, lists, blockquotes, bold/italic/links. */
+const inlineMd = (text) => {
+  let out = escText(text);
+  out = out.replace(/!\[([^\]]*)\]\([^)]*\)/g, '');
+  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => {
+    const h = href === '#reserver' ? '/blog#reserver' : href;
+    return `<a href="${h.replace(/"/g, '%22')}">${label}</a>`;
+  });
+  out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+  return out;
+};
+
+const markdownToHtml = (md) => {
+  const lines = md.split(/\r?\n/);
+  const out = [];
+  let para = [];
+  let list = null; // 'ul' | 'ol'
+  const flushPara = () => {
+    if (para.length) out.push(`<p>${inlineMd(para.join(' '))}</p>`);
+    para = [];
+  };
+  const closeList = () => {
+    if (list) out.push(`</${list}>`);
+    list = null;
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    let m;
+    if (!line) {
+      flushPara();
+      closeList();
+    } else if ((m = line.match(/^(#{1,4})\s+(.*)$/))) {
+      flushPara();
+      closeList();
+      const level = Math.max(2, m[1].length);
+      out.push(`<h${level}>${inlineMd(m[2])}</h${level}>`);
+    } else if ((m = line.match(/^[-*]\s+(.*)$/))) {
+      flushPara();
+      if (list !== 'ul') { closeList(); out.push('<ul>'); list = 'ul'; }
+      out.push(`<li>${inlineMd(m[1])}</li>`);
+    } else if ((m = line.match(/^\d+\.\s+(.*)$/))) {
+      flushPara();
+      if (list !== 'ol') { closeList(); out.push('<ol>'); list = 'ol'; }
+      out.push(`<li>${inlineMd(m[1])}</li>`);
+    } else if ((m = line.match(/^>\s?(.*)$/))) {
+      flushPara();
+      closeList();
+      out.push(`<blockquote>${inlineMd(m[1])}</blockquote>`);
+    } else if (/^\|/.test(line)) {
+      flushPara();
+      closeList();
+      if (!/^\|[\s:|-]+\|?$/.test(line)) {
+        out.push(`<p>${inlineMd(line.replace(/^\||\|$/g, '').split('|').map((c) => c.trim()).join(' - '))}</p>`);
+      }
+    } else if (/^!\[/.test(line)) {
+      flushPara();
+      closeList();
+    } else {
+      closeList();
+      para.push(line);
+    }
+  }
+  flushPara();
+  closeList();
+  return out.join('\n');
+};
+
+/** Replace first match of a regex with a literal string (no $ pattern interpretation). */
+const sub = (html, regex, value) => html.replace(regex, () => value);
+
+const files = fs.readdirSync(blogDir).filter((f) => f.endsWith('.md'));
+
+const posts = files
+  .map((filename) => {
+    const slug = filename.replace(/\.md$/, '');
+    const { data, content } = parseFrontmatter(fs.readFileSync(path.join(blogDir, filename), 'utf-8'));
+    return {
+      slug,
+      title: data.title || slug,
+      description: data.description || '',
+      date: data.date ? String(data.date).slice(0, 10) : '',
+      imageUrl: data.imageUrl || '',
+      content,
+    };
+  })
+  .sort((x, y) => new Date(y.date).getTime() - new Date(x.date).getTime());
+
+// Full internal links list, built once BEFORE the loop
+const internalLinksHtml = `<div id="seo-links" style="${HIDDEN_STYLE}">
   <a href="/">Accueil</a>
   <a href="/#services">Services</a>
   <a href="/#flotte">Flotte</a>
   <a href="/#tarifs">Tarifs</a>
-  <a href="/blog">Fontainebleau Magazine</a>\n`;
+  <a href="/blog">Le Mag de Fontainebleau</a>
+${posts.map((p) => `  <a href="/blog/${p.slug}">${escText(p.title)}</a>`).join('\n')}
+</div>`;
 
-files.forEach(filename => {
-  const slug = filename.replace('.md', '');
-  const content = fs.readFileSync(path.join(blogDir, filename), 'utf-8');
-  const title = getFrontmatterField(content, 'title');
-  const description = getFrontmatterField(content, 'description');
-  const imageUrl = getFrontmatterField(content, 'imageUrl');
-  
-  // Clean markdown for text content
-  const cleanText = content
-    .replace(/---[\s\S]*?---/, '') // remove frontmatter
-    .replace(/[#*`_]/g, '')        // remove basic markdown chars
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // remove link syntax but keep text
-    .trim();
+const applyHead = (html, { title, description, url, image, type }) => {
+  let h = html;
+  h = sub(h, /<title>.*?<\/title>/, `<title>${escText(title)}</title>`);
+  h = sub(h, /<meta name="description" content="[^"]*"/, `<meta name="description" content="${escAttr(description)}"`);
+  h = sub(h, /<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${escAttr(title)}"`);
+  h = sub(h, /<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${escAttr(description)}"`);
+  h = sub(h, /<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${url}"`);
+  h = sub(h, /<meta property="og:type" content="[^"]*"/, `<meta property="og:type" content="${type}"`);
+  if (image) h = sub(h, /<meta property="og:image" content="[^"]*"/, `<meta property="og:image" content="${escAttr(image)}"`);
+  h = sub(h, /<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${escAttr(title)}"`);
+  h = sub(h, /<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${escAttr(description)}"`);
+  h = sub(h, /<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${url}"`);
+  return h;
+};
 
-  internalLinksHtml += `  <a href="/blog/${slug}">${title}</a>\n`;
+const injectBody = (html, seoHtml) => sub(html, /<div id="root"><\/div>/, `<div id="root"></div>\n${seoHtml}\n${internalLinksHtml}`);
 
-  let html = template;
-  html = html.replace(/<title>.*?<\/title>/g, `<title>${title} | AFB Taxis</title>`);
-  html = html.replace(/<meta name="description" content="[^"]*"/g, `<meta name="description" content="${description.replace(/"/g, '&quot;')}"`);
-  html = html.replace(/<meta property="og:title" content="[^"]*"/g, `<meta property="og:title" content="${title.replace(/"/g, '&quot;')}"`);
-  html = html.replace(/<meta property="og:description" content="[^"]*"/g, `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}"`);
-  html = html.replace(/<meta property="og:image" content="[^"]*"/g, `<meta property="og:image" content="${imageUrl}"`);
-  html = html.replace(/<meta property="og:url" content="[^"]*"/g, `<meta property="og:url" content="https://www.afbtaxis.com/blog/${slug}"`);
-  // Fix canonical URL and inject internal links for P2 fix
-  html = html.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog/${slug}"`);
-  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${internalLinksHtml}`);
+posts.forEach((post) => {
+  const url = `${SITE}/blog/${post.slug}`;
+  let html = applyHead(template, {
+    title: `${post.title} | AFB Taxis`,
+    description: post.description,
+    url,
+    image: post.imageUrl,
+    type: 'article',
+  });
+  if (post.date) {
+    html = html.replace(
+      /<meta property="og:type" content="article"[^>]*>/,
+      (m) => `${m}\n    <meta property="article:published_time" content="${post.date}" />`
+    );
+  }
+  const seoDiv = `<div id="seo-content" style="${HIDDEN_STYLE}"><article><h1>${escText(post.title)}</h1><p>${escText(post.description)}</p>\n${markdownToHtml(post.content)}\n</article></div>`;
+  html = injectBody(html, seoDiv);
 
-  // Fix canonical URL and inject internal links for P2 fix
-  html = html.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog/${slug}"`);
-  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${internalLinksHtml}`);
-
-  
-  // Inject the raw text into the HTML outside of the root div so React hydration ignores it but crawlers read it
-  const seoTextDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">${title}. ${description}. ${cleanText}</div>`;
-  html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${seoTextDiv}`);
-
-  const postDir = path.join(distPath, 'blog', slug);
-  if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
+  const postDir = path.join(distPath, 'blog', post.slug);
+  fs.mkdirSync(postDir, { recursive: true });
   fs.writeFileSync(path.join(postDir, 'index.html'), html);
 });
-
-internalLinksHtml += `</div>`;
 
 // Now process the homepage (dist/index.html)
 let homeHtml = template;
@@ -80,17 +202,24 @@ const homeSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;hei
 homeHtml = homeHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${homeSeoDiv}\n${internalLinksHtml}`);
 fs.writeFileSync(indexHtmlPath, homeHtml);
 
-// And generate dist/blog/index.html to fix the P1 404
-let blogIndexHtml = template;
-blogIndexHtml = blogIndexHtml.replace(/<title>.*?<\/title>/g, `<title>Fontainebleau Magazine - Blog AFB Taxis</title>`);
-blogIndexHtml = blogIndexHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog"`);
-blogIndexHtml = blogIndexHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/blog"`);
-const blogIndexSeoDiv = `<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">Découvrez notre blog Fontainebleau Magazine. Articles sur le tourisme, le château de Fontainebleau, les transferts aéroports, et nos services VTC.</div>`;
-blogIndexHtml = blogIndexHtml.replace('<div id="root"></div>', `<div id="root"></div>\n${blogIndexSeoDiv}\n${internalLinksHtml}`);
-const blogRootPath = path.join(distPath, 'blog');
-if (!fs.existsSync(blogRootPath)) fs.mkdirSync(blogRootPath, { recursive: true });
-fs.writeFileSync(path.join(blogRootPath, 'index.html'), blogIndexHtml);
-
+// Generate dist/blog/index.html
+{
+  let blogHtml = applyHead(template, {
+    title: 'Le Mag de Fontainebleau : tourisme, transport, conseils | AFB Taxis',
+    description: "Articles sur Fontainebleau, ses châteaux, sa forêt, l'INSEAD et les trajets en Seine-et-Marne, par les chauffeurs d'AFB Taxis.",
+    url: `${SITE}/blog`,
+    image: '',
+    type: 'website',
+  });
+  const listHtml = posts
+    .map((p) => `<li><a href="/blog/${p.slug}">${escText(p.title)}</a> ${escText(p.description)}</li>`)
+    .join('\n');
+  const blogSeoDiv = `<div id="seo-content" style="${HIDDEN_STYLE}"><h1>Le Mag de Fontainebleau</h1><p>Tourisme, patrimoine, transferts aéroports et conseils de transport en Seine-et-Marne.</p><ul>\n${listHtml}\n</ul></div>`;
+  blogHtml = injectBody(blogHtml, blogSeoDiv);
+  const blogRootPath = path.join(distPath, 'blog');
+  fs.mkdirSync(blogRootPath, { recursive: true });
+  fs.writeFileSync(path.join(blogRootPath, 'index.html'), blogHtml);
+}
 
 // ==========================================
 // 4. PRÉ-RENDU DU SEO PROGRAMMATIQUE (TRAJETS)
@@ -116,7 +245,7 @@ for (const trajet of trajets) {
   html = html.replace('<div id="root"></div>', `<div id="root"></div>\n${seoTextDiv}\n${internalLinksHtml}`);
 
   fs.writeFileSync(path.join(trajetDir, 'index.html'), html);
-  console.log(`✅ Prerendered Trajet: ${trajet.slug}`);
+  console.log(`Prerendered Trajet: ${trajet.slug}`);
 }
 
 // ==========================================
@@ -131,6 +260,6 @@ partHtml = partHtml.replace(/<meta property="og:url" content="[^"]*"/g, `<meta p
 partHtml = partHtml.replace(/<link rel="canonical" href="[^"]*"/g, `<link rel="canonical" href="https://www.afbtaxis.com/partenaires"`);
 partHtml = partHtml.replace('<div id="root"></div>', `<div id="root"></div>\n<div id="seo-content" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">Espace Entreprises & Hôtels. Le partenaire VTC de confiance pour vos clients les plus exigeants. Hôtels de luxe, conciergeries, administration de l'INSEAD et grandes entreprises.</div>\n${internalLinksHtml}`);
 fs.writeFileSync(path.join(partDir, 'index.html'), partHtml);
-console.log('✅ Prerendered Partenaires');
+console.log('Prerendered Partenaires');
 
-console.log(`✅ SEO Pre-rendering done for ${files.length} posts + Homepage + Blog Index!`);
+console.log(`SEO pre-rendering done for ${posts.length} posts + Homepage + Blog Index!`);

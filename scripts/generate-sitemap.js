@@ -14,8 +14,10 @@ const getMdFiles = () => {
 };
 
 const getFrontmatterField = (content, field) => {
-  const match = content.match(new RegExp(`^${field}:\\s*["']?(.+?)["']?\\s*$`, 'm'));
-  return match ? match[1].trim() : '';
+  const fm = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!fm) return '';
+  const match = fm[1].match(new RegExp(`^${field}:\\s*(.+?)\\s*$`, 'm'));
+  return match ? match[1].trim().replace(/^["']|["']$/g, '') : '';
 };
 
 const files = getMdFiles();
@@ -36,7 +38,7 @@ let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 files.forEach(filename => {
   const slug = filename.replace('.md', '');
   const content = fs.readFileSync(path.join(blogDir, filename), 'utf-8');
-  const date = getFrontmatterField(content, 'date');
+  const date = (getFrontmatterField(content, 'updated') || getFrontmatterField(content, 'date')).slice(0, 10);
   sitemap += `  <url>
     <loc>${DOMAIN}/blog/${slug}</loc>
     ${date ? `<lastmod>${date}</lastmod>` : ''}
@@ -49,4 +51,4 @@ sitemap += `</urlset>`;
 
 const publicPath = path.resolve(__dirname, '../public');
 fs.writeFileSync(path.join(publicPath, 'sitemap.xml'), sitemap);
-console.log(`✅ sitemap.xml generated with ${files.length} posts!`);
+console.log(`sitemap.xml generated with ${files.length} posts!`);

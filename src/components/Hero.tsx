@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
-import { PhoneCall, ArrowRight, MapPin, Star, ShieldCheck, Clock } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { ArrowRight, Phone, Star } from '@phosphor-icons/react';
 import { COMPANY } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
-import { PriceEstimator } from './PriceEstimator';
+import { fadeUp, stagger, useMotionOk } from './motion';
+import type { Variants } from 'motion/react';
 
-const CITIES = [
-  'Fontainebleau', 'Avon', 'Paris', 'Melun', 'Nemours', 'Orly', 'Roissy CDG',
-  'Dammarie-les-Lys', 'Barbizon', 'Moret-sur-Loing', 'Samois-sur-Seine',
-  'Thomery', 'Bois-le-Roi', 'Milly-la-Forêt', 'Chessy', 'Disneyland Paris',
-  'Gare de Lyon', 'La Défense', 'Versailles', 'Évry', 'Sénart',
-];
+const wordUp: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+};
 
-const SLIDES = [
-  { name: 'Mercedes Classe S', image: 'https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg?auto=compress&cs=tinysrgb&w=1600' },
-  { name: 'Mercedes S W222', image: 'https://images.pexels.com/photos/18369291/pexels-photo-18369291.jpeg?auto=compress&cs=tinysrgb&w=1600' },
-  { name: 'Mercedes Classe V', image: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&w=1600' },
-];
+export const HERO_IMAGE =
+  'https://images.pexels.com/photos/18370955/pexels-photo-18370955.jpeg?auto=compress&cs=tinysrgb&w=1600';
 
 interface Props {
   onOpenBooking: (context?: string) => void;
@@ -23,180 +20,115 @@ interface Props {
 
 export function Hero({ onOpenBooking }: Props) {
   const { t } = useI18n();
-  const [current, setCurrent] = useState(0);
+  const motionOk = useMotionOk();
+  const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % SLIDES.length), 5500);
-    return () => clearInterval(timer);
-  }, []);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
-  const STATS = [
-    { value: '20+', label: t('hero.stat.years') },
-    { value: '5', label: t('hero.stat.vehicles') },
-    { value: '24/7', label: t('hero.stat.availability') },
-    { value: '4.9', label: t('hero.stat.rating') },
-  ];
+  const line1 = t('hero.title1').split(' ');
+  const line2 = t('hero.title2').split(' ');
 
   return (
-    <section id="home" className="relative overflow-hidden bg-white dark:bg-gray-900">
-      {/* ===== Dark hero ===== */}
-      <div className="relative overflow-hidden bg-[#0a0a0a] pb-24 pt-24 sm:pb-28 lg:pb-36 lg:pt-28">
-        {/* Decorative */}
-        <div className="absolute -right-32 top-0 h-[480px] w-[480px] rounded-full bg-gold-400/10 blur-[130px]" />
-        <div className="absolute -left-32 bottom-20 h-[320px] w-[320px] rounded-full bg-gold-400/5 blur-[100px]" />
+    <section
+      id="home"
+      ref={sectionRef}
+      className="grain relative overflow-hidden bg-zinc-950 text-white"
+    >
+      <div className="relative mx-auto grid min-h-[88dvh] max-w-7xl items-center gap-10 px-4 pb-24 pt-28 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-8 lg:pb-32 lg:pt-24">
+        {/* Copy */}
+        <motion.div
+          variants={stagger(0.1, 0.05)}
+          initial={motionOk ? 'hidden' : false}
+          animate="show"
+          className="relative z-10"
+        >
+          <motion.p variants={fadeUp} className="text-[11px] font-bold uppercase tracking-[0.22em] text-gold-400">
+            {t('hero.eyebrow')}
+          </motion.p>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-10 pt-6 lg:grid-cols-[1fr_1.1fr] lg:gap-8 lg:pt-10">
-            {/* Left : copy */}
-            <div className="animate-fade-in-up">
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-gold-400/40 bg-gold-400/10 px-4 py-2">
-                <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse-gold" />
-                <span className="text-xs font-bold uppercase tracking-wider text-gold-400 sm:text-sm">FONTAINEBLEAU & ÎLE-DE-FRANCE</span>
-              </div>
+          <h1
+            className="mt-5 font-display text-4xl font-extrabold leading-[1.02] tracking-tight text-white md:text-5xl lg:text-6xl"
+          >
+            <motion.span variants={stagger(0.06)} className="block">
+              {line1.map((w, i) => (
+                <motion.span key={`a${i}`} variants={wordUp} className="inline-block">
+                  {w}{i < line1.length - 1 ? ' ' : ''}
+                </motion.span>
+              ))}
+            </motion.span>
+            <motion.span variants={stagger(0.06, 0.15)} className="block text-gold-400">
+              {line2.map((w, i) => (
+                <motion.span key={`b${i}`} variants={wordUp} className="inline-block">
+                  {w}{i < line2.length - 1 ? ' ' : ''}
+                </motion.span>
+              ))}
+            </motion.span>
+          </h1>
 
-              <h1 className="mt-6 font-display text-[2.9rem] font-black leading-[1.0] tracking-tight text-white sm:text-6xl lg:text-[4.4rem] xl:text-[4.8rem]">
-                {t('hero.title1')}{' '}
-                <br />
-                <span className="text-gold-400">{t('hero.title2')}</span>
-              </h1>
+          <motion.p variants={fadeUp} dir="auto" className="mt-6 max-w-[48ch] text-base leading-relaxed text-zinc-400 sm:text-lg">
+            {t('hero.subtitle')}
+          </motion.p>
 
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-400 sm:text-lg">
-                {t('hero.subtitle')}
-              </p>
+          <motion.div variants={fadeUp} className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <motion.button
+              data-testid="hero-book-button"
+              onClick={() => onOpenBooking()}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 text-[15px] font-bold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            >
+              {t('common.book')}
+              <ArrowRight size={18} weight="bold" className="transition-transform group-hover:translate-x-1" />
+            </motion.button>
+            <motion.a
+              data-testid="hero-call-button"
+              href={`tel:${COMPANY.phoneRaw}`}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full border border-white/15 bg-white/5 px-8 text-[15px] font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+            >
+              <Phone size={18} className="text-gold-400" />
+              <span className="tabular-nums">{COMPANY.phone}</span>
+            </motion.a>
+          </motion.div>
+        </motion.div>
 
-              {/* CTAs */}
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
-                <button
-                  data-testid="hero-book-button"
-                  onClick={() => onOpenBooking()}
-                  className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-8 py-4 font-bold text-gray-900 shadow-[0_12px_35px_-8px_rgba(250,204,21,0.5)] transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-gold-300"
-                >
-                  {t('hero.cta')}
-                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-                </button>
-                <a
-                  data-testid="hero-call-button"
-                  href={`tel:${COMPANY.phoneRaw}`}
-                  className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full border border-white/15 bg-white/10 px-8 py-4 font-bold text-white backdrop-blur-sm transition-[transform,background-color] duration-300 hover:scale-[1.03] hover:bg-white/20"
-                >
-                  <PhoneCall size={18} className="text-gold-400" />
-                  {COMPANY.phone}
-                </a>
-              </div>
+        {/* Visual */}
+        <motion.div
+          initial={motionOk ? { opacity: 0, scale: 0.97 } : false}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          className="relative"
+        >
+          <motion.div style={motionOk ? { y: imageY } : undefined} className="relative aspect-[4/3] overflow-hidden rounded-card lg:aspect-[5/4]">
+            <img
+              src={HERO_IMAGE}
+              alt="Mercedes Classe S noire, berline AFB Taxis à Fontainebleau"
+              width={1600}
+              height={1200}
+              loading="eager"
+              {...({ fetchpriority: 'high' } as object)}
+              decoding="async"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-transparent to-transparent" />
+          </motion.div>
 
-              {/* HUGE 24/7 BANNER */}
-              <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-gold-400/30 bg-gold-400/10 px-5 py-3 backdrop-blur-md">
-                <span className="flex h-3 w-3 items-center justify-center">
-                  <span className="absolute inline-flex h-3 w-3 animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                </span>
-                <span className="font-display text-lg font-black tracking-widest text-gold-400">DISPONIBLE 24H/24 ET 7J/7</span>
-              </div>
-
-              {/* Trust row */}
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-400">
-                <span className="flex items-center gap-2">
-                  <span className="flex text-gold-400">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                  </span>
-                  <span className="font-bold text-white">4.9</span> Google
-                </span>
-                <span className="hidden h-4 w-px bg-white/15 sm:block" />
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck size={15} className="text-gold-400" /> CPAM 77
-                </span>
-                <span className="hidden h-4 w-px bg-white/15 sm:block" />
-                <span className="flex items-center gap-1.5">
-                  <Clock size={15} className="text-gold-400" /> 24/7
-                </span>
-              </div>
-            </div>
-
-            {/* Right : fleet slideshow blended into dark bg */}
-            <div className="relative animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-              <div className="relative h-64 sm:h-80 lg:h-[460px]">
-                {SLIDES.map((slide, i) => (
-                  <div
-                    key={slide.name}
-                    className={`absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${i === current ? 'opacity-100' : 'opacity-0'}`}
-                  >
-                    <img
-                      src={slide.image}
-                      alt={`Chauffeur Privé Fontainebleau - ${slide.name}`}
-                      className="h-full w-full object-cover"
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                      fetchPriority={i === 0 ? 'high' : 'auto'}
-                    />
-                    {/* Blend edges into black */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-[#0a0a0a]/60" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
-                  </div>
-                ))}
-
-                
-
-                {/* Vehicle name + dots */}
-                <div className="absolute bottom-2 left-0 flex items-center gap-4">
-                  <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">{SLIDES[current].name}</span>
-                  <div className="flex gap-2">
-                    {SLIDES.map((_, i) => (
-                      <button
-                        key={i}
-                        aria-label={`Slide ${i + 1}`}
-                        onClick={() => setCurrent(i)}
-                        className="flex h-8 items-center"
-                      >
-                        <span className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${i === current ? 'w-9 bg-gold-400' : 'w-4 bg-white/25'}`} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Wave transition to white/dark */}
-        <div className="absolute -bottom-px left-0 right-0 z-10 overflow-hidden">
-          <svg viewBox="0 0 2880 110" preserveAspectRatio="none" className="block h-[50px] w-[200%] fill-white dark:fill-gray-900 sm:h-[70px] lg:h-[95px] animate-wave">
-            <path d="M0,50 C360,110 360,-10 720,50 C1080,110 1080,-10 1440,50 C1800,110 1800,-10 2160,50 C2520,110 2520,-10 2880,50 L2880,110 L0,110 Z" />
-          </svg>
-        </div>
-      </div>
-
-      {/* ===== Light zone : estimator + stats + location ===== */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="-mt-2">
-          <PriceEstimator onOpenBooking={onOpenBooking} />
-        </div>
-
-        <div className="mt-8 grid grid-cols-2 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-[0_20px_50px_-30px_rgba(17,24,39,0.25)] dark:shadow-none sm:grid-cols-4 sm:divide-x sm:divide-gray-200 dark:sm:divide-gray-800">
-          {STATS.map((stat, i) => (
-            <div key={stat.value + i} className={`px-6 py-6 text-center sm:py-7 ${i > 1 ? 'border-t border-gray-200 dark:border-gray-800 sm:border-t-0' : ''} ${i % 2 === 1 ? 'border-l border-gray-200 dark:border-gray-800 sm:border-l-0' : ''}`}>
-              <p className="font-display text-3xl font-black text-gray-900 dark:text-white">{stat.value}</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-2 pb-10 text-xs font-medium text-gray-400 sm:text-sm">
-          <MapPin size={14} className="shrink-0 text-gold-600" />
-          <span className="text-center">{t('hero.locations')}</span>
-        </div>
-      </div>
-
-      {/* Cities marquee */}
-      <div className="relative border-y border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
-        <div className="overflow-hidden py-4">
-          <div className="animate-marquee flex w-max items-center gap-8">
-            {[...CITIES, ...CITIES].map((city, i) => (
-              <span key={i} className="flex shrink-0 items-center gap-3">
-                <span className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.2em] text-gray-400">{city}</span>
-                <span className="h-1.5 w-1.5 rounded-full bg-gold-400" />
-              </span>
-            ))}
-          </div>
-        </div>
+          <motion.div
+            initial={motionOk ? { opacity: 0, y: 16 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.7 }}
+            className="absolute -bottom-5 left-4 flex items-center gap-4 rounded-full border border-white/10 bg-zinc-900/90 py-3 pl-4 pr-6 backdrop-blur-md sm:left-6"
+          >
+            <span className="flex text-gold-400">
+              {[...Array(5)].map((_, i) => <Star key={i} size={14} weight="fill" />)}
+            </span>
+            <span className="text-sm font-semibold text-white">{t('hero.badge.rating')}</span>
+            <span className="hidden h-4 w-px bg-white/15 sm:block" />
+            <span className="hidden text-sm text-zinc-400 sm:block">{t('hero.badge.years')}</span>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

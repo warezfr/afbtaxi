@@ -48,7 +48,7 @@ export function Navbar({ onOpenBooking }: { onOpenBooking: () => void }) {
     { href: '/partenaires', label: 'Partenariat' },
   ];
 
-  const isDarkHero = location.pathname === '/' && !scrolled;
+  const isDarkHero = !scrolled && !location.pathname.startsWith('/blog');
 
   const headerVariants = {
     top: {

@@ -1,187 +1,195 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
-import { ContactSection } from '@/components/ContactSection';
+import { PostCard } from '@/components/blog/PostCard';
+import { PostCta } from '@/components/blog/PostCta';
+import { formatDate, gridVariants } from '@/components/blog/utils';
+
+const SITE = 'https://www.afbtaxis.com';
+const MAX_TAGS = 12;
 
 export function BlogList() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
-
+  const [filter, setFilter] = useState<string | null>(null);
+  const reduce = useReducedMotion();
   const allPosts = useBlogPosts();
 
-  const categories = useMemo(() => {
-    const cats = allPosts.map(p => p.category);
-    return Array.from(new Set(cats)).sort();
-  }, [allPosts]);
+  const categories = useMemo(() => Array.from(new Set(allPosts.map(p => p.category).filter(Boolean))).sort(), [allPosts]);
 
-  const allTags = useMemo(() => {
-    const tags = allPosts.flatMap(p => p.tags);
-    return Array.from(new Set(tags))
-      .filter(t => t !== 'AFB Taxis' && t !== 'Fontainebleau' && !categories.includes(t))
-      .sort();
+  const topTags = useMemo(() => {
+    const counts = new Map<string, number>();
+    allPosts.forEach(p => p.tags.forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+    return Array.from(counts.entries())
+      .filter(([t]) => t !== 'AFB Taxis' && !categories.includes(t))
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'fr'))
+      .slice(0, Math.max(0, MAX_TAGS - categories.length))
+      .map(([t]) => t);
   }, [allPosts, categories]);
 
-  const filteredPosts = useMemo(() => {
-    if (!selectedFilter) return allPosts;
-    return allPosts.filter(p => p.category === selectedFilter || p.tags.includes(selectedFilter));
-  }, [selectedFilter, allPosts]);
+  const filters = useMemo(() => [...categories, ...topTags], [categories, topTags]);
+
+  const filtered = useMemo(
+    () => (filter ? allPosts.filter(p => p.category === filter || p.tags.includes(filter)) : allPosts),
+    [filter, allPosts]
+  );
+
+  const featured = filtered[0];
+  const rest = filtered.slice(1);
+
+  const pill = (active: boolean) =>
+    `inline-flex min-h-[44px] shrink-0 snap-start items-center rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-950 ${
+      active
+        ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950'
+        : 'border border-zinc-200 text-zinc-700 hover:border-zinc-400 dark:border-white/10 dark:text-zinc-300 dark:hover:border-white/30'
+    }`;
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      name: 'Le Mag de Fontainebleau par AFB Taxis',
+      url: `${SITE}/blog`,
+      description: 'Tourisme, patrimoine, bons plans locaux et actualités du VTC en Seine-et-Marne.',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: allPosts.slice(0, 10).map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${SITE}/blog/${p.slug}`,
+        name: p.title,
+      })),
+    },
+  ];
 
   return (
     <>
       <Helmet>
-        <title>Blog Fontainebleau : Tourisme, Actualités et Transport | AFB Taxis</title>
-        <meta name="description" content="Découvrez nos articles sur Fontainebleau, ses châteaux, sa forêt, l'INSEAD et les astuces pour bien organiser vos transports en Seine-et-Marne." />
-        <link rel="canonical" href="https://www.afbtaxis.com/blog" />
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Blog",
-          "name": "Le Mag de Fontainebleau par AFB Taxis",
-          "url": "https://www.afbtaxis.com/blog",
-          "description": "Tourisme, patrimoine, bons plans locaux et actualités du VTC en Seine-et-Marne."
-        })}</script>
+        <title>Le Mag de Fontainebleau : tourisme, transport, conseils | AFB Taxis</title>
+        <meta
+          name="description"
+          content="Articles sur Fontainebleau, ses châteaux, sa forêt, l'INSEAD et les trajets en Seine-et-Marne, par les chauffeurs d'AFB Taxis."
+        />
+        <link rel="canonical" href={`${SITE}/blog`} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
-      {/* Hero header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 pt-32 pb-14 px-4 transition-colors">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold-500 dark:text-gold-400 mb-4">AFB Taxis · Fontainebleau</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight">
-            Le Mag de <span className="text-gold-500 dark:text-gold-400">Fontainebleau</span>
-          </h1>
-          <p className="mt-5 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Tourisme, patrimoine, bons plans locaux et actualités du VTC en Seine-et-Marne.
-          </p>
-        </div>
-      </div>
+      <div className="bg-zinc-50 pb-20 pt-28 dark:bg-zinc-950 md:pt-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <header className="max-w-3xl">
+            <h1 className="font-display text-4xl leading-[1.02] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-5xl lg:text-6xl">
+              Le Mag de Fontainebleau
+            </h1>
+            <p className="mt-5 max-w-[60ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+              Patrimoine, adresses et trajets en Seine-et-Marne, racontés par les chauffeurs qui les font chaque jour.
+            </p>
+          </header>
 
-      <section className="bg-gray-50 dark:bg-gray-950 min-h-screen py-12 lg:py-20 transition-colors">
-        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-10">
+          <div
+            role="group"
+            aria-label="Filtrer les articles"
+            className="-mx-4 mt-10 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            <button type="button" onClick={() => setFilter(null)} aria-pressed={filter === null} className={pill(filter === null)}>
+              Tout
+            </button>
+            {filters.map(f => (
+              <button key={f} type="button" onClick={() => setFilter(f)} aria-pressed={filter === f} className={pill(filter === f)}>
+                {f}
+              </button>
+            ))}
+          </div>
 
-            {/* Sidebar */}
-            <aside className="lg:w-60 shrink-0">
-              <div className="sticky top-28 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-sm transition-colors">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-5">Catégories</h3>
-                <ul className="space-y-2">
-                  <li>
-                    <button
-                      onClick={() => setSelectedFilter(null)}
-                      className={`text-left w-full text-sm font-semibold transition-colors py-1 ${!selectedFilter ? 'text-gold-600 dark:text-gold-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+          {featured ? (
+            <>
+              <motion.article
+                key={`featured-${featured.slug}`}
+                initial={false}
+                layout={!reduce}
+                className="group mt-8 grid overflow-hidden rounded-[20px] border border-zinc-200 bg-white shadow-[0_24px_60px_-28px_rgba(24,24,27,0.25)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none md:grid-cols-2"
+              >
+                <Link
+                  to={`/blog/${featured.slug}`}
+                  className="block overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                  tabIndex={-1}
+                  aria-hidden="true"
+                >
+                  <img
+                    src={featured.imageUrl}
+                    alt={featured.imageAlt || featured.title}
+                    width={1280}
+                    height={800}
+                    {...({ fetchpriority: 'high' } as object)}
+                    decoding="async"
+                    className="aspect-[16/10] h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] md:aspect-auto"
+                  />
+                </Link>
+                <div className="flex flex-col justify-center p-6 md:p-10 lg:p-14">
+                  <p className="text-sm font-medium text-gold-700 dark:text-gold-300">{featured.category}</p>
+                  <h2 className="mt-3 font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 lg:text-4xl">
+                    <Link
+                      to={`/blog/${featured.slug}`}
+                      className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
                     >
-                      Tout voir <span className="text-gray-400 dark:text-gray-600 text-xs ml-1">({allPosts.length})</span>
-                    </button>
-                  </li>
-                  {categories.map(cat => {
-                    const count = allPosts.filter(p => p.category === cat).length;
-                    return (
-                      <li key={cat}>
-                        <button
-                          onClick={() => setSelectedFilter(cat)}
-                          className={`text-left w-full text-sm font-semibold transition-colors py-1 ${selectedFilter === cat ? 'text-gold-600 dark:text-gold-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
-                        >
-                          {cat} <span className="text-gray-400 dark:text-gray-600 text-xs ml-1">({count})</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-
-                {allTags.length > 0 && (
-                  <>
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mt-8 mb-4">Tags</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {allTags.map(tag => (
-                        <button
-                          key={tag}
-                          onClick={() => setSelectedFilter(tag)}
-                          className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                            selectedFilter === tag
-                              ? 'bg-gold-500 text-gray-900 border-gold-500 shadow-sm'
-                              : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gold-400 hover:text-gold-500 bg-gray-50 dark:bg-transparent'
-                          }`}
-                        >
-                          #{tag}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </aside>
-
-            {/* Grid */}
-            <div className="flex-1">
-              {selectedFilter && (
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="font-display font-bold text-gray-900 dark:text-white text-xl">
-                    {selectedFilter}
-                    <span className="text-gray-400 dark:text-gray-500 text-sm font-normal ml-3">({filteredPosts.length} article{filteredPosts.length > 1 ? 's' : ''})</span>
+                      {featured.title}
+                    </Link>
                   </h2>
-                  <button onClick={() => setSelectedFilter(null)} className="text-xs text-gray-500 hover:text-gold-600 dark:hover:text-gold-400 transition-colors font-medium">
-                    ✕ Effacer le filtre
-                  </button>
-                </div>
-              )}
-
-              <div className="columns-1 md:columns-2 xl:columns-3 gap-6 space-y-6">
-                {filteredPosts.map((post, i) => (
+                  <p className="mt-4 line-clamp-3 max-w-[55ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    {featured.excerpt}
+                  </p>
+                  <p className="mt-5 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
+                    {formatDate(featured.date)} · {featured.readingMinutes} min de lecture
+                  </p>
                   <Link
-                    key={post.slug}
-                    to={`/blog/${post.slug}`}
-                    className="group block break-inside-avoid bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-gold-300 dark:hover:border-gold-500/40 shadow-sm hover:shadow-xl dark:hover:shadow-[0_0_40px_rgba(202,163,82,0.08)] transition-all duration-300"
+                    to={`/blog/${featured.slug}`}
+                    className="mt-6 inline-flex min-h-[44px] w-fit items-center gap-2 rounded-full bg-zinc-950 px-6 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 dark:focus-visible:ring-offset-zinc-900"
                   >
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={post.imageUrl}
-                        alt={`Taxi Fontainebleau - ${post.title}`}
-                        className="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading={i < 6 ? 'eager' : 'lazy'}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent opacity-80 dark:opacity-100" />
-                      <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5">
-                        <span className="bg-gold-500 text-gray-900 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm">
-                          {post.category}
-                        </span>
-                        {post.tags.filter(t => t !== post.category && t !== 'AFB Taxis').slice(0, 1).map(tag => (
-                          <span key={tag} className="bg-black/50 backdrop-blur-md text-white text-[10px] font-semibold px-2.5 py-1 rounded-full border border-white/20 shadow-sm">
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="p-6">
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider mb-3">
-                        {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                      </p>
-                      <h3 className="font-display font-bold text-[1.15rem] leading-snug text-gray-900 dark:text-white mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
-                        {post.title}
-                      </h3>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-5 line-clamp-3">
-                        {post.description}
-                      </p>
-                      <span className="text-sm font-bold text-gold-600 dark:text-gold-400 group-hover:gap-3 flex items-center gap-2 transition-all">
-                        Lire l'article <span className="transition-transform group-hover:translate-x-1">→</span>
-                      </span>
-                    </div>
+                    Lire l'article
+                    <ArrowRight size={16} weight="regular" />
                   </Link>
-                ))}
-              </div>
-
-              {filteredPosts.length === 0 && (
-                <div className="text-center py-24">
-                  <p className="text-gray-500 text-lg">Aucun article trouvé pour ce filtre.</p>
-                  <button onClick={() => setSelectedFilter(null)} className="mt-4 text-gold-600 dark:text-gold-400 hover:text-gold-500 font-semibold text-sm transition-colors">
-                    Voir tous les articles →
-                  </button>
                 </div>
-              )}
+              </motion.article>
+
+              <motion.div
+                key={filter ?? 'all'}
+                variants={reduce ? undefined : gridVariants}
+                initial={reduce ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+                className="mt-12 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3"
+              >
+                <AnimatePresence mode="popLayout">
+                  {rest.map(p => (
+                    <PostCard key={p.slug} post={p} />
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            </>
+          ) : (
+            <div className="mt-12 rounded-[20px] border border-zinc-200 bg-white p-10 text-center dark:border-white/10 dark:bg-zinc-900">
+              <p className="font-display text-2xl text-zinc-900 dark:text-zinc-50">Aucun article pour ce filtre</p>
+              <p className="mx-auto mt-2 max-w-[45ch] text-zinc-600 dark:text-zinc-400">
+                Essayez une autre catégorie ou revenez à la liste complète.
+              </p>
+              <button
+                type="button"
+                onClick={() => setFilter(null)}
+                className="mt-6 inline-flex min-h-[44px] items-center rounded-full bg-zinc-950 px-6 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:bg-white dark:text-zinc-950"
+              >
+                Tout afficher
+              </button>
             </div>
+          )}
+
+          <div className="mt-20">
+            <PostCta onBook={() => openBooking('blog')} />
           </div>
         </div>
-      </section>
-
-      <ContactSection onOpenBooking={() => openBooking('Contact depuis le Blog')} />
+      </div>
     </>
   );
 }

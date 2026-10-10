@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
-import { X, Send } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { X, PaperPlaneTilt } from '@phosphor-icons/react';
 import { COMPANY } from '@/lib/constants';
+
+const inputCls =
+  'w-full min-h-[48px] rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder-zinc-400 transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/40 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-50';
+const labelCls = 'mb-1.5 block text-sm font-semibold text-zinc-700 dark:text-zinc-300';
 
 export function ContactModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,64 +23,83 @@ export function ContactModal() {
     return () => window.removeEventListener('open-contact-modal', handleOpen);
   }, []);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-      <div 
-        className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm transition-opacity"
-        onClick={() => setIsOpen(false)}
-      />
-      
-      <div className="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-          <h3 className="text-xl font-display font-black text-gray-900 dark:text-white">Nous contacter</h3>
-          <button 
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
-            className="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          />
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-lg overflow-hidden rounded-card border border-zinc-200 bg-white shadow-[0_24px_60px_-28px_rgba(24,24,27,0.35)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none"
           >
-            <X size={20} />
-          </button>
+            <div className="taxi-checker h-2" />
+            <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-white/10">
+              <h3 id="contact-modal-title" className="font-display text-lg font-bold text-zinc-900 dark:text-zinc-50">Nous écrire</h3>
+              <button
+                onClick={() => setIsOpen(false)}
+                aria-label="Fermer"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6 sm:p-8">
+              <form action={`https://formsubmit.co/${COMPANY.email}`} method="POST" className="space-y-5">
+                <input type="hidden" name="_autoresponse" value="Bonjour, nous avons bien reçu votre message. Nous vous recontactons très vite. L'équipe AFB Taxis." />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_next" value={window.location.href} />
+
+                <div>
+                  <label htmlFor="contact-subject" className={labelCls}>Sujet</label>
+                  <select id="contact-subject" name="sujet" defaultValue={defaultSubject} className={inputCls}>
+                    <option value="Demande d'informations">Demande d'informations</option>
+                    <option value="Réservation">Réservation</option>
+                    <option value="Partenariats">Partenariats</option>
+                    <option value="Réclamation / Autre">Réclamation / Autre</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="contact-name" className={labelCls}>Nom</label>
+                  <input id="contact-name" type="text" name="nom" required className={inputCls} autoComplete="name" />
+                </div>
+                <div>
+                  <label htmlFor="contact-email" className={labelCls}>E-mail</label>
+                  <input id="contact-email" type="email" name="email" required className={inputCls} autoComplete="email" />
+                </div>
+                <div>
+                  <label htmlFor="contact-message" className={labelCls}>Message</label>
+                  <textarea id="contact-message" name="message" required rows={4} className={inputCls} />
+                </div>
+
+                <button
+                  type="submit"
+                  className="mt-2 inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-full bg-gold-400 px-6 font-bold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
+                >
+                  Envoyer <PaperPlaneTilt size={18} />
+                </button>
+              </form>
+            </div>
+          </motion.div>
         </div>
-
-        <div className="p-6 sm:p-8">
-          <form action={`https://formsubmit.co/${COMPANY.email}`} method="POST" className="space-y-5">
-            <input type="hidden" name="_autoresponse" value="Bonjour ! Nous avons bien reçu votre message. Notre équipe va le traiter dans les plus brefs délais et vous recontactera très vite. L'équipe AFB Taxis." />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value={window.location.href} />
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">Sujet de votre demande</label>
-              <select name="sujet" defaultValue={defaultSubject} className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none">
-                <option value="Demande d'informations">Demande d'informations</option>
-                <option value="Réservation">Réservation</option>
-                <option value="Partenariats">Partenariats</option>
-                <option value="Réclamation / Autre">Réclamation / Autre</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">Votre Nom</label>
-              <input type="text" name="nom" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="Jean Dupont" />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">Votre Email</label>
-              <input type="email" name="email" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="jean@exemple.com" />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
-              <textarea name="message" required rows={4} className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="Comment pouvons-nous vous aider ?"></textarea>
-            </div>
-
-            <button type="submit" className="w-full inline-flex items-center justify-center gap-2 bg-gold-400 hover:bg-gold-500 text-gray-900 px-6 py-4 rounded-xl font-black uppercase tracking-widest transition-all mt-2">
-              Envoyer <Send size={18} />
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 }

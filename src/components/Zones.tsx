@@ -1,37 +1,43 @@
-import { MapPin } from 'lucide-react';
+import { motion } from 'motion/react';
+import { MapPin } from '@phosphor-icons/react';
 import { ZONES } from '@/lib/constants';
 import { useI18n } from '@/lib/i18n';
+import { fadeUp, stagger, viewportSoon } from './motion';
 
 export function Zones() {
   const { t } = useI18n();
 
   return (
-    <section id="zones" className="relative overflow-hidden bg-white dark:bg-gray-950 py-16 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal mb-10 text-center lg:mb-14">
-          <p className="mb-3 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[.22em] text-gold-600 sm:text-sm">
-            <span className="h-px w-8 bg-gold-400" />
-            {t('zones.label')}
-            <span className="h-px w-8 bg-gold-400" />
-          </p>
-          <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
-            {t('zones.title1')}<span className="yellow-marker px-1">{t('zones.title2')}</span>
+    <section id="zones" className="border-y border-zinc-200 bg-zinc-50 py-20 dark:border-white/10 dark:bg-zinc-950 lg:py-24">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-14 lg:px-8">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewportSoon} className="lg:col-span-4">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl">
+            {t('zones.title1')}{t('zones.title2')}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base text-gray-500 dark:text-gray-400 sm:text-lg">
-            {t('zones.subtitle')}
-          </p>
-        </div>
+          <p className="mt-4 text-base leading-relaxed text-zinc-600 dark:text-zinc-400">{t('zones.subtitle')}</p>
+        </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-3" data-testid="zones-list">
-          {ZONES.map((zone) => (
-            <div
-              key={zone}
-              className="group flex min-h-[44px] items-center gap-2.5 rounded-full border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 px-5 py-2.5 transition-[transform,border-color,background-color] duration-300 hover:-translate-y-0.5 hover:border-gold-400 dark:hover:border-gold-500 hover:bg-gold-50 dark:hover:bg-gold-500/10"
-            >
-              <MapPin size={15} className="text-gold-600 transition-transform duration-300 group-hover:scale-110" />
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{zone}</span>
-            </div>
-          ))}
+        <div className="lg:col-span-8">
+          <motion.ul
+            variants={stagger(0.04)}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewportSoon}
+            className="flex flex-wrap gap-2.5"
+            data-testid="zones-list"
+          >
+            {ZONES.map((zone) => (
+              <motion.li
+                key={zone}
+                variants={fadeUp}
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-800 transition-colors hover:border-gold-400 hover:bg-gold-50 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-gold-400/60 dark:hover:bg-gold-400/10"
+              >
+                <MapPin size={15} className="text-gold-600 dark:text-gold-400" />
+                {zone}
+              </motion.li>
+            ))}
+          </motion.ul>
+          <p className="mt-6 max-w-[60ch] text-sm leading-relaxed text-zinc-500 dark:text-zinc-500">{t('zones.beyond')}</p>
         </div>
       </div>
     </section>

@@ -1,158 +1,184 @@
-import { useParams, Navigate } from 'react-router-dom';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { ReservationWizard } from '@/components/ReservationWizard';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Clock, Car, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Link, useOutletContext, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { motion, useReducedMotion } from 'motion/react';
+import { CheckCircle, ArrowRight } from '@phosphor-icons/react';
+import { PageHeader } from '@/components/PageHeader';
+import { NotFound } from '@/pages/NotFound';
 import trajets from '@/data/trajets.json';
-import { useI18n } from '@/lib/i18n';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+};
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+
+const HEADER_IMAGE = 'https://images.pexels.com/photos/9459158/pexels-photo-9459158.jpeg?auto=compress&cs=tinysrgb&w=1200';
+const ARGUMENTS = [
+  'Prix fixe annoncé lors de la réservation',
+  'Chauffeur professionnel et ponctuel',
+  'Mercedes Classe E ou Classe V',
+  'Prise en charge des bagages',
+  'Attente incluse en cas de retard de vol ou de train',
+];
 
 export function TrajetTemplate() {
   const { slug } = useParams<{ slug: string }>();
+  const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
+  const reduce = useReducedMotion();
   const trajet = trajets.find((t) => t.slug === slug);
-  const [wizardOpen, setWizardOpen] = useState(false);
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
 
-  if (!trajet) {
-    return <Navigate to="/" replace />;
-  }
+  if (!trajet) return <NotFound />;
 
-  const openBooking = () => {
-    setWizardOpen(true);
+  const url = `https://www.afbtaxis.com/trajets/${trajet.slug}`;
+  const others = trajets.filter((t) => t.slug !== trajet.slug);
+  const stats = [
+    { label: 'Distance', value: trajet.distance },
+    { label: 'Durée estimée', value: trajet.duration },
+    { label: 'Berline (1 à 4 pers.)', value: `Dès ${trajet.priceCar}` },
+    { label: 'Van (5 à 7 pers.)', value: `Dès ${trajet.priceVan}` },
+  ];
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        name: trajet.h1,
+        description: trajet.description,
+        serviceType: 'Chauffeur privé et taxi',
+        areaServed: [trajet.origin, trajet.destination],
+        url,
+        provider: { '@type': 'Organization', name: 'AFB Taxis', url: 'https://www.afbtaxis.com' },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.afbtaxis.com/' },
+          { '@type': 'ListItem', position: 2, name: trajet.h1, item: url },
+        ],
+      },
+    ],
+  };
+
+  const view = {
+    initial: reduce ? false : ('hidden' as const),
+    whileInView: 'show' as const,
+    viewport: { once: true, amount: 0.3 },
   };
 
   return (
     <>
-      <Navbar onOpenBooking={openBooking} />
-      <main className="flex-1 bg-white dark:bg-gray-950">
-        
-        {/* Hero Section */}
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src="https://images.pexels.com/photos/9459158/pexels-photo-9459158.jpeg?auto=compress&cs=tinysrgb&w=2000" 
-              alt={trajet.title}
-              className="w-full h-full object-cover opacity-90 dark:opacity-40"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/40 dark:from-gray-950 dark:via-gray-950/80 dark:to-gray-950/40" />
-            <div className="absolute inset-0 bg-gray-900/40 dark:bg-black/60 mix-blend-multiply" />
-          </div>
+      <Helmet>
+        <title>{`${trajet.title} | AFB Taxis`}</title>
+        <meta name="description" content={trajet.description} />
+        <link rel="canonical" href={url} />
+        <meta property="og:title" content={trajet.title} />
+        <meta property="og:description" content={trajet.description} />
+        <meta property="og:url" content={url} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-400/20 text-gold-600 dark:text-gold-400 font-bold text-sm tracking-widest uppercase mb-6 backdrop-blur-md border border-gold-400/30">
-              <span className="w-2 h-2 rounded-full bg-gold-500 animate-pulse-gold"></span>
-              Service 24H/24 & 7J/7
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-black text-gray-900 dark:text-white tracking-tight mb-6 drop-shadow-sm">
-              {trajet.h1.split(' ↔ ')[0]} <br/>
-              <span className="text-gold-600 dark:text-gold-400">↔ {trajet.h1.split(' ↔ ')[1]}</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-10 drop-shadow-sm">
-              {trajet.description}
-            </p>
-            <button 
-              onClick={openBooking}
-              className="inline-flex items-center justify-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gold-500 hover:text-gray-900 transition-all shadow-xl hover:scale-105"
+      <PageHeader
+        title={trajet.h1}
+        subtitle={trajet.description}
+        image={HEADER_IMAGE}
+        imageAlt={`Chauffeur privé AFB Taxis, trajet ${trajet.origin} vers ${trajet.destination}`}
+        breadcrumb={[{ label: 'Accueil', to: '/' }, { label: trajet.h1, to: `/trajets/${trajet.slug}` }]}
+      >
+        <button
+          type="button"
+          onClick={() => openBooking(`${trajet.origin} - ${trajet.destination}`)}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-gold-400 px-7 py-3 font-semibold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        >
+          Réserver
+        </button>
+      </PageHeader>
+
+      <section className="border-b border-zinc-200 bg-white dark:border-white/10 dark:bg-zinc-900">
+        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 md:grid-cols-4 md:divide-x md:divide-zinc-200 md:dark:divide-white/10 lg:px-8">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className={`py-8 md:px-8 md:first:pl-0 ${i % 2 === 1 ? 'border-l border-zinc-200 pl-6 dark:border-white/10 md:border-l-0' : ''} ${i > 1 ? 'border-t border-zinc-200 dark:border-white/10 md:border-t-0' : ''}`}
             >
-              Réserver ce trajet <ArrowRight size={20} />
-            </button>
-          </div>
-        </section>
-
-        {/* Info Grid */}
-        <section className="py-12 bg-gray-50 dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="p-4">
-                <MapPin className="mx-auto text-gold-500 mb-3" size={32} />
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Distance</p>
-                <p className="text-xl font-black text-gray-900 dark:text-white">{trajet.distance}</p>
-              </div>
-              <div className="p-4 border-l border-gray-200 dark:border-gray-800">
-                <Clock className="mx-auto text-gold-500 mb-3" size={32} />
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Temps estimé</p>
-                <p className="text-xl font-black text-gray-900 dark:text-white">{trajet.duration}</p>
-              </div>
-              <div className="p-4 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-800">
-                <Car className="mx-auto text-gold-500 mb-3" size={32} />
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Berline (1-4p)</p>
-                <p className="text-xl font-black text-gray-900 dark:text-white">Dès {trajet.priceCar}</p>
-              </div>
-              <div className="p-4 border-t border-l md:border-t-0 border-gray-200 dark:border-gray-800">
-                <Car className="mx-auto text-gold-500 mb-3" size={32} />
-                <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">Van (5-7p)</p>
-                <p className="text-xl font-black text-gray-900 dark:text-white">Dès {trajet.priceVan}</p>
-              </div>
+              <dt className="text-sm text-zinc-600 dark:text-zinc-400">{s.label}</dt>
+              <dd className="mt-1 font-display text-2xl tabular-nums tracking-tight text-zinc-900 dark:text-zinc-50 md:text-3xl">{s.value}</dd>
             </div>
-          </div>
-        </section>
+          ))}
+        </dl>
+      </section>
 
-        {/* Content Section */}
-        <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-16 items-center">
-            <div className="lg:w-1/2">
-              <div className="prose prose-lg dark:prose-invert prose-gold">
-                <h2>Un service sur-mesure pour votre trajet {trajet.origin} - {trajet.destination}</h2>
-                <p>{trajet.content}</p>
-                <ul className="mt-8 space-y-4 not-prose">
-                  {[
-                    "Prix fixe garanti lors de la réservation",
-                    "Chauffeur privé professionnel et ponctuel",
-                    "Véhicules haut de gamme (Mercedes Classe E, Classe V)",
-                    "Prise en charge des bagages",
-                    "Attente gratuite en cas de retard de vol/train"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                      <CheckCircle2 className="text-emerald-500 shrink-0" size={24} />
-                      <span className="font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <section className="bg-zinc-50 py-20 dark:bg-zinc-950 lg:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
+          <motion.article {...view} variants={fadeUp}>
+            <div className="prose prose-zinc max-w-none dark:prose-invert prose-headings:font-display prose-headings:tracking-tight">
+              <h2>Votre trajet {trajet.origin} - {trajet.destination}</h2>
+              <p>{trajet.content}</p>
             </div>
-            
-            <div className="lg:w-1/2 w-full">
-              <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-xl">
-                <h3 className="text-2xl font-black font-display text-gray-900 dark:text-white mb-6">Demander un devis immédiat</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Départ</label>
-                    <input type="text" readOnly value={trajet.origin} className="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white font-medium focus:outline-none" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Arrivée</label>
-                    <input type="text" readOnly value={trajet.destination} className="w-full bg-white dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white font-medium focus:outline-none" />
-                  </div>
-                  <button onClick={openBooking} className="w-full mt-4 bg-gold-400 hover:bg-gold-500 text-gray-900 font-black uppercase tracking-widest py-4 rounded-xl transition-colors">
-                    Continuer la réservation
-                  </button>
-                  <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4 flex items-center justify-center gap-2">
-                    <ShieldCheck size={16} className="text-emerald-500" /> Paiement sécurisé à bord ou en ligne
-                  </p>
+            <ul className="mt-8 divide-y divide-zinc-200 dark:divide-white/10">
+              {ARGUMENTS.map((a) => (
+                <li key={a} className="flex items-center gap-3 py-3 text-zinc-700 dark:text-zinc-300">
+                  <CheckCircle size={22} weight="regular" className="shrink-0 text-gold-600 dark:text-gold-400" aria-hidden="true" />
+                  <span>{a}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.article>
+
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <motion.div
+              {...view}
+              variants={fadeUp}
+              className="rounded-[20px] border border-zinc-200 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(24,24,27,0.25)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none md:p-8"
+            >
+              <h2 className="font-display text-2xl tracking-tight text-zinc-900 dark:text-zinc-50">Réserver ce trajet</h2>
+              <dl className="mt-6 divide-y divide-zinc-200 dark:divide-white/10">
+                <div className="py-3">
+                  <dt className="text-sm text-zinc-600 dark:text-zinc-400">Départ</dt>
+                  <dd className="font-medium text-zinc-900 dark:text-zinc-50">{trajet.origin}</dd>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
+                <div className="py-3">
+                  <dt className="text-sm text-zinc-600 dark:text-zinc-400">Arrivée</dt>
+                  <dd className="font-medium text-zinc-900 dark:text-zinc-50">{trajet.destination}</dd>
+                </div>
+              </dl>
+              <button
+                type="button"
+                onClick={() => openBooking(`${trajet.origin} - ${trajet.destination}`)}
+                className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center rounded-full bg-gold-400 px-8 py-3 font-semibold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
+              >
+                Réserver
+              </button>
+            </motion.div>
+          </aside>
+        </div>
+      </section>
 
-      </main>
-      <Footer />
-      
-      <div className="hidden lg:block">
-        <WhatsAppButton />
-      </div>
-      <MobileBottomNav onOpenBooking={openBooking} />
-      
-      <ReservationWizard
-        open={wizardOpen}
-        onClose={() => setWizardOpen(false)}
-        context={`Réservation: ${trajet.origin} ↔ ${trajet.destination}`}
-      />
+      <section className="bg-white py-20 dark:bg-zinc-900 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl">
+            Autres trajets
+          </h2>
+          <motion.ul {...view} variants={stagger} className="divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-white/10 dark:border-white/10">
+            {others.map((o) => (
+              <motion.li key={o.slug} variants={fadeUp}>
+                <Link
+                  to={`/trajets/${o.slug}`}
+                  className="group flex min-h-[64px] items-center justify-between gap-4 py-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
+                >
+                  <span className="font-display text-lg tracking-tight text-zinc-900 group-hover:text-gold-700 dark:text-zinc-50 dark:group-hover:text-gold-300">{o.h1}</span>
+                  <span className="flex items-center gap-4 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
+                    <span>{o.distance}</span>
+                    <span>Dès {o.priceCar}</span>
+                    <ArrowRight size={18} weight="regular" aria-hidden="true" />
+                  </span>
+                </Link>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+      </section>
     </>
   );
 }

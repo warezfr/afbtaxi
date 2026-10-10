@@ -1,196 +1,210 @@
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { ReservationWizard } from '@/components/ReservationWizard';
-import { useState, useEffect } from 'react';
-import { Star, Building2, CalendarCheck, CreditCard, MessageCircle, Send, MapPin } from 'lucide-react';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { motion, useReducedMotion } from 'motion/react';
+import {
+  Star,
+  CalendarCheck,
+  Receipt,
+  Airplane,
+  GraduationCap,
+  Train,
+  PaperPlaneTilt,
+  WhatsappLogo,
+} from '@phosphor-icons/react';
+import { PageHeader } from '@/components/PageHeader';
 import { COMPANY } from '@/lib/constants';
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+};
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+
+const SERVICES = [
+  { icon: Star, title: 'Flotte discrète', desc: 'Mercedes Classe E, Classe S et Classe V entretenues avec soin, chauffeurs en costume.' },
+  { icon: CalendarCheck, title: 'Priorité de réservation', desc: 'Vos demandes passent en premier, y compris pendant les événements de l\'INSEAD.' },
+  { icon: Receipt, title: 'Facturation centralisée', desc: 'Paiement différé à 30 jours, facture unique et bons de commande acceptés.' },
+  { icon: Airplane, title: 'Transferts aéroports', desc: 'Orly et Roissy-CDG, suivi du vol et attente incluse en cas de retard.' },
+  { icon: GraduationCap, title: 'Navettes INSEAD et entreprises', desc: 'Arrivées de groupes, séminaires et déplacements de direction en Seine-et-Marne.' },
+  { icon: Train, title: 'Gares et sites touristiques', desc: 'Gare de Fontainebleau-Avon, château de Fontainebleau, Vaux-le-Vicomte.' },
+];
+
+const STEPS = [
+  { n: '01', title: 'Vous nous écrivez', desc: 'Remplissez le formulaire ou envoyez un message WhatsApp avec votre volume estimé.' },
+  { n: '02', title: 'Nous ouvrons votre compte', desc: 'Un interlocuteur dédié vous recontacte sous 24 heures et fixe les conditions.' },
+  { n: '03', title: 'Vous réservez', desc: 'Par téléphone, WhatsApp ou en ligne, avec un prix annoncé avant le départ.' },
+];
+
+const fieldClass =
+  'w-full rounded-xl border border-zinc-300 bg-zinc-50 px-4 py-3 text-zinc-900 placeholder:text-zinc-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-50 dark:placeholder:text-zinc-500 dark:focus-visible:ring-offset-zinc-900';
+const labelClass = 'mb-2 block text-sm font-semibold text-zinc-800 dark:text-zinc-200';
+
 export function Partenaires() {
-  const [wizardOpen, setWizardOpen] = useState(false);
+  const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
+  const [params] = useSearchParams();
+  const reduce = useReducedMotion();
+  const sent = params.get('success') === 'true';
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const whatsappMessage = "Bonjour, je souhaite ouvrir un compte partenaire / conciergerie avec AFB Taxis.";
+  const whatsappMessage = 'Bonjour, je souhaite ouvrir un compte partenaire / conciergerie avec AFB Taxis.';
   const whatsappUrl = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+
+  const view = {
+    initial: reduce ? false : ('hidden' as const),
+    whileInView: 'show' as const,
+    viewport: { once: true, amount: 0.3 },
+  };
 
   return (
     <>
-      <Navbar onOpenBooking={() => setWizardOpen(true)} />
-      <main className="flex-1 bg-white dark:bg-gray-950">
-        
-        
-        {/* HERO SECTION AVEC IMAGE */}
-        <div className="relative overflow-hidden bg-gray-900 pt-32 pb-20 lg:pt-48 lg:pb-40">
-          <div className="absolute inset-0 z-0">
-            <img 
-              src="https://images.unsplash.com/photo-1563911302283-d2bc129e7570?q=80&w=2000&auto=format&fit=crop" 
-              alt="Partenaires et Conciergerie AFB Taxis"
-              className="w-full h-full object-cover"
-            />
-            {/* Dark gradient overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-gray-900/90" />
-            <div className="absolute inset-0 bg-black/40" />
-          </div>
+      <Helmet>
+        <title>Partenariat hôtels, entreprises et agences | AFB Taxis Fontainebleau</title>
+        <meta
+          name="description"
+          content="Hôtels, conciergeries, INSEAD et entreprises : chauffeur privé à Fontainebleau avec priorité de réservation et facturation centralisée. Ouvrez un compte partenaire."
+        />
+        <link rel="canonical" href="https://www.afbtaxis.com/partenaires" />
+        <meta property="og:title" content="Partenariat hôtels, entreprises et agences | AFB Taxis" />
+        <meta property="og:url" content="https://www.afbtaxis.com/partenaires" />
+        <meta property="og:type" content="website" />
+      </Helmet>
 
-          <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-400/20 text-gold-400 font-bold text-sm tracking-widest uppercase mb-8 backdrop-blur-md border border-gold-400/30">
-              <Building2 size={16} /> Espace Entreprises & Hôtels
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white tracking-tight mb-8 drop-shadow-sm">
-              Le partenaire VTC de confiance <br className="hidden lg:block"/>
-              <span className="text-gold-400">pour vos clients les plus exigeants</span>
-            </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-10 drop-shadow-sm">
-              Hôtels de luxe, conciergeries, administration de l'INSEAD et grandes entreprises : AFB Taxis met à votre disposition une flotte premium et un service prioritaire.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a 
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#25D366] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[#20bd5a] transition-all shadow-xl hover:scale-105"
+      <PageHeader
+        title="Partenariat hôtels, entreprises et agences"
+        subtitle="Une flotte premium, un interlocuteur dédié et une facturation simple pour vos clients."
+        breadcrumb={[{ label: 'Accueil', to: '/' }, { label: 'Partenaires', to: '/partenaires' }]}
+      >
+        <button
+          type="button"
+          onClick={() => openBooking('Partenaires')}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-gold-400 px-7 py-3 font-semibold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        >
+          Réserver
+        </button>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-3 font-semibold text-zinc-950 transition-colors hover:bg-[#20bd5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+        >
+          <WhatsappLogo size={22} weight="regular" aria-hidden="true" /> WhatsApp
+        </a>
+      </PageHeader>
+
+      <section className="bg-zinc-50 py-20 dark:bg-zinc-950 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-12 max-w-2xl font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">
+            Ce que nous prenons en charge
+          </h2>
+          <motion.ul
+            {...view}
+            variants={stagger}
+            className="grid gap-x-16 divide-y divide-zinc-200 dark:divide-white/10 md:grid-cols-2 md:divide-y-0"
+          >
+            {SERVICES.map(({ icon: Icon, title, desc }) => (
+              <motion.li
+                key={title}
+                variants={fadeUp}
+                className="flex gap-5 border-t border-zinc-200 py-7 dark:border-white/10"
               >
-                <MessageCircle size={24} /> Ligne Directe Conciergerie
-              </a>
-              <a 
-                href="#formulaire-partenaire"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all border border-gray-200"
-              >
-                Demander l'ouverture d'un compte
-              </a>
-            </div>
-          </div>
-
-          {/* Wave transition to white/dark */}
-          <div className="absolute -bottom-px left-0 right-0 z-10 overflow-hidden">
-            <svg viewBox="0 0 2880 110" preserveAspectRatio="none" className="block h-[50px] w-[200%] fill-gray-50 dark:fill-gray-900 sm:h-[70px] lg:h-[95px] animate-wave">
-              <path d="M0,50 C360,110 360,-10 720,50 C1080,110 1080,-10 1440,50 C1800,110 1800,-10 2160,50 C2520,110 2520,-10 2880,50 L2880,110 L0,110 Z" />
-            </svg>
-          </div>
-        </div>
-
-        {/* MOTS CLÉS SEO CACHÉS */}
-        <div className="opacity-0 pointer-events-none w-0 h-0 absolute overflow-hidden" aria-hidden="true">
-          Partenaires VTC Fontainebleau, Conciergerie Aigle Noir Fontainebleau, Navette INSEAD Fontainebleau, Hôtel Demeures de Campagne Parc de Fontainebleau, VTC L'Axel Fontainebleau, Hôtels de luxe Fontainebleau, Transport Château de Fontainebleau, VTC Château de Vaux-le-Vicomte, Transport partenaires Barbizon, Navette entreprise Fontainebleau, Chauffeur de direction Seine-et-Marne, Transport VIP INSEAD.
-        </div>
-
-        {/* POURQUOI NOUS CHOISIR */}
-        <section className="py-24 bg-gray-50 dark:bg-gray-900 border-y border-gray-200 dark:border-gray-800">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-display font-black text-gray-900 dark:text-white text-center mb-16">
-              Pourquoi nous confier vos clients ?
-            </h2>
-            <div className="grid md:grid-cols-3 gap-12">
-              {[
-                {
-                  icon: <Star className="text-gold-500 w-12 h-12" />,
-                  title: "Flotte Premium Anonyme",
-                  desc: "Des véhicules haut de gamme (Mercedes) discrets, parfaitement entretenus, chauffeurs en costume."
-                },
-                {
-                  icon: <CalendarCheck className="text-gold-500 w-12 h-12" />,
-                  title: "Priorité de Réservation",
-                  desc: "Vos demandes sont traitées en priorité absolue, même en période de forte affluence (événements INSEAD)."
-                },
-                {
-                  icon: <CreditCard className="text-gold-500 w-12 h-12" />,
-                  title: "Facturation Simplifiée",
-                  desc: "Possibilité de paiement différé à 30 jours, facturation centralisée et bons de commande acceptés."
-                }
-              ].map((benefit, i) => (
-                <div key={i} className="text-center p-8 rounded-3xl bg-white dark:bg-gray-950 shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-xl transition-shadow">
-                  <div className="inline-flex p-4 rounded-2xl bg-gold-50 dark:bg-gold-500/10 mb-6">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{benefit.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">{benefit.desc}</p>
+                <Icon size={32} weight="regular" className="mt-1 shrink-0 text-gold-600 dark:text-gold-400" aria-hidden="true" />
+                <div>
+                  <h3 className="font-display text-xl tracking-tight text-zinc-900 dark:text-zinc-50">{title}</h3>
+                  <p className="mt-2 max-w-[65ch] leading-relaxed text-zinc-600 dark:text-zinc-400">{desc}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+      </section>
 
-        {/* FORMULAIRE D'OUVERTURE DE COMPTE */}
-        <section id="formulaire-partenaire" className="py-24">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white dark:bg-gray-900 p-8 md:p-12 rounded-[2rem] shadow-2xl border border-gray-100 dark:border-gray-800">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-display font-black text-gray-900 dark:text-white mb-4">
-                  Demande d'Ouverture de Compte
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Remplissez ce formulaire pour être recontacté sous 24h par notre équipe commerciale dédiée aux partenariats professionnels.
-                </p>
+      <section className="bg-white py-20 dark:bg-zinc-900 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-14 max-w-2xl font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">
+            Comment ça marche
+          </h2>
+          <motion.ol {...view} variants={stagger} className="grid gap-10 md:grid-cols-3 md:gap-12">
+            {STEPS.map((s) => (
+              <motion.li key={s.n} variants={fadeUp}>
+                <span className="font-display text-5xl tabular-nums text-gold-500">{s.n}</span>
+                <h3 className="mt-4 font-display text-xl tracking-tight text-zinc-900 dark:text-zinc-50">{s.title}</h3>
+                <p className="mt-2 max-w-[65ch] leading-relaxed text-zinc-600 dark:text-zinc-400">{s.desc}</p>
+              </motion.li>
+            ))}
+          </motion.ol>
+        </div>
+      </section>
+
+      <section id="formulaire-partenaire" className="bg-zinc-50 py-20 dark:bg-zinc-950 lg:py-28">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-[20px] border border-zinc-200 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(24,24,27,0.25)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none md:p-10">
+            <h2 className="font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50">
+              Demande d'ouverture de compte
+            </h2>
+            <p className="mt-3 mb-8 leading-relaxed text-zinc-600 dark:text-zinc-400">
+              Notre équipe vous recontacte sous 24 heures.
+            </p>
+
+            {sent && (
+              <p role="status" className="mb-8 rounded-xl border border-gold-300 bg-gold-50 px-4 py-3 text-zinc-900 dark:border-gold-700 dark:bg-gold-900/30 dark:text-zinc-50">
+                Votre demande est bien envoyée. Nous vous recontactons sous 24 heures.
+              </p>
+            )}
+
+            <form action="https://formsubmit.co/afb@afbtaxis.com" method="POST" className="space-y-6">
+              <input type="hidden" name="_autoresponse" value="Bonjour ! Nous avons bien reçu votre demande d'ouverture de compte partenaire B2B chez AFB Taxis. Notre équipe commerciale va l'étudier avec soin et vous recontactera d'ici 24 heures maximum. À très vite ! L'équipe AFB Taxis." />
+              <input type="hidden" name="_subject" value="Nouvelle Demande de Partenariat B2B !" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_next" value="https://www.afbtaxis.com/partenaires?success=true" />
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div>
+                  <label htmlFor="p-societe" className={labelClass}>Établissement / Société</label>
+                  <input id="p-societe" type="text" name="societe" required className={fieldClass} placeholder="Ex : Hôtel de l'Aigle Noir" />
+                </div>
+                <div>
+                  <label htmlFor="p-nom" className={labelClass}>Nom du contact</label>
+                  <input id="p-nom" type="text" name="nom" required className={fieldClass} placeholder="Votre nom" />
+                </div>
               </div>
 
-              <form action="https://formsubmit.co/afb@afbtaxis.com" method="POST" className="space-y-6">
-                {/* Auto-response pour le client */}
-                <input type="hidden" name="_autoresponse" value="Bonjour ! Nous avons bien reçu votre demande d'ouverture de compte partenaire B2B chez AFB Taxis. Notre équipe commerciale va l'étudier avec soin et vous recontactera d'ici 24 heures maximum. À très vite ! L'équipe AFB Taxis." />
-                <input type="hidden" name="_subject" value="Nouvelle Demande de Partenariat B2B !" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_next" value="https://www.afbtaxis.com/partenaires?success=true" />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Établissement / Société</label>
-                    <input type="text" name="societe" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="Ex: Hôtel de l'Aigle Noir" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Nom du contact</label>
-                    <input type="text" name="nom" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="Votre nom" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Professionnel</label>
-                    <input type="email" name="email" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="contact@etablissement.com" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Téléphone</label>
-                    <input type="tel" name="telephone" required className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="01 23 45 67 89" />
-                  </div>
-                </div>
-
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Besoin estimé</label>
-                  <select name="volume" className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none">
-                    <option value="Occasionnel">Occasionnel (1-5 trajets/mois)</option>
-                    <option value="Regulier">Régulier (5-20 trajets/mois)</option>
-                    <option value="Quotidien">Quotidien (Plus de 20 trajets/mois)</option>
-                  </select>
+                  <label htmlFor="p-email" className={labelClass}>E-mail professionnel</label>
+                  <input id="p-email" type="email" name="email" required className={fieldClass} placeholder="contact@etablissement.com" />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Message (Optionnel)</label>
-                  <textarea name="message" rows={4} className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 rounded-xl px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-gold-500 focus:outline-none" placeholder="Précisez vos besoins particuliers..."></textarea>
+                  <label htmlFor="p-tel" className={labelClass}>Téléphone</label>
+                  <input id="p-tel" type="tel" name="telephone" required className={fieldClass} placeholder="01 23 45 67 89" />
                 </div>
+              </div>
 
-                <button type="submit" className="w-full inline-flex items-center justify-center gap-3 bg-gold-400 hover:bg-gold-500 text-gray-900 px-8 py-4 rounded-xl font-black uppercase tracking-widest transition-all shadow-xl">
-                  Envoyer la demande <Send size={20} />
-                </button>
-              </form>
-            </div>
+              <div>
+                <label htmlFor="p-volume" className={labelClass}>Besoin estimé</label>
+                <select id="p-volume" name="volume" className={fieldClass}>
+                  <option value="Occasionnel">Occasionnel (1-5 trajets/mois)</option>
+                  <option value="Regulier">Régulier (5-20 trajets/mois)</option>
+                  <option value="Quotidien">Quotidien (plus de 20 trajets/mois)</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="p-message" className={labelClass}>Message (facultatif)</label>
+                <textarea id="p-message" name="message" rows={4} className={fieldClass} placeholder="Précisez vos besoins particuliers" />
+              </div>
+
+              <button
+                type="submit"
+                className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-gold-400 px-8 py-3 font-semibold text-zinc-950 transition-colors hover:bg-gold-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
+              >
+                Envoyer la demande <PaperPlaneTilt size={20} weight="regular" aria-hidden="true" />
+              </button>
+            </form>
           </div>
-        </section>
-
-      </main>
-      <Footer />
-      
-      <div className="hidden lg:block">
-        <WhatsAppButton />
-      </div>
-      <MobileBottomNav onOpenBooking={() => setWizardOpen(true)} />
-      
-      <ReservationWizard
-        open={wizardOpen}
-        onClose={() => setWizardOpen(false)}
-      />
+        </div>
+      </section>
     </>
   );
 }

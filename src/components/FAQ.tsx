@@ -1,88 +1,98 @@
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { useI18n } from '../lib/i18n';
+import { AnimatePresence, motion } from 'motion/react';
+import { Plus } from '@phosphor-icons/react';
+import { useI18n } from '@/lib/i18n';
+import { fadeUp, stagger, viewportSoon, useMotionOk } from './motion';
 
 const FAQ_DATA = [
   {
-    question: "Comment puis-je réserver mon taxi ?",
-    answer: "Vous pouvez réserver très facilement via notre module de réservation en ligne, par téléphone au 06 07 42 46 16, ou directement sur WhatsApp. Nous vous recommandons de réserver à l'avance pour les trajets vers les aéroports."
+    question: 'Comment réserver un taxi ?',
+    answer: 'En ligne via le formulaire de réservation, par téléphone au 06 07 42 46 16 ou sur WhatsApp. Pour les aéroports, réservez la veille si possible.',
   },
   {
-    question: "Comment se passe la confirmation de ma réservation ?",
-    answer: "Une fois votre demande envoyée via le site, vous recevrez immédiatement un e-mail récapitulatif avec les détails de votre trajet. Notre chauffeur vous contactera ensuite (par téléphone ou WhatsApp) pour confirmer la prise en charge."
+    question: 'Comment ma réservation est-elle confirmée ?',
+    answer: 'Vous recevez un e-mail récapitulatif immédiatement, puis le chauffeur vous contacte par téléphone ou WhatsApp pour confirmer la prise en charge.',
   },
   {
-    question: "Quels sont les moyens de paiement acceptés ?",
-    answer: "Nous acceptons les paiements par Carte Bancaire (Visa, Mastercard, Amex) directement à bord du véhicule, ainsi que les paiements en espèces. Une facture vous sera délivrée sur demande."
+    question: 'Quels moyens de paiement acceptez-vous ?',
+    answer: 'Carte bancaire (Visa, Mastercard, American Express) à bord du véhicule, et espèces. Une facture est remise sur demande.',
   },
   {
-    question: "Proposez-vous le transport médical conventionné ?",
-    answer: "Oui, AFB Taxis est un taxi conventionné par la CPAM en Seine-et-Marne (77). Nous assurons vos transports médicaux vers les hôpitaux et centres de soins (aller-retour). Pensez à vous munir de votre prescription médicale de transport."
+    question: 'Faites-vous le transport médical conventionné ?',
+    answer: 'Oui. AFB Taxis est conventionné CPAM en Seine-et-Marne. Munissez-vous de votre prescription médicale de transport, nous gérons le reste.',
   },
   {
-    question: "Faites-vous les transferts vers les aéroports d'Orly et Roissy CDG ?",
-    answer: "Absolument. Les transferts aéroports sont notre spécialité. Nous desservons Paris-Orly (ORY) et Paris-Charles de Gaulle (CDG). Nous suivons l'horaire de votre vol en temps réel pour vous garantir une arrivée ponctuelle et sans stress."
-  }
+    question: 'Desservez-vous Orly et Roissy CDG ?',
+    answer: 'Oui, ainsi que Beauvais. Nous suivons votre vol en temps réel : en cas de retard, le chauffeur adapte l\'heure de prise en charge.',
+  },
+  {
+    question: 'Le prix annoncé peut-il changer ?',
+    answer: 'Non. Pour les trajets de la grille, le prix est confirmé à la réservation. Les suppléments éventuels (attente, arrêt) sont indiqués à l\'avance.',
+  },
 ];
 
 export function FAQ() {
   const { t } = useI18n();
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const motionOk = useMotionOk();
+  const [open, setOpen] = useState<number | null>(0);
 
   const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": FAQ_DATA.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_DATA.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
   };
 
   return (
-    <section id="faq" className="bg-gray-50 dark:bg-gray-950 py-24 sm:py-32">
-      <div className="mx-auto max-w-4xl px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-display text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
-            Questions <span className="text-gold-500">Fréquentes</span>
-          </h2>
-          <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
-            Tout ce que vous devez savoir sur nos services de taxi à Fontainebleau.
-          </p>
-        </div>
+    <section id="faq" className="bg-zinc-50 py-20 dark:bg-zinc-950 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={viewportSoon}>
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl lg:text-5xl">{t('faq.title')}</h2>
+          <p className="mt-3 text-base text-zinc-600 dark:text-zinc-400">{t('faq.subtitle')}</p>
+        </motion.div>
 
-        <div className="space-y-4">
-          {FAQ_DATA.map((faq, index) => (
-            <div 
-              key={index} 
-              className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200"
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none"
-              >
-                <span className="font-display font-bold text-gray-900 dark:text-white text-lg pr-4">{faq.question}</span>
-                <ChevronDown 
-                  className={`w-5 h-5 text-gold-500 transition-transform duration-300 flex-shrink-0 ${openIndex === index ? 'rotate-180' : ''}`} 
-                />
-              </button>
-              
-              <div 
-                className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}
-              >
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <motion.dl
+          variants={stagger(0.06)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportSoon}
+          className="mt-10 grid grid-cols-1 gap-x-12 md:grid-cols-2"
+        >
+          {FAQ_DATA.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <motion.div key={i} variants={fadeUp} className="border-t border-zinc-200 dark:border-white/10">
+                <dt>
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-${i}`}
+                    className="flex w-full items-center justify-between gap-4 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+                  >
+                    <span className="font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50">{f.question}</span>
+                    <motion.span animate={{ rotate: isOpen ? 45 : 0 }} transition={{ duration: 0.25 }} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-200/70 text-zinc-900 dark:bg-white/10 dark:text-zinc-50">
+                      <Plus size={16} weight="bold" />
+                    </motion.span>
+                  </button>
+                </dt>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.dd
+                      id={`faq-${i}`}
+                      initial={motionOk ? { height: 0, opacity: 0 } : false}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={motionOk ? { height: 0, opacity: 0 } : undefined}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="max-w-[60ch] pb-6 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{f.answer}</p>
+                    </motion.dd>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </motion.dl>
       </div>
-
-      {/* JSON-LD Schema for FAQ */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </section>
   );

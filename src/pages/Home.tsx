@@ -1,15 +1,15 @@
 import { useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Hero } from '@/components/Hero';
-import { TrustMarquee } from '@/components/TrustMarquee';
+import { ProofBar } from '@/components/ProofBar';
 import { Services } from '@/components/Services';
 import { Fleet } from '@/components/Fleet';
 import { Zones } from '@/components/Zones';
 import { Tarifs } from '@/components/Tarifs';
 import { Advantages } from '@/components/Advantages';
 import { Reviews } from '@/components/Reviews';
-import { ContactSection } from '@/components/ContactSection';
 import { FAQ } from '@/components/FAQ';
+import { ContactSection } from '@/components/ContactSection';
 
 export function Home() {
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
@@ -17,21 +17,24 @@ export function Home() {
   return (
     <>
       <Helmet>
-        <title>AFB Taxis | Chauffeur Privé et VTC à Fontainebleau & Région Parisienne</title>
-        <meta name="description" content="Réservez votre taxi ou chauffeur privé à Fontainebleau. Navettes aéroports (Orly, CDG), gares, transport médicalisé (conventionné CPAM). Service Premium 24/7." />
+        <title>AFB Taxis | Taxi et chauffeur privé à Fontainebleau, aéroports, CPAM</title>
+        <meta
+          name="description"
+          content="Taxi et chauffeur privé à Fontainebleau et Seine-et-Marne. Transferts Orly, Roissy CDG, gares, Paris, transport conventionné CPAM. Mercedes Classe S, E, V. Réservation 24h/24 au 06 07 42 46 16."
+        />
+        <link rel="canonical" href="https://www.afbtaxis.com/" />
       </Helmet>
-      
+
       <Hero onOpenBooking={openBooking} />
+      <ProofBar onOpenBooking={openBooking} />
       <Services onOpenBooking={openBooking} />
-      <div className="content-auto">
-        <Fleet onOpenBooking={openBooking} />
-        <Zones />
-        <Tarifs />
-        <Advantages />
-        <Reviews />
-        <FAQ />
-        <ContactSection onOpenBooking={() => openBooking()} />
-      </div>
+      <Fleet onOpenBooking={openBooking} />
+      <Zones />
+      <Tarifs />
+      <Advantages />
+      <Reviews />
+      <FAQ />
+      <ContactSection onOpenBooking={() => openBooking()} />
     </>
   );
 }

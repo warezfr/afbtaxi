@@ -1,97 +1,66 @@
-import { useState } from 'react';
-import { useParams, Navigate, Link, useOutletContext } from 'react-router-dom';
+import { Children, isValidElement, useMemo, type ReactNode } from 'react';
+import { useParams, Link, useOutletContext } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import ReactMarkdown from 'react-markdown';
-import { Heart, Share2, Facebook, Twitter, Linkedin, Mail, Link as LinkIcon, Send } from 'lucide-react';
-import { useBlogPost, useBlogPosts } from '@/hooks/useBlogPosts';
-import { ContactSection } from '@/components/ContactSection';
+import ReactMarkdown, { type Components } from 'react-markdown';
+import { motion, useReducedMotion } from 'motion/react';
+import { ArrowLeft, ArrowRight, Phone } from '@phosphor-icons/react';
+import { useBlogPost, getRelatedPosts, getAdjacentPosts } from '@/hooks/useBlogPosts';
+import { COMPANY } from '@/lib/constants';
+import { PostCard } from '@/components/blog/PostCard';
+import { PostCta } from '@/components/blog/PostCta';
+import { ShareBar } from '@/components/blog/ShareBar';
+import { TableOfContents } from '@/components/blog/TableOfContents';
+import { ReadingProgress } from '@/components/blog/ReadingProgress';
+import { extractHeadings, slugify } from '@/components/blog/headings';
+import { formatDate, gridVariants } from '@/components/blog/utils';
 
-function ShareBar({ title, url }: { title: string; url: string }) {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [copied, setCopied] = useState(false);
+const SITE = 'https://www.afbtaxis.com';
 
-  const encoded = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
-
-  const shares = [
-    { icon: Facebook,  label: 'Facebook',  href: `https://www.facebook.com/sharer/sharer.php?u=${encoded}`,  className: 'bg-[#1877F2] text-white hover:opacity-80 border-transparent shadow-md hover:shadow-lg' },
-    { icon: Twitter,   label: 'X / Twitter', href: `https://twitter.com/intent/tweet?url=${encoded}&text=${encodedTitle}`, className: 'bg-black dark:bg-white text-white dark:text-black hover:opacity-80 border-transparent shadow-md hover:shadow-lg' },
-    { icon: Linkedin,  label: 'LinkedIn',  href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`, className: 'bg-[#0A66C2] text-white hover:opacity-80 border-transparent shadow-md hover:shadow-lg' },
-    { icon: Send,      label: 'Telegram',  href: `https://t.me/share/url?url=${encoded}&text=${encodedTitle}`, className: 'bg-[#229ED9] text-white hover:opacity-80 border-transparent shadow-md hover:shadow-lg' },
-    { icon: Mail,      label: 'E-mail',    href: `mailto:?subject=${encodedTitle}&body=${encoded}`, className: 'bg-gray-600 text-white hover:opacity-80 border-transparent shadow-md hover:shadow-lg' },
-  ];
-
-  const handleLike = () => {
-    setLiked(prev => !prev);
-    setLikeCount(prev => prev + (liked ? -1 : 1));
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(url).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  return (
-    <div className="my-10 py-8 border-t border-b border-gray-100 dark:border-gray-800">
-      <p className="text-sm font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-5">Vous avez aimé cet article ?</p>
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Like */}
-        <button
-          onClick={handleLike}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-sm transition-all duration-300 border shadow-sm ${liked ? 'bg-gold-500 text-gray-900 border-gold-500 scale-105' : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gold-500 hover:text-gold-500 dark:hover:text-gold-400'}`}
-        >
-          <Heart className={`w-4 h-4 ${liked ? 'fill-gray-900' : ''}`} />
-          {liked ? 'Aimé !' : 'J\'aime'}
-          {likeCount > 0 && <span className="ml-1 text-xs">({likeCount})</span>}
-        </button>
-
-        <span className="text-gray-900 dark:text-white text-sm font-medium flex items-center gap-1.5 ml-2"><Share2 className="w-3.5 h-3.5" /> Partager :</span>
-
-        {/* Social share buttons */}
-        {shares.map(({ icon: Icon, label, href, className }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            title={label}
-            className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-200 hover:scale-110 ${className}`}
-          >
-            <Icon className="w-4 h-4" />
-          </a>
-        ))}
-
-        {/* Copy link */}
-        <button
-          onClick={handleCopy}
-          title="Copier le lien"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm text-sm font-medium transition-all duration-200"
-        >
-          <LinkIcon className="w-4 h-4" />
-          {copied ? '✅ Copié !' : 'Copier le lien'}
-        </button>
-      </div>
-    </div>
-  );
+function textOf(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join('');
+  if (isValidElement(node)) return textOf((node.props as { children?: ReactNode }).children);
+  return Children.toArray(node).map(textOf).join('');
 }
 
 export function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const { openBooking } = useOutletContext<{ openBooking: (context?: string) => void }>();
-  const post = useBlogPost(slug!);
-  const allPosts = useBlogPosts();
+  const post = useBlogPost(slug ?? '');
+  const reduce = useReducedMotion();
 
-  if (!post) return <Navigate to="/blog" replace />;
+  const headings = useMemo(() => (post ? extractHeadings(post.content) : []), [post]);
+  const related = useMemo(() => (post ? getRelatedPosts(post, 3) : []), [post]);
+  const { newer, older } = useMemo(() => (post ? getAdjacentPosts(post) : {}), [post]);
 
-  const pageUrl = `https://www.afbtaxis.com/blog/${post.slug}`;
+  if (!post) {
+    return (
+      <div className="bg-zinc-50 pb-24 pt-36 dark:bg-zinc-950">
+        <Helmet>
+          <title>Article introuvable | AFB Taxis</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="font-display text-4xl leading-[1.02] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-5xl">
+            Cet article n'existe pas
+          </h1>
+          <p className="mt-5 max-w-[55ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+            Le lien est peut-être ancien ou incomplet. Retrouvez tous nos articles dans le Mag.
+          </p>
+          <Link
+            to="/blog"
+            className="mt-8 inline-flex min-h-[48px] items-center gap-2 rounded-full bg-zinc-950 px-6 font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:bg-white dark:text-zinc-950"
+          >
+            <ArrowLeft size={18} weight="regular" />
+            Retour au Mag
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
-  const related = [
-    ...allPosts.filter(p => p.slug !== post.slug && p.category === post.category),
-    ...allPosts.filter(p => p.slug !== post.slug && p.category !== post.category),
-  ].slice(0, 3);
+  const pageUrl = `${SITE}/blog/${post.slug}`;
+  const book = () => openBooking('blog');
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -100,140 +69,205 @@ export function BlogPost() {
     description: post.description,
     image: post.imageUrl,
     datePublished: post.date,
+    dateModified: post.updated || post.date,
+    mainEntityOfPage: pageUrl,
     author: { '@type': 'Organization', name: 'AFB Taxis' },
-    publisher: { '@type': 'Organization', name: 'AFB Taxis', logo: { '@type': 'ImageObject', url: 'https://www.afbtaxis.com/logo.png' } },
+    publisher: { '@type': 'Organization', name: 'AFB Taxis', logo: { '@type': 'ImageObject', url: COMPANY.logoUrl } },
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Mag', item: `${SITE}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: pageUrl },
+    ],
+  };
+
+  const components: Components = {
+    h2: ({ children }) => <h2 id={slugify(textOf(children))}>{children}</h2>,
+    h3: ({ children }) => <h3 id={slugify(textOf(children))}>{children}</h3>,
+    a: ({ href = '', children }) => {
+      if (href === '#reserver') {
+        return (
+          <a href="#reserver" onClick={() => book()}>
+            {children}
+          </a>
+        );
+      }
+      if (href.startsWith('/')) return <Link to={href}>{children}</Link>;
+      if (href.startsWith('#')) return <a href={href}>{children}</a>;
+      return (
+        <a href={href} target="_blank" rel="noopener noreferrer">
+          {children}
+        </a>
+      );
+    },
+    img: ({ src, alt }) => (
+      <img src={src} alt={alt || ''} loading="lazy" decoding="async" className="w-full rounded-[20px]" />
+    ),
+    table: ({ children }) => (
+      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <table className="tabular-nums">{children}</table>
+      </div>
+    ),
   };
 
   return (
     <>
       <Helmet>
-        <title>{post.title} | AFB Taxis</title>
+        <title>{`${post.title} | AFB Taxis`}</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={pageUrl} />
+        <meta property="og:type" content="article" />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.description} />
         <meta property="og:image" content={post.imageUrl} />
         <meta property="og:url" content={pageUrl} />
+        <meta property="article:published_time" content={post.date} />
+        {post.updated && <meta property="article:modified_time" content={post.updated} />}
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={post.description} />
         <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
-      <article className="bg-white dark:bg-gray-950 min-h-screen">
-        {/* Full-width wide hero image */}
-        <div className="w-full h-[55vh] md:h-[65vh] lg:h-[75vh] relative overflow-hidden">
-          <img
-            src={post.imageUrl}
-            alt={`Taxi Fontainebleau - ${post.title}`}
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-900/30 to-transparent" />
+      <ReadingProgress />
 
-          {/* Overlay content */}
-          <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-12 pb-10 sm:pb-14 max-w-5xl mx-auto">
-            <Link to="/blog" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-300 hover:text-gold-400 transition-colors mb-6 drop-shadow-md">
-              ← Le Mag de Fontainebleau
-            </Link>
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="bg-gold-500 text-gray-900 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md">
-                {post.category}
-              </span>
-              {post.tags.filter(t => t !== post.category).slice(0, 3).map(tag => (
-                <span key={tag} className="bg-white/10 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20 shadow-sm">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] font-black tracking-tight leading-tight text-white drop-shadow-lg">
+      <div className="bg-zinc-50 pb-20 pt-28 dark:bg-zinc-950 md:pt-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <header>
+            <nav aria-label="Fil d'Ariane" className="text-sm text-zinc-600 dark:text-zinc-400">
+              <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <li>
+                  <Link to="/" className="hover:text-zinc-900 dark:hover:text-zinc-50">Accueil</Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li>
+                  <Link to="/blog" className="hover:text-zinc-900 dark:hover:text-zinc-50">Mag</Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li>
+                  <Link to="/blog" className="hover:text-zinc-900 dark:hover:text-zinc-50">{post.category}</Link>
+                </li>
+              </ol>
+            </nav>
+
+            <h1 className="mt-6 max-w-4xl font-display text-3xl leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 md:text-5xl">
               {post.title}
             </h1>
-            <p className="mt-4 text-base text-gray-200 leading-relaxed max-w-3xl drop-shadow-md">{post.description}</p>
-            <p className="mt-3 text-xs text-gray-300 font-medium uppercase tracking-wider drop-shadow-md">
-              {new Date(post.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+            <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
+              <span>{formatDate(post.date)}</span>
+              {post.updated && post.updated !== post.date && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>mis à jour le {formatDate(post.updated)}</span>
+                </>
+              )}
+              <span aria-hidden="true">·</span>
+              <span>{post.readingMinutes} min de lecture</span>
+              <span aria-hidden="true">·</span>
+              <span className="font-medium text-gold-700 dark:text-gold-300">{post.category}</span>
             </p>
+
+            <img
+              src={post.imageUrl}
+              alt={post.imageAlt || post.title}
+              width={1280}
+              height={720}
+              {...({ fetchpriority: 'high' } as object)}
+              decoding="async"
+              className="mt-8 aspect-[16/9] w-full rounded-[20px] object-cover shadow-[0_24px_60px_-28px_rgba(24,24,27,0.25)] dark:shadow-none"
+            />
+          </header>
+
+          <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_280px]">
+            <article className="min-w-0">
+              <TableOfContents headings={headings} variant="mobile" />
+              <div
+                className="prose prose-zinc prose-lg max-w-[68ch] dark:prose-invert
+                  prose-headings:font-display prose-headings:tracking-tight prose-headings:scroll-mt-28
+                  prose-a:font-medium prose-a:text-gold-700 prose-a:underline-offset-4 hover:prose-a:text-gold-600 dark:prose-a:text-gold-300
+                  prose-img:rounded-[20px]"
+              >
+                <ReactMarkdown components={components}>{post.content}</ReactMarkdown>
+              </div>
+
+              <div className="max-w-[68ch]">
+                <ShareBar title={post.title} url={pageUrl} />
+              </div>
+
+              <div className="mt-12">
+                <PostCta id="reserver" onBook={() => book()} />
+              </div>
+            </article>
+
+            <aside className="hidden lg:block">
+              <div className="sticky top-24 space-y-8">
+                <TableOfContents headings={headings} variant="sidebar" />
+                <div className="rounded-[20px] border border-zinc-200 bg-white p-5 dark:border-white/10 dark:bg-zinc-900">
+                  <p className="font-display text-lg text-zinc-900 dark:text-zinc-50">Réserver</p>
+                  <a
+                    href={`tel:${COMPANY.phoneIntl}`}
+                    className="mt-2 inline-flex items-center gap-2 text-sm tabular-nums text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+                  >
+                    <Phone size={16} weight="regular" />
+                    {COMPANY.phone}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => book()}
+                    className="mt-4 inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-zinc-950 px-5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 dark:bg-gold-400 dark:text-zinc-950 dark:hover:bg-gold-300 dark:focus-visible:ring-offset-zinc-900"
+                  >
+                    Réserver
+                  </button>
+                </div>
+              </div>
+            </aside>
           </div>
-        </div>
 
-        {/* Article body */}
-        <div className="mx-auto max-w-3xl px-5 sm:px-8 pt-12 pb-16 lg:pb-24">
-          <div className="
-            prose prose-lg dark:prose-invert max-w-none
-            font-sans
-            prose-headings:font-display prose-headings:font-black prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:tracking-tight
-            prose-h2:text-3xl prose-h2:mt-14 prose-h2:mb-6 prose-h2:border-l-4 prose-h2:border-gold-500 prose-h2:pl-5
-            prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-gold-600 dark:prose-h3:text-gold-400
-            prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-[2] prose-p:text-[1.15rem] prose-p:mb-8 prose-p:font-medium
-            prose-li:text-gray-600 dark:prose-li:text-gray-300 prose-li:text-[1.1rem] prose-li:leading-[1.9] prose-li:mb-2 prose-li:font-medium
-            prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-bold
-            prose-a:text-gold-600 dark:prose-a:text-gold-400 prose-a:underline hover:prose-a:text-gold-500 prose-a:font-semibold
-            prose-blockquote:border-l-4 prose-blockquote:border-gold-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-900 prose-blockquote:px-8 prose-blockquote:py-5 prose-blockquote:rounded-r-2xl prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:my-10
-            prose-img:rounded-3xl prose-img:shadow-xl prose-img:my-12 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-gray-100 dark:prose-img:border-gray-800
-          ">
-            <ReactMarkdown
-              components={{
-                a: ({ node, ...props }) => {
-                  if (props.href === '#reserver') {
-                    return (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          openBooking(`Réservation depuis l'article : ${post.title}`);
-                        }}
-                        className="not-prose inline-flex items-center gap-2 bg-gold-400 text-gray-900 font-bold text-base px-6 py-3 rounded-full hover:bg-gold-300 transition-all shadow-md hover:shadow-lg hover:scale-[1.02] my-4 mx-auto"
-                      >
-                        🚕 Réserver un chauffeur pour s'y rendre
-                      </button>
-                    );
-                  }
-                  return <a {...props} />;
-                }
-              }}
-            >
-              {post.content}
-            </ReactMarkdown>
-          </div>
-
-          {/* Like + Share bar */}
-          <ShareBar title={post.title} url={pageUrl} />
-        </div>
-      </article>
-
-      {/* Related Posts */}
-      {related.length > 0 && (
-        <div className="bg-gray-50 dark:bg-gray-900 py-16 px-6 lg:px-8 border-t border-gray-200 dark:border-gray-800">
-          <div className="mx-auto max-w-5xl">
-            <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 border-l-4 border-gold-500 pl-4">À lire aussi</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {related.map(r => (
-                <Link key={r.slug} to={`/blog/${r.slug}`} className="group block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 dark:hover:border-gold-500/50 hover:border-gold-300">
-                  <div className="relative h-44 overflow-hidden">
-                    <img src={r.imageUrl} alt={r.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
-                    <span className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-widest bg-gold-500 text-gray-900 px-2.5 py-1 rounded-full shadow-sm">{r.category}</span>
-                  </div>
-                  <div className="p-5">
-                    <h4 className="font-display font-bold text-base text-gray-900 dark:text-white group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors leading-snug line-clamp-2">{r.title}</h4>
-                  </div>
+          {(newer || older) && (
+            <nav aria-label="Articles précédent et suivant" className="mt-16 grid gap-4 border-t border-zinc-200 pt-8 dark:border-white/10 md:grid-cols-2">
+              {older ? (
+                <Link to={`/blog/${older.slug}`} className="group rounded-[20px] border border-zinc-200 p-5 transition-colors hover:border-gold-500 dark:border-white/10">
+                  <span className="inline-flex items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    <ArrowLeft size={14} weight="regular" /> Article précédent
+                  </span>
+                  <span className="mt-1 line-clamp-2 block font-display text-lg text-zinc-900 dark:text-zinc-50">{older.title}</span>
                 </Link>
-              ))}
-            </div>
-          </div>
+              ) : <span />}
+              {newer ? (
+                <Link to={`/blog/${newer.slug}`} className="group rounded-[20px] border border-zinc-200 p-5 text-left transition-colors hover:border-gold-500 dark:border-white/10 md:text-right">
+                  <span className="inline-flex items-center gap-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    Article suivant <ArrowRight size={14} weight="regular" />
+                  </span>
+                  <span className="mt-1 line-clamp-2 block font-display text-lg text-zinc-900 dark:text-zinc-50">{newer.title}</span>
+                </Link>
+              ) : <span />}
+            </nav>
+          )}
+
+          {related.length > 0 && (
+            <section className="mt-16" aria-labelledby="related-title">
+              <h2 id="related-title" className="font-display text-3xl tracking-tight text-zinc-900 dark:text-zinc-50 md:text-4xl">
+                À lire aussi
+              </h2>
+              <motion.div
+                variants={reduce ? undefined : gridVariants}
+                initial={reduce ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                className="mt-8 grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3"
+              >
+                {related.map(r => (
+                  <PostCard key={r.slug} post={r} />
+                ))}
+              </motion.div>
+            </section>
+          )}
         </div>
-      )}
-
-      {/* CTA */}
-      <div className="bg-white dark:bg-gray-900 py-16 text-center px-4 border-t border-gray-100 dark:border-gray-800">
-        <h3 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-2">Besoin d'un taxi à Fontainebleau ?</h3>
-        <p className="text-gray-500 dark:text-gray-400 mb-6">Mercedes Classe S & V · Disponible 7j/7 · Transferts aéroports</p>
-        <button
-          onClick={() => openBooking(`Suite à la lecture : ${post.title}`)}
-          className="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-gold-400 px-10 py-4 font-bold text-gray-900 text-lg transition-all duration-300 hover:scale-[1.03] hover:bg-gold-300 shadow-md hover:shadow-lg dark:shadow-[0_0_40px_rgba(202,163,82,0.2)]"
-        >
-          Réserver un chauffeur →
-        </button>
       </div>
-
-      <ContactSection onOpenBooking={() => openBooking()} />
     </>
   );
 }
