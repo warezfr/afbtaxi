@@ -1,10 +1,40 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "header", "key": "x-forwarded-proto", "value": "http" }],
+      "destination": "https://www.afbtaxis.com/:path*",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
     { "source": "/blog", "destination": "/blog/index.html" },
     { "source": "/blog/(.*)", "destination": "/blog/$1/index.html" },
     { "source": "/trajets/(.*)", "destination": "/trajets/$1/index.html" },
-    { "source": "/partenaires", "destination": "/partenaires/index.html" }
+    { "source": "/partenaires", "destination": "/partenaires/index.html" },
+    { "source": "/transfert-aeroport-orly", "destination": "/transfert-aeroport-orly/index.html" },
+    { "source": "/taxi-gare-fontainebleau-avon", "destination": "/taxi-gare-fontainebleau-avon/index.html" },
+    { "source": "/transport-sanitaire-conventionne-77", "destination": "/transport-sanitaire-conventionne-77/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    }
   ]
 }

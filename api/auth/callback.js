@@ -1,4 +1,6 @@
 // OAuth callback for Décap CMS
+const SITE_ORIGIN = 'https://www.afbtaxis.com';
+
 export default async function handler(req, res) {
   const { code } = req.query;
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -16,55 +18,39 @@ export default async function handler(req, res) {
     const data = await tokenRes.json();
 
     if (data.error) {
-      return res.status(400).send(`GitHub OAuth error: ${data.error_description}`);
+      return res.status(400).send('GitHub OAuth error.');
     }
 
-    // Send token back to Décap CMS via postMessage
-    const html = `<!DOCTYPE html>
-<html>
-<head><title>Authentification réussie...</title></head>
-<body>
-<script>
-  (function() {
-    function receiveMessage(e) {
-      console.log("receiveMessage %o", e);
-      window.opener.postMessage(
-        'authorization:github:success:${JSON.stringify(data).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}',
-        e.origin
-      );
-    }
-    window.addEventListener("message", receiveMessage, false);
-    window.opener.postMessage("authorizing:github", "*");
-  })()
-</script>
-<p>Connexion réussie, fermeture automatique...</p>
-</body>
-</html>`;
+    const authPayload = JSON.stringify({
+      token: data.access_token,
+      provider: 'github',
+    });
 
-    // Replace the token properly
     const successHtml = `<!DOCTYPE html>
-<html>
+<html lang="fr">
 <head><title>Authentification réussie...</title></head>
 <body>
 <script>
   (function() {
+    var payload = ${JSON.stringify(authPayload)};
+    var targetOrigin = ${JSON.stringify(SITE_ORIGIN)};
     function receiveMessage(e) {
-      window.opener.postMessage(
-        'authorization:github:success:{"token":"${data.access_token}","provider":"github"}',
-        e.origin
-      );
+      if (e.origin !== targetOrigin) return;
+      window.opener.postMessage('authorization:github:success:' + payload, e.origin);
     }
-    window.addEventListener("message", receiveMessage, false);
-    window.opener.postMessage("authorizing:github", "*");
-  })()
+    window.addEventListener('message', receiveMessage, false);
+    window.opener.postMessage('authorizing:github', targetOrigin);
+  })();
 </script>
 <p>Connexion réussie, fermeture automatique...</p>
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Frame-Options', 'DENY');
     res.send(successHtml);
-  } catch (err) {
-    res.status(500).send(`Error: ${err.message}`);
+  } catch {
+    res.status(500).send('Authentication failed.');
   }
 }

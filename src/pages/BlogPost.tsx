@@ -13,6 +13,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { ReadingProgress } from '@/components/blog/ReadingProgress';
 import { extractHeadings, slugify } from '@/components/blog/headings';
 import { formatDate, gridVariants } from '@/components/blog/utils';
+import { formatDocumentTitle } from '@/lib/seo-title';
 
 const SITE = 'https://www.afbtaxis.com';
 
@@ -116,7 +117,7 @@ export function BlogPost() {
   return (
     <>
       <Helmet>
-        <title>{`${post.title} | AFB Taxis`}</title>
+        <title>{formatDocumentTitle(post.title)}</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={pageUrl} />
         <meta property="og:type" content="article" />
